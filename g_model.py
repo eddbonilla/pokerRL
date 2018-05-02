@@ -9,23 +9,20 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 ### END CODE HERE (Question 1) ###
-print(mnist.train.images.shape)
-print(mnist.test.images.shape)
-print(mnist.test.labels.shape)
+#print(mnist.train.images.shape)
+#print(mnist.test.images.shape)
+#print(mnist.test.labels.shape)
 
 # Define placeholder input data  matrix and for the labels
 ### START CODE HERE (Question 2) ###
-
 
 
 X = tf.placeholder(tf.float32,shape=(None,784))
 Y = tf.placeholder(tf.float32,shape=(None,10))
 
 
-### END CODE HERE (Question 2) ###
 
-# Define parameters W and b of your model
-### START CODE HERE (Question 3) ###
+#Initialize parameters
 
 def initialize_parameters_deep(layer_dims):
 	"""
@@ -35,8 +32,29 @@ def initialize_parameters_deep(layer_dims):
 	parameters = {}
 	L = len(layer_dims)
 
-	for l in range(L):
-		
+	for l in range(1,L):
+		parameters['W'+str(l)] = tf.get_variable("W"+str(l),shape=[layer_dims[l-1],layer_dims[l]],initializer = tf.contrib.layers.xavier_initializer(seed = 1))
+		parameters['b'+str(l)] = tf.get_variable("b"+str(l),shape=[1,layer_dims[l]],initializer=tf.zeros_initializer())
+
+		assert(parameters['W' + str(l)].shape == (layer_dims[l-1], layer_dims[l]))
+		assert(parameters['b' + str(l)].shape == (1,layer_dims[l]))
+
+	return parameters
+
+parameters = initialize_parameters_deep([5,4,3,2])
+
+print("W1 = " + str(parameters["W1"]))
+print("b1 = " + str(parameters["b1"]))
+print("W2 = " + str(parameters["W2"]))
+print("b2 = " + str(parameters["b2"]))
+print("W3 = " + str(parameters["W3"]))
+print("b3 = " + str(parameters["b3"]))
+
+
+#Forward propagation step
+
+
+"""
 
 W1 = tf.get_variable("W1",shape = [784,100],initializer = tf.contrib.layers.xavier_initializer(seed = 1))
 b1 = tf.get_variable("b1",shape=[100],initializer=tf.zeros_initializer())
@@ -114,19 +132,7 @@ for i in range(100):
 	_, cost1 = sess.run([train_step, cost],feed_dict=train_data)
 print("Iteration: " + str(i), "training cost " + str(cost1))
 
-
-### END CODE HERE (Question 9) ###
-
-# Evaluate your accuracy and cost on the train and test sets
-### START CODE HERE (Question 10) ###
-#a,c = sess.run([accuracy, cost], feed_dict=train_data)
-#print("Train accuracy = " + str(a) + ", Train cost = " + str(c))
-
-#print(sess.run(accuracy, feed_dict={X: mnist.test.images, Y: mnist.test.labels}))
-#print(sess.run(accuracy, feed_dict={X: mnist.train.images, Y: mnist.train.labels}))
-
-#print("Test accuracy = " + str(a) + ", Test cost = " + str(c))
-### END CODE HERE (Question 10) ###
+"""
 
 
-# How can you improve the code? What do you observe?
+
