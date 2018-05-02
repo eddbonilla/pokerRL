@@ -1,6 +1,5 @@
 """
-CS230 Hands-on session 3: Tensorflow tutorial
-Kian Katanforoosh, Andrew Ng
+This will eventually become the neural net g. For now we are building a deep neural net for the mnist data set, with a softmax output. 
 """
 
 import tensorflow as tf
@@ -17,6 +16,8 @@ print(mnist.test.labels.shape)
 # Define placeholder input data  matrix and for the labels
 ### START CODE HERE (Question 2) ###
 
+
+
 X = tf.placeholder(tf.float32,shape=(None,784))
 Y = tf.placeholder(tf.float32,shape=(None,10))
 
@@ -25,6 +26,17 @@ Y = tf.placeholder(tf.float32,shape=(None,10))
 
 # Define parameters W and b of your model
 ### START CODE HERE (Question 3) ###
+
+def initialize_parameters_deep(layer_dims):
+	"""
+	Initialize the parameters of our L-layer neural network"
+	"""
+
+	parameters = {}
+	L = len(layer_dims)
+
+	for l in range(L):
+		
 
 W1 = tf.get_variable("W1",shape = [784,100],initializer = tf.contrib.layers.xavier_initializer(seed = 1))
 b1 = tf.get_variable("b1",shape=[100],initializer=tf.zeros_initializer())
