@@ -22,7 +22,7 @@ Y = tf.placeholder(tf.float32,shape=(None,10))
 
 
 
-#Initialize parameters
+######INITIALIZE PARAMETERS##########
 
 def initialize_parameters_deep(layer_dims):
 	"""
@@ -41,7 +41,7 @@ def initialize_parameters_deep(layer_dims):
 
 	return parameters
 
-parameters = initialize_parameters_deep([5,4,3,2])
+parameters = initialize_parameters_deep([784,4,3,17])
 
 print("W1 = " + str(parameters["W1"]))
 print("b1 = " + str(parameters["b1"]))
@@ -51,7 +51,40 @@ print("W3 = " + str(parameters["W3"]))
 print("b3 = " + str(parameters["b3"]))
 
 
-#Forward propagation step
+########FORWARD PROPAGATION############
+def linear_relu_forward(A_prev,W,b):
+	""""
+	single step of relu
+	"""
+	Z = tf.matmul(A_prev,W)+b
+	A = tf.nn.relu(Z)
+
+	return A
+
+def linear_softmax_forward(A_prev,W,b):
+
+	Z = tf.matmul(A_prev,W)+b
+	A = tf.nn.softmax(Z)
+
+	return A
+
+def L_model_forward(X,parameters):
+
+	A = X
+	L = len(parameters) // 2
+
+	for l in range(1,L):
+		A_prev = A
+		A = linear_relu_forward(A,parameters['W'+str(l)],parameters['b'+str(l)])
+
+	AL = linear_softmax_forward(A,parameters['W' + str(L)],parameters['b' + str(L)])
+
+	return AL
+
+AL = L_model_forward(X,parameters)
+
+print(AL)
+
 
 
 """
