@@ -5,7 +5,8 @@ def averageStrategy(player,playerState,publicHistory,publicCards):
 def SelfPlay(eta):
 	game = LeducGame()
 	treeStrategies = []
-	rangeMemory = []
+	fReservoir = []
+	gReservoir = []
 	allPlayersCards = game.getPlayerStates()
 	ante = game.getAnte()
 	v = np.array([-ante,-ante],dtype = float)
@@ -14,7 +15,7 @@ def SelfPlay(eta):
 		publicHistory, publicCards = game.getPublicState()
 		playerCards = allPlayersCards[player]
 		opponentCards = np.delete(allPlayersCards,player,axis=0)
-		rangeMemory.append((publicHistory,publicCards,playerCards,opponentCards))
+		gReservoir.append((publicHistory,publicCards,playerCards,opponentCards))
 		if np.random.random() > eta:
 			strategy = averageStrategy(player,playerCards,publicHistory,publicCards)
 		
@@ -25,6 +26,6 @@ def SelfPlay(eta):
 		v[player]-= bet
 		#print(action,bet,v)
 	v += game.getOutcome()
-	#print(v, allPlayersCards,publicCards)
-	#Add rangeMemory to g_Reservoir
-	#Add treeStrategies,v to f_Reservoir
+	for strt,plC,pbH,pbC in treeStrategies:
+	 fReservoir = (strt,plC,pbH,pbC,v)
+	return fReservoir,gReservoir
