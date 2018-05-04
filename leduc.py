@@ -1,3 +1,6 @@
+import numpy as np
+import tensorflow as tf
+
 class Game:
 	pass
 
@@ -14,7 +17,7 @@ class LeducGame(Game):
 		self.finished = False
 		self.playerfolded = None
 		self.raisesInRound = 0
-		self.history = 
+		self.history = np.zeros((2,2,3,2))
 
 	def endRound(self):
 		if round==1:
@@ -28,12 +31,13 @@ class LeducGame(Game):
 		else:
 			self.finished =True
 
-	def getPlayer():
+	def getPlayer(self):
 		return self.player
 
-	def getPlayerState:
+	def getPlayerStates(self):
+		playerStates = tf.one_hot([cards["player1",card["player2"]],3)
 
-	def getPublicState():
+	def getPublicState(self):
 
 
 	def getOutcome(self):
@@ -58,7 +62,7 @@ class LeducGame(Game):
 			return None
 
 	def getPlayerStates(self):
-		pass
+		return tf
 
 	def getPublicHistory(self):
 		pass
@@ -88,17 +92,20 @@ class LeducGame(Game):
         	self.playerfolded = self.player
         elif raisesInRound == 2:
         	betAmount = self.bet
+        	self.history[self.player,self.round,self.raisesInRound,1] = 1
         	self.endRound()
         else:
         	if action == 1:
         		if raisesInRound==1:
         			betAmount = self.bet
         			self.endRound()	
+        			self.history[self.player,self.round,self.raisesInRound,1] = 1
         	if action == 0:
         		if raisesInRound==1:
         			betAmount = 2*self.bet
         		else:
         			betAmount = self.bet
+        		self.history[self.player,self.round,self.raisesInRound,0] = 1
         		raisesInRound += 1
 
         pot +=betAmount
