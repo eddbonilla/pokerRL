@@ -2,7 +2,7 @@ def SelfPlay(eta):
 	game = LeducGame()
  	treeStrategies = []
  	rangeMemory = []
- 	while game.isUnfinished():
+ 	while not game.isFinished():
  		player = game.getPlayer()
  		publicState = game.getPublicState()
  		playerState = game.getPlayerState()
