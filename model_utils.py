@@ -1,5 +1,5 @@
 """
-This will eventually become the neural net g. For now we are building a deep neural net for the mnist data set, with a softmax output. 
+These are utility functions to be called when the neural networks are trained. It contains all the forward propagations, backprop will be done when the models are trained. I put in some placeholder values for X and Y so as to be able to test forward propagation.
 """
 
 import numpy as np
