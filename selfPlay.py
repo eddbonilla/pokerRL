@@ -20,7 +20,7 @@ def SelfPlay(eta):
 			strategy = averageStrategy(player,playerCards,publicHistory,publicCards)
 		
 		else:
-			strategy = treeStrategy(playerState,publicHistory)
+			strategy = treeStrategy(player,playerCards,publicHistory,publicCards)
 			treeStrategies.append((strategy,playerCards,publicHistory,publicCards))
 		action,bet = game.action(strategy)
 		v[player]-= bet
