@@ -12,7 +12,8 @@ def SelfPlay(eta):
 	v = np.array([-ante,-ante],dtype = float)
 	while not game.isFinished():
 		player = game.getPlayer()
-		publicHistory, publicCards = game.getPublicState()
+		publicHistory = game.getPublicHistory()
+		publicCards = game.getPublicCard()
 		playerCards = allPlayersCards[player]
 		opponentCards = np.delete(allPlayersCards,player,axis=0)
 		gReservoir.append((publicHistory,publicCards,playerCards,opponentCards))
