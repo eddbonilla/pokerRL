@@ -33,7 +33,7 @@ class MCTS():
                    proportional to Nsa[(s,a)]**(1./temp)
         """
         
-        estimOpponentCards= self.gnet.predict(playerCards, publicHistory, publicCards) # gives a guess of the opponent cards, we can change this to be the actual cards
+        estimOpponentCards= self.gnet.predict(game.getPlayerCards(), game.getpublicHistory(), game.getPublicCards()) # gives a guess of the opponent cards, we can change this to be the actual cards
         for i in range(self.args.numMCTSSims):
 
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
@@ -76,9 +76,7 @@ class MCTS():
 
         if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
             # leaf node
-            self.Ps[s], v = self.fnet.predict(estimOpponentCards, playerCards, publicHistory, publicCards)
-            #valids = self.game.getValidMoves(publicHistory, 1)
-            #self.Ps[s] = self.Ps[s]*valids      # masking invalid moves
+            self.Ps[s], v = self.fnet.predict(estimOpponentCards, gameCopy.getPlayerCards(), gameCopy.publicHistory(), gameCopy.publicCards()) #This is begging to get changed for something useful
             sum_Ps_s = np.sum(self.Ps[s])
             if sum_Ps_s > 0:
                 self.Ps[s] /= sum_Ps_s    # renormalize
@@ -112,10 +110,14 @@ class MCTS():
         action = np.zeros[self.gameCopy.getActionSize(),1] # Encode the action in the one hot format
         action[best_act]=1;
 
-        opponentCards, playerCards, publicHistory, publicCards = self.gameCopy.action(action)
-        #next_s = self.game.getCanonicalForm(next_s, next_player)
+        self.gameCopy.action(action)
+        if self.gameCopy.getPlayer() == self.game.getPlayer(): # If somehow it is still your turn, play again, same rules apply 
+       
+        	v = -self.search(estimOpponentCards)
+       
+        else:
 
-        v = self.oppSearch(opponentCards, playerCards, publicHistory, publicCards)
+        	v = self.oppSearch(estimOpponentCards) 			   #If not, let the opponent play their turn. The argument is carried to continue the tree search
 
         if (s,a) in self.Qsa:
             self.Qsa[(s,a)] = (self.Nsa[(s,a)]*self.Qsa[(s,a)] + v)/(self.Nsa[(s,a)]+1)
@@ -128,7 +130,10 @@ class MCTS():
         self.Ns[s] += 1
 	return -v
 
-	def oppSearch() #same as search but no decisions are made based on Q. Tries to model an opponent with a fixed strateg
+	def oppSearch(estimOpponentCards) 
+	#This function is virtually the same as the search method,  
+	# but no decisions are made based on Q. Tries to model an opponent with a fixed strategy. 
+	# It was written to avoid clunky 'if' statements in the search code
 	    
 	    s = self.gameCopy.stringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
 
@@ -140,13 +145,13 @@ class MCTS():
 
         if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
             # leaf node
-            estimPlayerCards = self.gnet.predict()															#Allow the opponent to infer your cards based on your bets 
-            self.Ps[s], v = self.fnet.predict(opponentCards,estimPlayerCards, publicHistory, publicCards)   #Opponent Strategy	
+            estimPlayerCards = self.gnet.predict(game.getPlayerCards(), game.getpublicHistory(), game.getPublicCards()) 	#Allow the opponent to infer your cards based on your bets 
+            self.Ps[s], v = self.fnet.predict(estimPlayerCards, game.getPlayerCards(), game.getpublicHistory(), game.getPublicCards())   #Opponent Strategy. 
 
             sum_Ps_s = np.sum(self.Ps[s])
             if sum_Ps_s > 0:
                 self.Ps[s] /= sum_Ps_s    # renormalize
-            else                
+            else:                
                 # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
                 # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.   
                 print("All valid moves were masked, do workaround.")
@@ -161,17 +166,26 @@ class MCTS():
 
         # pick the action with the highest upper confidence bound
         for a in range(self.gameCopy.getActionSize()):
-
-        	u = self.args.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[s] + EPS)    # The opponent does not adapt their strategy based on your Q, the 1/N is there to allow for exploration
-
+            if (s,a) in self.Nsa:
+                    u = self.args.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[s])/(1+self.Nsa[(s,a)])
+            else:
+                    u = self.args.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[s] + EPS)     # Q = 0 ?
             if u > cur_best:
                 cur_best = u
                 best_act = a
 
-        a = best_act
-        opponentCards, playerCards, publicHistory, publicCards = self.gameCopy.action(a)
+        action = np.zeros[self.gameCopy.getActionSize(),1] # Encode the action in the one hot format
+        action[best_act]=1;
 
-        v = self.search(opponentCards, playerCards, publicHistory, publicCards) #the player's turn now
+        self.gameCopy.action(action) #Execute the action
+
+        if self.gameCopy.getPlayer() == self.game.getPlayer(): # Pass the turn to the original player
+       
+        	v = self.search(estimOpponentCards)
+       
+        else:
+
+        	v = -self.oppSearch(estimOpponentCards) 							#If somehow it is still the opponent's turn, let them play again
 
         if (s,a) in self.Nsa:
             self.Nsa[(s,a)] += 1
