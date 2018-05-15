@@ -103,6 +103,9 @@ class LeducGame(Game):
 	def isFinished(self):
 		return self.finished
 
+	def getActionSize(self):
+		return 3 #3 actions always: check, raise, fold
+
 	def action(self,strategy):
 		#Randomly select action from strategy.
 		#Args:
