@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 class Game:
-	def stringRepresentation():
+	def stringRepresentation(self):
 		pass
 	
 
@@ -24,6 +24,15 @@ class LeducGame(Game):
 		self.raisesInRound = 0
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
+
+	def stringRepresentation(self):
+		dict = { 	"player" : self.player,
+					"playerCard": self.cards["player" + str(self.player+1)], 
+					"publicHistory": self.getPublicHistory()}
+		if "public" in self.cards:
+			dict["publicCard"] = self.cards["public"]
+
+		return str(dict)
 
 	def finishGame(self,playerfolded):
 		self.finished = True
