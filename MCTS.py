@@ -35,7 +35,7 @@ class MCTS():
 
 
 
-	def treeStrategy(self,game,temp=1):
+	def Strategy(self,game,temp=1):
 		"""
 		This function performs numMCTSSims simulations of MCTS starting from
 		initialState.
@@ -58,8 +58,9 @@ class MCTS():
 		counts = [self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())] #Here you count the number of times that action a was taken in state s
 
 		counts = [x**(1./temp) for x in counts] #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
-		probs = [x/float(sum(counts)) for x in counts] #normalize
-		return probs 		#return pi,tree strategy
+		treeStrategy = [x/float(sum(counts)) for x in counts] #normalize
+		averageStrategy = self.Ps[s]
+		return averageStrategy, treeStrategy 		#return pi,tree strategy
 
 	def search(self):
 

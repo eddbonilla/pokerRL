@@ -2,27 +2,38 @@ def averageStrategy(player,playerState,publicHistory,publicCards):
 	#Test code. To be replaced by neural net
 	return [0.5,0.4,0.1] 
 
-def SelfPlay(eta,nnets):
+def SelfPlay(eta,nnets,cpuct):
 	game = LeducGame()
 	cache = []
 	allPlayersCards = game.getPlayerStates()
 	ante = game.getAnte()
 	v = np.array([-ante,-ante],dtype = float)
+	trees[0] = MCTS(nnets, 50, cpuct)             #Index labels player
+	trees[1] = MCTS(nnets, 50, cpuct)
 	while not game.isFinished():
 
 		player = game.getPlayer()
 
-		treeStrategy = treeStrategy(game)
-		averageStrategy,_ = nnets.policyValue(game.getPlayerCard(),game.getPublicHistory(),game.getPublicCard())
+		averageStrategy, treeStrategy = trees[player].treeStrategy(game)
 
 		strategy = (1-eta)*averageStrategy + eta * treeStrategy 
 
-		cache.append((treeStrategy,player,game.getPublicHistory(),game.getPublicCard(),game.getPlayerCard(),getOpponentCard(),game.getPot(),v[player]))
+		dict = {
+					"treeStrategy" :treeStrategy,
+					"player": player,
+					"publicHistory": game.getPublicHistory(),
+					"publicCard"  : game.getPublicCard(),
+					"playerCard"  : game.getPlayerCard(),
+					"opponent"    : game.getOpponentCard(),
+					"pot"         : game.getPot(),
+					"moneyBet"    : v[player]
+				}
+		cache.append(dict)
 		action,bet = game.action(strategy)
 		v[player]-= bet
 		#print(action,bet,v)
 	v += game.getOutcome()
-	for strt,plr,pbH,pbC,plC,opC,pot,v_0 in cache:
-		fReservoir.append(pbH,pbC,plC,strt,(v[plr]-v_0)/pot)			#Store (publicHistory, publicCard, playerCard, treeStrategy, v)
-		gReservoir.append(pbH,pbC,opC)									#Store (publicHistory, publicCard, opponentCard)
-	return fReservoir,gReservoir
+	for dict in cache:
+		dict["v"] = (v[dict["player"]] - dict["moneyBet"])/float(dict["pot"])
+
+	return cache
