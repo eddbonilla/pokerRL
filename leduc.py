@@ -91,6 +91,9 @@ class LeducGame(Game):
 		else:
 			publicCard = np.zeros(3)
 		return publicCard
+		
+	def getPot(self):
+		return self.pot
 
 	def setOpponentCard(self,card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
