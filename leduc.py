@@ -2,8 +2,6 @@ import numpy as np
 import random
 
 class Game:
-	def stringRepresentation(self):
-		pass
 	
 
 class LeducGame(Game):
@@ -25,9 +23,17 @@ class LeducGame(Game):
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
 
-	def stringRepresentation(self):
+	def playerInfoStringRepresentation(self):
 		dict = { 	"player" : self.player,
 					"playerCard": self.cards["player" + str(self.player+1)], 
+					"publicHistory": self.getPublicHistory()}
+		if "public" in self.cards:
+			dict["publicCard"] = self.cards["public"]
+
+		return str(dict)
+
+	def publicInfoStringRepresentation(self):
+		dict = { 	"player" : self.player, 
 					"publicHistory": self.getPublicHistory()}
 		if "public" in self.cards:
 			dict["publicCard"] = self.cards["public"]
