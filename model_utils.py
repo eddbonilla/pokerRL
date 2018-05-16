@@ -1,5 +1,5 @@
 """
-These are utility functions to be called when the neural networks are trained. It contains all the forward propagations, backprop will be done when the models are trained. I put in some placeholder values for X and Y so as to be able to test forward propagation.
+These are utility functions to be called when the neural networks are trained. It contains all the forward propagations, backprop will be done when the models are trained. I put in some placeholder values for X and Y so as to be able to test forward propagation. 
 """
 
 import numpy as np
@@ -7,15 +7,18 @@ import tensorflow as tf
 import math
 
 
-
-
-X = tf.placeholder(tf.float32,shape=(None,784))
-Y = tf.placeholder(tf.float32,shape=(None,10))
-
-
 ####CREATE PLACEHOLDERS######
 
 
+def create_placeholders(n_x,n_y):
+
+	X = tf.placeholder(tf.float32,shape=(None,n_x),name="X")
+	Y = tf.placeholder(tf.float32,shape=(None,n_y),name="Y")
+
+	return X,Y
+
+
+X,Y= create_placeholders(784,10)
 
 ######INITIALIZE PARAMETERS##########
 
@@ -62,7 +65,7 @@ def linear_relu_forward(A_prev,W,b):
 
 def linear_softmax_forward(A_prev,W,b):
 	"""
-	single step of softmax
+	single step of softmax -- probably not necessary since the loss function already takes this into account
 	"""
 
 	Z = tf.matmul(A_prev,W)+b
@@ -72,9 +75,9 @@ def linear_softmax_forward(A_prev,W,b):
 
 
 ###Forward propagate from public history
-def L_model_forward(public_history,parameters):
+def L_model_forward(input_tensor,parameters):
 
-	A = public_history
+	A = input_tensor
 	L = len(parameters) // 2
 
 	for l in range(1,L):
@@ -82,14 +85,66 @@ def L_model_forward(public_history,parameters):
 		A = linear_relu_forward(A,parameters['W'+str(l)],parameters['b'+str(l)])
 	
 
-	ZL,opp_priv_info = linear_softmax_forward(A,parameters['W' + str(L)],parameters['b' + str(L)]) 
+	ZL = tf.matmul(A,parameters['W' + str(L)]) + parameters['b' + str(L)]
 	
 
-	return ZL,opp_priv_info
+	return ZL
 
 #_,AL = L_model_forward(X,parameters)
-ZL,_ = L_model_forward(X,parameters)
-#print(ZL)
+ZL = L_model_forward(X,parameters)
+print("ZL_shape = " + str(ZL.shape))
+
+
+################SLICE TENSOR############################
+
+def slice_tensor(tensor):
+
+	#Slice the output logits into the predicted possible moves and the value of the move
+
+	k = tensor.shape[1].value
+	p_logits,v = tf.split(tensor,[k-1,1],1)
+
+	return p_logits,v
+
+p2,v = slice_tensor(ZL)
+print(p2.shape)
+
+###################F NETWORK COST########################
+
+def compute_cost_f(input_tensor,labels,alpha):
+
+	p_logits,v = slice_tensor(input_tensor)
+	p_labels, v_values = slice_tensor(labels)
+
+	logits = p_logits
+	labels = p_labels
+
+	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits, labels = labels)) + alpha*tf.reduce_sum(tf.square(v - v_values))
+
+	return cost
+
+"""
+with tf.Session() as test1:
+	z1 = tf.constant([[1,2,3],[5,4,3],[9,2,8]], dtype = tf.float32)
+	y1 = tf.constant([[1,0,0],[0,1,0],[0,0,1]], dtype = tf.float32)
+
+	p3,_ = slice_tensor(z1)
+	print(test1.run(z1))
+	print(test1.run(p3))
+	print(test1.run(compute_cost_f(z1,y1,1)))
+"""
+
+###################G NETWORK COST########################
+
+def compute_cost_g(input_tensor,labels):
+
+	logits = input_tensors
+	labels = Y_labels
+
+	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits, labels = labels))
+
+
+
 
 ###############CREATE MINIBATCHES########################
 
@@ -122,11 +177,9 @@ def random_mini_batches(X,Y,mini_batch_size):
 
 
 	sess1 = tf.Session()
-	m = sess1.run(tf.cast(X_assess.shape[0],tf.int32))	
+	m = X.shape[0].value 	
 
 	mini_batches = []
-	#permutation = list(np.random.permutation(m))
-	#print(permutation)
 	shuffled_X = sess1.run(tf.random_shuffle(X))
 	shuffled_Y = sess1.run(tf.random_shuffle(Y))
 
@@ -152,9 +205,11 @@ def random_mini_batches(X,Y,mini_batch_size):
 
 
 mini_batches = random_mini_batches(X_assess,Y_assess,mini_batch_size = 64)
+
 print ("shape of the 1st mini_batch_X: " + str(mini_batches[0][0].shape))
 print ("shape of the 2nd mini_batch_X: " + str(mini_batches[1][0].shape))
 print ("shape of the 3rd mini_batch_X: " + str(mini_batches[2][0].shape))
+
 
 
 
