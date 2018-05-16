@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 class Game:
-	
+	pass
 
 class LeducGame(Game):
 	#2 = K, 1 = Q, 0 = J
