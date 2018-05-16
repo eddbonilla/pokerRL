@@ -54,7 +54,7 @@ class MCTS():
         	print(i)
         	self.search(estimOpponentCards)
 
-        s = self.game.stringRepresentation() #This is to get a representation of the initial state of the game
+        s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
         counts = [self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())] #Here you count the number of times that action a was taken in state s
 
         counts = [x**(1./temp) for x in counts] #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
@@ -68,14 +68,12 @@ class MCTS():
         else:
         	print("opponent")
 
-    	s = self.gameCopy.stringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
+    	s = self.gameCopy.playerInfoStringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
 
-        if s not in self.Es: # check if s is a known terminal state
-            self.Es[s] = self.gameCopy.getOutcome()
-        if self.Es[s] is not None: 
+        if gameCopy.isFinished(): # check if s is a known terminal state
 
             print("Terminal")
-            return -self.Es[s][self.game.getPlayer()] 
+            return -gameCopy.getOutcome()[self.game.getPlayer()] 
 
         if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
             # leaf node
