@@ -55,10 +55,10 @@ class MCTS():
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
-		counts = [self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())] #Here you count the number of times that action a was taken in state s
+		counts = np.array([self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())]) #Here you count the number of times that action a was taken in state s
 
-		counts = [x**(1./temp) for x in counts] #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
-		treeStrategy = [x/float(sum(counts)) for x in counts] #normalize
+		counts = counts**(1./temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
+		treeStrategy = counts /float(np.sum(counts)) #normalize
 		averageStrategy = self.Ps[s]
 		return averageStrategy, treeStrategy 		#return pi,tree strategy
 
