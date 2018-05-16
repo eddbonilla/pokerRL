@@ -2,7 +2,9 @@ import numpy as np
 import random
 
 class Game:
-	pass
+	def stringRepresentation(self):
+		pass
+	
 
 class LeducGame(Game):
 	#2 = K, 1 = Q, 0 = J
@@ -22,6 +24,15 @@ class LeducGame(Game):
 		self.raisesInRound = 0
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
+
+	def stringRepresentation(self):
+		dict = { 	"player" : self.player,
+					"playerCard": self.cards["player" + str(self.player+1)], 
+					"publicHistory": self.getPublicHistory()}
+		if "public" in self.cards:
+			dict["publicCard"] = self.cards["public"]
+
+		return str(dict)
 
 	def finishGame(self,playerfolded):
 		self.finished = True
@@ -58,16 +69,31 @@ class LeducGame(Game):
 	def getPlayer(self):
 		return self.player
 
+	def getPlayerCard(self):
+		return np.eye(3)[self.cards["player"+str(self.player+1)]]
+
+	def getOpponentCard(self):
+		return np.eye(3)[self.cards["player"+str(2 - self.player)]]
+
 	def getPlayerStates(self):
 		#return tf.one_hot(self.cards["player1"],3),tf.one_hot(self.cards["player2"],3)
 		return np.eye(3)[[self.cards["player1"],self.cards["player2"]]]
 
-	def getPublicState(self):
+	def getPublicCard(self):
 		if "public" in self.cards:
 			publicCard = (np.eye(3)[[self.cards["public"]]]).flatten()
 		else:
 			publicCard = np.zeros(3)
-		return self.history, publicCard
+		return publicCard
+
+	def setOpponentCard(self,card):
+		#input: card as scalar number e.g. 2=K,1=Q,0=J
+		self.cards["player"+str(2 - self.player)] = card
+
+	def getPublicHistory(self):
+		#Public history returned with player history at top
+		public_history = self.history[::(-1)**self.player,:,:,:]
+		return public_history
 
 	def getOutcome(self):
 		#Returns (player1reward,player2reward). NOTE reward is the pot (if game won) or zero the costs of the bets over the course of the game
@@ -76,6 +102,9 @@ class LeducGame(Game):
 				
 	def isFinished(self):
 		return self.finished
+
+	def getActionSize(self):
+		return 3 #3 actions always: check, raise, fold
 
 	def action(self,strategy):
 		#Randomly select action from strategy.
