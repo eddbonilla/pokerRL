@@ -10,8 +10,8 @@ class MCTS():
 	This class handles the MCTS tree.
 	"""
 
-	def __init__(self, game, nnets, numMCTSSims, cpuct):
-		self.game = game
+	def __init__(self, nnets, numMCTSSims, cpuct):
+		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
 		self.numMCTSSims=numMCTSSims
@@ -35,7 +35,7 @@ class MCTS():
 
 
 
-	def treeStrategy(self, playerCards, publicHistory, publicCards, temp=1):
+	def treeStrategy(self,game,temp=1):
 		"""
 		This function performs numMCTSSims simulations of MCTS starting from
 		initialState.
@@ -44,15 +44,15 @@ class MCTS():
 		probs: a policy vector where the probability of the ith action is
 		proportional to Nsa[(s,a)]**(1./temp)
 		"""
-		
+		self.game=game
 		estimOpponentCards= self.nnets.estimateOpponent(self.game.getPlayerCard(), self.game.getPublicHistory(), self.game.getPublicCard()) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
 			self.gameCopy.setOpponentCard(np.random.choice(self.gameCopy.getActionSize(),estimOpponentCards)) #choose the opponent cards with a guess
-			print(i)
+			if i%100 == 0: print(i)
 			self.search()
-			if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
+			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
 		counts = [self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())] #Here you count the number of times that action a was taken in state s
@@ -68,15 +68,15 @@ class MCTS():
 		playerMove = self.gameCopy.getPlayer() == self.game.getPlayer()
 
 		if playerMove:
-			print("Player")
+			#print("Player")
 			sForN = s
 		else:
-			print("opponent")
+			#print("opponent")
 			sForN = self.gameCopy.publicInfoStringRepresentation()
 
 		if self.gameCopy.isFinished(): # check if s is a known terminal state
 
-			print("Terminal")
+			#print("Terminal")
 			return self.gameCopy.getOutcome()[self.game.getPlayer()] #Always get outcome for original player
 
 		if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
@@ -106,7 +106,7 @@ class MCTS():
 		a=best_act
 		action = np.zeros((self.gameCopy.getActionSize(),1)) # Encode the action in the one hot format
 		action[a]=1;
-		print(action)
+		#print(action)
 		_,bet = self.gameCopy.action(action)
 		net_winnings = -bet*(playerMove) + self.search()
 		v = net_winnings/pot
@@ -117,7 +117,7 @@ class MCTS():
 		else:
 			self.Qsa[(s,a)] = v
 			self.Nsa[(sForN,a)] = 1
-		print("Q="+str(self.Qsa[(s,a)]))
-		print("net_winnings=" +str(net_winnings))
+		#print("Q="+str(self.Qsa[(s,a)]))
+		#print("net_winnings=" +str(net_winnings))
 		self.Ns[sForN] += 1
 		return net_winnings

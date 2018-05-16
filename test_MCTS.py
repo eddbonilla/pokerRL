@@ -5,15 +5,16 @@ from leduc import LeducGame
 from MCTS import MCTS
 class nnet():
 	def policyValue(self,a,b,c):
-		return [1, 0, 0] , 1
+		p=[1.,1.,1.]
+		return p/np.sum(p) , 0.5
 
 	def estimateOpponent(self,a,b,c):
-		g=[0,1,0]
-		return g 
+		g=[1.,1.,1.]
+		return g/np.sum(g)
 
 game=LeducGame()
 net=nnet()
-tree=MCTS(game, net, numMCTSSims=100, cpuct=1)
-strat=tree.treeStrategy(1,2,3)
+tree=MCTS(net, numMCTSSims=2000, cpuct=1)
+strat=tree.treeStrategy(game)
 
 print(strat)
