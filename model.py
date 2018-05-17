@@ -23,7 +23,7 @@ def define_scope(function):
 class nnets:
 	"""docstring for nnet"""
 	def __init__(self,session, gameParams,alpha =1.):
-		session.run(A)
+
 		self.sess=session
 
 		#Create placeholders
@@ -112,7 +112,7 @@ class nnets:
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		return self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsInput : [playerInfo]})
 
-	def estimateOpponent(self,playerCard, publicHistory, publicCard,flattened=False):
+	def estimateOpponent(self,playerCard, publicHistory, publicCard):
 
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 
@@ -124,6 +124,6 @@ class nnets:
 		publicCard=np.reshape(publicCard,-1)
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
 
-	def trainNets(self, minibatchTuple):
+	def trainOnMinibatch(self, minibatchTuple):
 		inputs, policies, values, oppCards = minibatchTuple
 		self.sess.run([trainEstimate,trainPolicyValue],feed_dict = {self.nnetsInput:[inputs],self.policyNetTarget:[policies],self.valueNetTarget:values, self.estimNetTarget: oppCards} )
