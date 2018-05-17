@@ -106,8 +106,10 @@ class nnets:
 
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		opponentCard=self.estimateOpponent(playerCard, publicHistory, publicCard)
-		playerEstimate=np.concatenate((playerInfo,opponentCard),axis=0)
-		p= self.getPolicy.eval(session = self.sess, feed_dict = {policyNetInput : playerInfo})
+		print(playerInfo.shape)
+		print(opponentCard.shape)
+		playerInfo=np.concatenate((playerInfo,np.reshape(opponentCard,-1)),axis=0)
+		return self.sess.run(self.getPolicyValue, feed_dict = {self.policyNetInput : [playerInfo]})
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard,flattened=False):
 
