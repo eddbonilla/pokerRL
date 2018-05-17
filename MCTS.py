@@ -35,7 +35,7 @@ class MCTS():
 
 
 
-	def Strategy(self,game,temp=1):
+	def strategy(self,game,temp=1):
 		"""
 		This function performs numMCTSSims simulations of MCTS starting from
 		initialState.
