@@ -9,7 +9,7 @@ class LeducGame(Game):
 	def getAnte(self):
 		return 1
 
-	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3}
+	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize" : 1}
 
 	def __init__(self):
 		self.dealer = random.randint(0,2)

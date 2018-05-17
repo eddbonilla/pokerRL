@@ -9,32 +9,18 @@ from keras import backend as K
 from model import nnets
 from leduc import LeducGame
 from selfPlay import SelfPlay
+class Training:
 
-def getGameParams():
-	"""
-	Returns the game parameters
-	"""
-	dummyGame=LeducGame()
-	historySize=dummyGame.getPublicHistory().size
-	handSize=dummyGamey.getPlayerCard().size
-	publicCardSize= 1 # I want a method for this -E
-	actionSize=dummyGame.getActionSize()
-	valueSize=1 #I want a method for this-E
-	gameParams={
-	"historySize":historySize,
-	"handSize": handSize,
-	"publicCardSize": publicCardSize,
-	"actionSize": actionSize,
-	"valueSize": valueSize
-	}
-	return historySize,handSize,publicCardSize,actionSize,valueSize
+	def __init__(self,maxMemory):
+		self.N = 0
+		self.gameParams = LeducGame.params
+		self.inputsReservoir = np.zeros((maxMemory, self.gameParams["historySize"] + self.gameParams["handSize"] + self.gameParams["publicCardSize"]))
+		self.opponentsCardsReservoir = np.zeros((maxMemory, self.gameParams["handSize"]))
+		self.policiesReservoir = np.zeros((maxMemory,self.gameParams["actionSize"]))
+		self.valuesReservoir = np.zeros((maxMemory,self.gameParams["valueSize"]))
 
-def trainOne(sess,nnets,gameParams) #train with only 1 instance (for now) It is a draft of what the code should be
+	def trainOne(sess,nnets,gameParams) #train with only 1 instance (for now) It is a draft of what the code should be
 	
-	nnInputsReservoir=[]
-	opponentCardsReservoir=[]
-	policiesReservoir=[]
-	valuesReservoir=[]
 	for j in range(epochs)
 		for i in range(IterPerEpoch)
 			newInput, newOppCard, newP, newV = selfPlay(eta=0.3, numMCTSSims=100,nnets,cpuct=1)
