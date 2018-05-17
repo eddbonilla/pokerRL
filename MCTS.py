@@ -49,13 +49,13 @@ class MCTS():
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
-			self.gameCopy.setOpponentCard(np.random.choice(self.gameCopy.getActionSize(),estimOpponentCards)) #choose the opponent cards with a guess
+			self.gameCopy.setOpponentCard(np.random.choice(self.gameCopy.params["actionSize"],estimOpponentCards)) #choose the opponent cards with a guess
 			if i%100 == 0: print(i)
 			self.search()
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
-		counts = np.array([self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())]) #Here you count the number of times that action a was taken in state s
+		counts = np.array([self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.params["actionSize"])]) #Here you count the number of times that action a was taken in state s
 
 		counts = counts**(1./temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
 		treeStrategy = counts /float(np.sum(counts)) #normalize
@@ -94,7 +94,7 @@ class MCTS():
 		best_act = -1
 
 		# pick the action with the highest upper confidence bound
-		for a in range(self.gameCopy.getActionSize()):
+		for a in range(self.gameCopy.params["actionSize"]):
 			if (sForN,a) in self.Nsa:
 					u = (playerMove)*self.Qsa[(s,a)] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
 			else:
@@ -105,7 +105,7 @@ class MCTS():
 				best_act = a
 
 		a=best_act
-		action = np.zeros((self.gameCopy.getActionSize(),1)) # Encode the action in the one hot format
+		action = np.zeros((self.gameCopy.params["actionSize"],1)) # Encode the action in the one hot format
 		action[a]=1;
 		#print(action)
 		_,bet = self.gameCopy.action(action)
