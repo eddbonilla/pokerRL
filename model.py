@@ -108,18 +108,24 @@ class nnets:
 		self.alpha=float(new_alpha)
 
 	def policyValue(self,playerCard, publicHistory, publicCard):
-
+		#print(publicCard)
+		#print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		return self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsInput : [playerInfo]})
+		#print(playerInfo.shape)
+		p, v = self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsInput : [playerInfo]})
+		p=np.reshape(p,(self.policyNetTarget.get_shape()[1]))
+		v=np.reshape(v,(self.valueNetTarget.get_shape()[1]))
+		return p,v
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
-
+		print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-
-		return self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsInput: [playerInfo]})
+		print(playerInfo.shape)
+		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsInput: [playerInfo]})
+		return np.reshape(estimate,(self.estimNetTarget.get_shape()[1]))
 
 	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
-		playerCard=np.reshape(playerCard,-1)
+		#playerCard=np.reshape(playerCard,-1)
 		publicHistory=np.reshape(publicHistory,-1)
 		publicCard=np.reshape(publicCard,-1)
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)

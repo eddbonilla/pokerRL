@@ -50,8 +50,7 @@ class MCTS():
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
 			self.gameCopy.setOpponentCard(np.random.choice(int(self.gameCopy.params["actionSize"]),p=estimOpponentCards)) #choose the opponent cards with a guess
-			#if i%100 == 0: 
-			print(i)
+			if i%100 == 0: print(i)
 			self.search()
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
@@ -93,14 +92,17 @@ class MCTS():
 
 		cur_best = -float("inf")
 		best_act = -1
-		print(playerMove)
+
 		# pick the action with the highest upper confidence bound
 		for a in range(self.gameCopy.params["actionSize"]):
 			
 			if (sForN,a) in self.Nsa:
-					u = (playerMove)*self.Qsa[(s,a)] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
+				if playerMove:
+					u = self.Qsa[(s,a)] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
+				else:
+					u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
 			else:
-					u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS)     # Q = 0 ?
+				u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS)     # Q = 0 ?
 
 			if u > cur_best:
 				cur_best = u
