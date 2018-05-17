@@ -3,7 +3,7 @@ import numpy as np
 import copy
 from leduc import LeducGame
 from MCTS import MCTS
-class nnet():
+class nnet:
 	def policyValue(self,a,b,c):
 		p=[1.,1.,1.]
 		return p/np.sum(p) , 0.5
@@ -15,6 +15,6 @@ class nnet():
 game=LeducGame()
 net=nnet()
 tree=MCTS(net, numMCTSSims=2000, cpuct=1)
-strat=tree.treeStrategy(game)
+#strat=tree.treeStrategy(game)
 
-print(strat)
+#print(strat)
