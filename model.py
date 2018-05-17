@@ -27,10 +27,9 @@ class nnets:
 		self.sess=session
 
 		#Create placeholders
-		self.policyNetInput=tf.placeholder(dtype=tf.float32,shape=(None,historySize+2*handSize+publicCardSize),name='policyNetInput')
 		self.policyNetTarget=tf.placeholder(dtype=tf.float32,shape=(None,actionSize))
 		self.valueNetTarget=tf.placeholder(dtype=tf.float32,shape=(None,valueSize))
-		self.estimNetInput=tf.placeholder(dtype=tf.float32,shape=(None,historySize+handSize+publicCardSize),name='estimNetInput')
+		self.nnetsInput=tf.placeholder(dtype=tf.float32,shape=(None,historySize+handSize+publicCardSize),name='estimNetInput')
 		self.estimNetTarget=tf.placeholder(dtype=tf.float32,shape=(None,handSize))
 
 		#Properties that we are setting to be constants
@@ -51,16 +50,17 @@ class nnets:
 #Functions that set properties during initialization
 	@define_scope
 	def getPolicyValue(self):
-		input_size = int(self.policyNetInput.get_shape()[1])
-		policy_size= int(self.policyNetTarget.get_shape()[1])
-		value_size= int(self.valueNetTarget.get_shape()[1])
-		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=256, activation='relu')(model)
-		p_values = Dense(output_dim=policy_size, activation='softmax')(model)
-		v_values = Dense(output_dim=value_size, activation='linear')(model)
-		self.fModel = Model(input=inputs, output=[p_values , v_values])
-		return self.fModel(self.policyNetInput)
+		with tf.variable_scope("policy_value_scope"):
+			input_size = int(self.policyNetInput.get_shape()[1])
+			policy_size= int(self.policyNetTarget.get_shape()[1])
+			value_size= int(self.valueNetTarget.get_shape()[1])
+			inputs = Input(shape=(input_size,))
+			model = Dense(output_dim=256, activation='relu')(inputs)
+			model = Dense(output_dim=256, activation='relu')(model)
+			p_values = Dense(output_dim=policy_size, activation='softmax')(model)
+			v_values = Dense(output_dim=value_size, activation='linear')(model)
+			self.fModel = Model(input=inputs, output=[p_values , v_values])
+		return self.fModel(tf.concatenate((self.nnetsInput,self.getEstimateOpponent),concat_dim = 1))
 
 	@define_scope
 	def costPolicyValue(self):
@@ -74,29 +74,32 @@ class nnets:
 	@define_scope
 	def trainPolicyValue(self):
 		optimizer=tf.train.AdamOptimizer(0.0001)
-		return optimizer.minimize(self.costPolicyValue)
+		variables = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope = "policy_value_scope")
+		return optimizer.minimize(self.costPolicyValue, var_list=variables)
 
 
 	@define_scope
 	def getEstimateOpponent(self):
-		input_size = int(self.estimNetInput.get_shape()[1])
-		target_size= int(self.estimNetTarget.get_shape()[1])
-		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=256, activation='relu')(model)
-		cards = Dense(output_dim=target_size, activation='softmax')(model)
-		self.gModel = Model(input=inputs, output=cards)
-		return self.gModel(self.estimNetInput)
+		with tf.variable_scope("estimate_opponent_scope"):
+			input_size = int(self.estimNetInput.get_shape()[1])
+			target_size= int(self.estimNetTarget.get_shape()[1])
+			inputs = Input(shape=(input_size,))
+			model = Dense(output_dim=256, activation='relu')(inputs)
+			model = Dense(output_dim=256, activation='relu')(model)
+			cards = Dense(output_dim=target_size, activation='softmax')(model)
+			self.gModel = Model(input=inputs, output=cards)
+		return self.gModel(self.nnetsInput)
 
 	@define_scope
 	def costEstimate(self):
 		cardProb=self.getEstimateOpponent
-		return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.estimNetInput,logits=cardProb))
+		return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.estimNetTarget,logits=cardProb))
 
 	@define_scope
 	def trainEstimate(self):
 		optimizer=tf.train.AdamOptimizer(0.0001)
-		return optimizer.minimize(self.costEstimate)
+		variables = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope = "opponent_estimate_scope")
+		return optimizer.minimize(self.costEstimate,var_list = variables)
 
 #Auxiliary functions
 	def setAlpha(self,new_alpha):
@@ -105,20 +108,22 @@ class nnets:
 	def policyValue(self,playerCard, publicHistory, publicCard):
 
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		opponentCard=self.estimateOpponent(playerCard, publicHistory, publicCard)
 		print(playerInfo.shape)
 		print(opponentCard.shape)
 		playerInfo=np.concatenate((playerInfo,np.reshape(opponentCard,-1)),axis=0)
-		return self.sess.run(self.getPolicyValue, feed_dict = {self.policyNetInput : [playerInfo]})
+		return self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsInput : [playerInfo]})
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard,flattened=False):
 
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 
-		return self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.estimNetInput: [playerInfo]})
+		return self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsInput: [playerInfo]})
 
 	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
 		playerCard=np.reshape(playerCard,-1)
 		publicHistory=np.reshape(publicHistory,-1)
 		publicCard=np.reshape(publicCard,-1)
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
+
+	def trainNets(self, epochs):
+		, _ = self.sess.run([trainEstimate,trainPolicyValue],feed_dict = )
