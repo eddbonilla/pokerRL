@@ -11,6 +11,7 @@ class LeducGame(Game):
 
 	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize": 1}
 
+
 	def __init__(self):
 		self.dealer = random.randint(0,1)
 		self.player = self.dealer  #0 for player 1, 1 for player 2
