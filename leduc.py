@@ -9,8 +9,11 @@ class LeducGame(Game):
 	def getAnte(self):
 		return 1
 
+	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3}
+
 	def __init__(self):
-		self.player = 0  #0 for player 1, 1 for player 2
+		self.dealer = random.randint(0,2)
+		self.player = self.dealer  #0 for player 1, 1 for player 2
 		self.pot = 2
 		self.cards = {}
 		self.cards["player1"] = random.randint(0,2)
@@ -22,6 +25,22 @@ class LeducGame(Game):
 		self.raisesInRound = 0
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
+
+	def resetGame():
+		self.dealer = random.randint(0,2)
+		self.player = self.dealer  #0 for player 1, 1 for player 2
+		self.pot = 2
+		del self.cards["public"] 
+		self.cards["player1"] = random.randint(0,2)
+		self.cards["player2"] = (self.cards["player1"] + (random.randint(0,4)%3) + 1)%3
+		self.round = 0   #0 for 1st round, 1 for 2nd round
+		self.bet = 2
+		self.finished = False
+		self.playerfolded = None
+		self.raisesInRound = 0
+		self.history = 0
+		self.winnings = None
+
 
 	def playerInfoStringRepresentation(self):
 		dict = { 	"player" : self.player,
@@ -64,7 +83,7 @@ class LeducGame(Game):
 			self.round = 1
 			self.bet = 4
 			self.raisesInRound = 0
-			self.player = 0
+			self.player = self.dealer
 			if self.cards["player1"] == self.cards["player2"]:
 				self.cards["public"] = (self.cards["player1"] + 1 + random.randint(0,1))%3
 			else:
@@ -97,7 +116,7 @@ class LeducGame(Game):
 
 	def setOpponentCard(self,card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
-		self.cards["player"+str(2 - self.player)] = card
+		self.cards["player"+str(2 - self.player)] = card 
 
 	def getPublicHistory(self):
 		#Public history returned with player history at top
@@ -111,9 +130,6 @@ class LeducGame(Game):
 				
 	def isFinished(self):
 		return self.finished
-
-	def getActionSize(self):
-		return 3 #3 actions always: check, raise, fold
 
 	def action(self,strategy):
 		#Randomly select action from strategy.
