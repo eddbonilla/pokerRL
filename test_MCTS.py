@@ -15,6 +15,6 @@ class nnet:
 game=LeducGame()
 net=nnet()
 tree=MCTS(net, numMCTSSims=2000, cpuct=1)
-#strat=tree.treeStrategy(game)
+boring, strat=tree.strategy(game)
 
-#print(strat)
+print(strat)

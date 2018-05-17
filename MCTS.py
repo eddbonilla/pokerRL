@@ -49,8 +49,9 @@ class MCTS():
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
-			self.gameCopy.setOpponentCard(np.random.choice(self.gameCopy.params["actionSize"],estimOpponentCards)) #choose the opponent cards with a guess
-			if i%100 == 0: print(i)
+			self.gameCopy.setOpponentCard(np.random.choice(int(self.gameCopy.params["actionSize"]),p=estimOpponentCards)) #choose the opponent cards with a guess
+			#if i%100 == 0: 
+			print(i)
 			self.search()
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
@@ -83,7 +84,7 @@ class MCTS():
 		if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
 			# leaf node
 			
-			#fnet and gnet integrate into one function - I just thinkthis might be slightly faster/cleaner -G 
+			#fnet and gnet integrate into one function 
 			self.Ps[s], v = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())   #Opponent Strategy.
 
 			#self.Vs[s] = valids
@@ -92,9 +93,10 @@ class MCTS():
 
 		cur_best = -float("inf")
 		best_act = -1
-
+		print(playerMove)
 		# pick the action with the highest upper confidence bound
 		for a in range(self.gameCopy.params["actionSize"]):
+			
 			if (sForN,a) in self.Nsa:
 					u = (playerMove)*self.Qsa[(s,a)] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
 			else:
@@ -122,3 +124,6 @@ class MCTS():
 		#print("net_winnings=" +str(net_winnings))
 		self.Ns[sForN] += 1
 		return net_winnings
+
+	def setNumSimulations(self,newNumMCTSSims):
+		self.numMCTSSims=numMCTSSims

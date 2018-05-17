@@ -9,10 +9,10 @@ class LeducGame(Game):
 	def getAnte(self):
 		return 1
 
-	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3}
+	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize": 1}
 
 	def __init__(self):
-		self.dealer = random.randint(0,2)
+		self.dealer = random.randint(0,1)
 		self.player = self.dealer  #0 for player 1, 1 for player 2
 		self.pot = 2
 		self.cards = {}
@@ -26,11 +26,12 @@ class LeducGame(Game):
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
 
-	def resetGame():
-		self.dealer = random.randint(0,2)
+	def resetGame(self):
+		self.dealer = random.randint(0,1)
 		self.player = self.dealer  #0 for player 1, 1 for player 2
 		self.pot = 2
-		del self.cards["public"] 
+		if "public" in self.cards: 
+			del self.cards["public"] 
 		self.cards["player1"] = random.randint(0,2)
 		self.cards["player2"] = (self.cards["player1"] + (random.randint(0,4)%3) + 1)%3
 		self.round = 0   #0 for 1st round, 1 for 2nd round
@@ -38,7 +39,7 @@ class LeducGame(Game):
 		self.finished = False
 		self.playerfolded = None
 		self.raisesInRound = 0
-		self.history = 0
+		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
 
 

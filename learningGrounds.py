@@ -51,9 +51,9 @@ def trainOne(sess,nnets,gameParams) #train with only 1 instance (for now) It is 
 def main(_)
 compGraph = tf.Graph()
 	with compGraph.as_default(), tf.Session() as sess:
-	K.set_session(sess)
-	networks=nnets(sess,gameParams, alpha=1.)
-	#saver = tf.train.Saver() #This is probably good practice
-	session.run(tf.global_variables_initializer())
-
-	trainOne(sess,nnets,gameParams)
+		K.set_session(sess)
+		gameParams=getGameParams;
+		networks=nnets(sess,gameParams, alpha=1.)
+		#saver = tf.train.Saver() #This is probably good practice
+		session.run(tf.global_variables_initializer())
+		trainOne(sess,nnets,gameParams)
