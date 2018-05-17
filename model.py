@@ -108,9 +108,6 @@ class nnets:
 	def policyValue(self,playerCard, publicHistory, publicCard):
 
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		print(playerInfo.shape)
-		print(opponentCard.shape)
-		playerInfo=np.concatenate((playerInfo,np.reshape(opponentCard,-1)),axis=0)
 		return self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsInput : [playerInfo]})
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard,flattened=False):
@@ -126,4 +123,4 @@ class nnets:
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
 
 	def trainNets(self, epochs):
-		, _ = self.sess.run([trainEstimate,trainPolicyValue],feed_dict = )
+		self.sess.run([trainEstimate,trainPolicyValue],feed_dict = {})
