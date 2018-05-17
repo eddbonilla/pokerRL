@@ -57,12 +57,12 @@ class selfPlay:
 
 		return inputs, opponentCards, policies, vs
 
-		def cleanTrees():
-			for tree in self.trees:
-				tree.cleanTree()
+	def cleanTrees():
+		for tree in self.trees:
+			tree.cleanTree()
 
-		def setSimulationParams(self, newNumMCTSSims, newEta):
-			self.eta=newEta
-			self.numMCTSSims=newNumMCTSSims
-			for tree in self.trees:
-				tree.setNumSimulations(newNumMCTSSims)
+	def setSimulationParams(self, newNumMCTSSims, newEta):
+		self.eta=newEta
+		self.numMCTSSims=newNumMCTSSims
+		for tree in self.trees:
+			tree.setNumSimulations(newNumMCTSSims)
