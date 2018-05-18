@@ -37,10 +37,12 @@ class selfPlay:
 					"moneyBet"    : value[player]
 					}
 			cache.append(dict)
+			#assert np.sum(value) + dict["pot"] == 0
 			action,bet = self.game.action(strategy)
 			value[player]-= bet
 			#print(action,bet,value)
 		value += self.game.getOutcome()
+		#assert np.sum(value) == 0
 		#print(value)
 		gameData = { "input" : np.zeros((len(cache), self.game.params["inputSize"])),
 					"estimTarget" : np.zeros((len(cache),self.game.params["handSize"])),

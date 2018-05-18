@@ -9,6 +9,7 @@ from keras import backend as K
 from model import nnets
 from leduc import LeducGame
 from selfPlay import selfPlay
+import time
 
 class Training:
 
@@ -38,10 +39,13 @@ class Training:
 
 	def doTraining(self,steps):
 		for i in range(steps):
+			start = time.time()
 			self.playGames()
+			postGames = time.time()
 			for j in range(self.batchesPerTrain):
 				self.nnets.trainOnMinibatch()
-			print(i)
+			end = time.time()
+			print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - postGames))
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
