@@ -31,11 +31,12 @@ print(strat)
 
 with tf.Session() as session:
 	K.set_session(session)
-	params = {"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize": 1}
+	params = {"inputSize" : 30,"historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize": 1}
 	A=tf.placeholder(dtype=tf.float32,shape=(1,2))
 	F=nnets(session,params)
 	session.run(tf.global_variables_initializer())
 	Q=LeducGame()
-	B=selfPlay(Q,[0.3,0.5],100,F,1)
+	B=selfPlay(Q,[0.3,0.5],F,100,1)
 	output=B.runGame()
+	saver=tf.train.Saver()
 	print("Success?")
