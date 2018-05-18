@@ -86,7 +86,7 @@ class nnets:
 			self.fModel = Model(input=inputs, output=[p_values , v_values])
 			print(self.getEstimateOpponent.get_shape())
 			print(self.nnetsInput.get_shape())
-		return self.fModel(tf.concat(values=[self.nnetsInput,self.getEstimateOpponent],concat_dim = 1))
+		return self.fModel(tf.concat(values=[self.nnetsInput,self.getEstimateOpponent],axis=1))
 
 	@define_scope
 	def costPolicyValue(self):
