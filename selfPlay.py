@@ -13,7 +13,12 @@ class selfPlay:
 
 	def runGame(self):
 		self.game.resetGame()
-		cache = []
+		cache = { "input" : [],
+					"estimTarget" : [],
+					"policyTarget": [],
+					"valuesTarget" : [],
+					"player" : [],
+					"pot" : []}
 		ante = self.game.getAnte()
 		value = np.zeros(2)
 		value-=ante
@@ -26,39 +31,28 @@ class selfPlay:
 			averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			strategy = (1-self.eta[player])*averageStrategy + self.eta[player] * treeStrategy 
-			dict = {
-					"treeStrategy" :treeStrategy,
-					"player": player,
-					"publicHistory": self.game.getPublicHistory(),
-					"publicCard"  : self.game.getPublicCard(),
-					"playerCard"  : self.game.getPlayerCard(),
-					"opponentCard"    : self.game.getOpponentCard(),
-					"pot"         : self.game.getPot(),
-					"moneyBet"    : value[player]
-					}
-			cache.append(dict)
+
+			cache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
+			cache["policyTarget"].append(treeStrategy)
+			cache["estimTarget"].append(self.game.getOpponentCard())
+			cache["valuesTarget"].append(value[player])
+			cache["player"].append(player)
+			cache["pot"].append(self.game.getPot())
 			#assert np.sum(value) + dict["pot"] == 0
 			action,bet = self.game.action(strategy)
 			value[player]-= bet
-			#print(action,bet,value)
+			print(action,bet,value)
+
 		value += self.game.getOutcome()
 		#assert np.sum(value) == 0
 		#print(value)
-		gameData = { "input" : np.zeros((len(cache), self.game.params["inputSize"])),
-					"estimTarget" : np.zeros((len(cache),self.game.params["handSize"])),
-					"policyTarget": np.zeros((len(cache),self.game.params["actionSize"])),
-					"valuesTarget" : np.zeros((len(cache),self.game.params["valueSize"])) }
 
 
-		for i in range(len(cache)):
-			dict = cache[i]
-			v = (value[dict["player"]] - dict["moneyBet"])/dict["pot"]
-			gameData["input"][i,:] = (self.nnets.preprocessInput(dict["playerCard"],dict["publicHistory"],dict["publicCard"]))
-			gameData["estimTarget"][i,:] = (dict["opponentCard"])
-			gameData["policyTarget"][i,:] = (dict["treeStrategy"])
-			gameData["valuesTarget"][i,:]= v
+		for i in range(len(cache["valuesTarget"])):
+			cache["valuesTarget"][i] += self.game.getOutcome()[cache["player"][i]]
+			cache["valuesTarget"][i] /= cache["pot"][i]
 
-		return gameData
+		return cache
 
 	def cleanTrees(self):
 		for tree in self.trees:

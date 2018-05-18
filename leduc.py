@@ -122,7 +122,7 @@ class LeducGame(Game):
 
 	def getPublicHistory(self):
 		#Public history returned with player history at top
-		public_history = self.history[::(-1)**self.player,:,:,:]
+		public_history = np.copy(self.history[::(-1)**self.player,:,:,:])
 		return public_history
 
 	def getOutcome(self):
@@ -169,7 +169,7 @@ class LeducGame(Game):
 			if oldRaisesInRound==1:
 				betAmount = self.bet
 				endRound = True
-			elif oldRaisesInRound == 0 and oldPlayer == 1:
+			elif oldRaisesInRound == 0 and not oldPlayer == self.dealer:
 				endRound = True				
 			self.history[oldPlayer,oldRound,oldRaisesInRound,1] = 1
 		if action == 0:

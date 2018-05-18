@@ -50,8 +50,9 @@ class Training:
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
-		k = newData["input"].shape[0]
+		k = len(newData["input"])
 		for key in self.reservoirs:
+			newData[key] = np.array(newData[key])
 			assert k == newData[key].shape[0]
 		if self.N + k < self.maxMemory:
 			for key in self.reservoirs:
