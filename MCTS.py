@@ -20,6 +20,7 @@ class MCTS():
 		self.Nsa = {}	   # stores #times edge s,a was visited
 		self.Ns = {}		# stores #times board s was visited
 		self.Ps = {}		# stores initial policy (returned by neural net)
+		self.Qs = {}		# stores neural net value estimate for current position
 
 		self.Es = {}		# stores game.getGameEnded ended for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
@@ -87,6 +88,7 @@ class MCTS():
 			self.Ps[s], v = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())   #Opponent Strategy.
 
 			#self.Vs[s] = valids
+			self.Qs[s] = v
 			self.Ns[sForN] = 0
 			return pot*(1-v +(2*v-1)*playerMove)
 
@@ -102,7 +104,11 @@ class MCTS():
 				else:
 					u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
 			else:
-				u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS)     # Q = 0 ?
+				if playerMove:
+					u = self.Qs[s] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS) 
+				else:
+					u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS)
+
 
 			if u > cur_best:
 				cur_best = u
