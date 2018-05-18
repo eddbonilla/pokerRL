@@ -21,10 +21,10 @@ class selfPlay:
 		while not self.game.isFinished():
 
 			player = self.game.getPlayer()
-			print(player)
+			#print(player)
 
 			averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
-			print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
+			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			strategy = (1-self.eta[player])*averageStrategy + self.eta[player] * treeStrategy 
 			dict = {
 					"treeStrategy" :treeStrategy,
@@ -34,14 +34,14 @@ class selfPlay:
 					"playerCard"  : self.game.getPlayerCard(),
 					"opponentCard"    : self.game.getOpponentCard(),
 					"pot"         : self.game.getPot(),
-					"moneyBet"    : v[player]
+					"moneyBet"    : value[player]
 					}
 			cache.append(dict)
 			action,bet = self.game.action(strategy)
 			value[player]-= bet
-			print(action,bet,v)
+			#print(action,bet,value)
 		value += self.game.getOutcome()
-		print(value)
+		#print(value)
 		gameData = { "input" : np.zeros((len(cache), self.game.params["inputSize"])),
 					"estimTarget" : np.zeros((len(cache),self.game.params["handSize"])),
 					"policyTarget": np.zeros((len(cache),self.game.params["actionSize"])),
@@ -58,7 +58,7 @@ class selfPlay:
 
 		return gameData
 
-	def cleanTrees():
+	def cleanTrees(self):
 		for tree in self.trees:
 			tree.cleanTree()
 
@@ -100,5 +100,6 @@ class selfPlay:
 				if j == 0: v_TR+=v[testPlayer]/numTests
 				if j == 1: v_TA+=v[testPlayer]/numTests
 				if j == 2: v_AR+=v[testPlayer]/numTests
-		return v_TR, v_TA, v_AR
+		print("v_TR="+str(v_TR)+"\t"+"v_TA="+str(v_TA)+"\t"+"v_AR="+str(v_AR))
+		#return v_TR, v_TA, v_AR
 

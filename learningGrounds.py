@@ -9,6 +9,7 @@ from keras import backend as K
 from model import nnets
 from leduc import LeducGame
 from selfPlay import selfPlay
+
 class Training:
 
 	def __init__(self,maxMemory):
@@ -23,28 +24,29 @@ class Training:
 							"valuesTarget" : np.zeros((maxMemory,self.gameParams["valueSize"])) }
 		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
-		
-	def doTraining(self,steps):
+
 		compGraph = tf.Graph()
 		compGraph.as_default()
-		self.sess = tf.Session()
-		K.set_session(sess)
-		self.nnets=nnets(sess,self.gameParams, alpha=1.)
+		self.sess= tf.Session()
+		K.set_session(self.sess)
+		self.nnets=nnets(self.sess,self.gameParams, alpha=1.)
 		#saver = tf.train.Saver() #This is probably good practice
-		sess.run(tf.global_variables_initializer())
+		self.sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.3,0.3],game=LeducGame(), nnets = self.nnets, numMCTSSims=100,cpuct=1)
+
+	def doTraining(self,steps):
 		for i in range(steps):
 			self.playGames()
 			self.nnets.trainOnMinibatch()
-		self.sess.close()
+		#self.sess.close()
 
 	def addToReservoirs(self,newData):
 		k = newData["input"].shape[0]
-		for key in reservoirs:
+		for key in self.reservoirs:
 			assert k == newData[key].shape[0]
 		if self.N + k < self.maxMemory:
 			for key in self.reservoirs:
-			self.reservoirs[key][self.N:self.N+k, :] = newData
+				self.reservoirs[key][self.N:self.N+k, :] = newData[key]
 		elif self.N >= self.maxMemory:
 			keep_prob =  float(self.maxMemory)/(self.N+k)
 			keep_masks = np.random.rand((k)) < keep_prob
@@ -68,10 +70,12 @@ class Training:
 				self.reservoirs[key][replacements,:] = newData[key][keep_masks,:]
 		self.N += k
 
-	def shuffleReservoirs():
+	def shuffleReservoirs(self):
+		shortenedReservoirs = {}
 		for key in self.reservoirs:
-			np.shuffle(self.reservoirs[key])
+			np.random.shuffle(self.reservoirs[key][0:self.N,:])
 			shortenedReservoirs[key] = self.reservoirs[key][0:self.N,:]
+
 		if self.numShuffled < self.maxMemory:
 			self.nnets.initialiseIterator(shortenedReservoirs, self.batchSize)
 		self.numShuffled = self.N
@@ -84,3 +88,7 @@ class Training:
 			self.addToReservoirs(self.selfPlay.runGame())
 		if self.N - self.numShuffled > self.maxMemory or (self.numShuffled < self.maxMemory and (self.N - self.numShuffled)/self.N > self.unShuffledFraction):
 			self.shuffleReservoirs()
+		self.selfPlay.cleanTrees()
+
+	def closeSession(self):
+		sess.close()

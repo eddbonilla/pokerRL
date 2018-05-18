@@ -115,9 +115,9 @@ class nnets:
 	def costPolicyValue(self):
 		logits , v = self.getLogitsValue
 		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.nnetsData["policyTarget"],logits=logits))
-		print(p_cost)
+		#print(p_cost)
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.nnetsData["valuesTarget"])))
-		print(v_cost)
+		#print(v_cost)
 		return tf.add(p_cost,tf.multiply(self.alpha,v_cost))
 
 	@define_scope
@@ -142,13 +142,13 @@ class nnets:
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		print(playerInfo.shape)
+		#print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsData["input"]: [playerInfo]})
 
 		return np.reshape(estimate,(self.gameParams["handSize"]))
 
 	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
-		#playerCard=np.reshape(playerCard,-1)
+		playerCard=np.reshape(playerCard,-1)
 		publicHistory=np.reshape(publicHistory,-1)
 		publicCard=np.reshape(publicCard,-1)
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
@@ -161,4 +161,4 @@ class nnets:
 		self.sess.run(self.iterator.initializer,feed_dict = feed_dict)
 
 	def trainOnMinibatch(self):
-		self.sess.run([trainEstimate,trainPolicyValue])
+		self.sess.run([self.trainEstimate,self.trainPolicyValue])
