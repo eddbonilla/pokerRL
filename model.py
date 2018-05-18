@@ -51,7 +51,6 @@ class nnets:
 	@define_scope
 	def getEstimateOpponent(self):
 		with tf.variable_scope("estimate_opponent_scope"):
-			print("something")
 			input_size = int(self.nnetsInput.get_shape()[1])
 			target_size= int(self.estimNetTarget.get_shape()[1])
 			inputs = Input(shape=(input_size,))
@@ -84,17 +83,17 @@ class nnets:
 			p_values = Dense(output_dim=policy_size, activation='softmax')(model)
 			v_values = Dense(output_dim=value_size, activation='linear')(model)
 			self.fModel = Model(input=inputs, output=[p_values , v_values])
-			print(self.getEstimateOpponent.get_shape())
-			print(self.nnetsInput.get_shape())
-		return self.fModel(tf.concat(values=[self.nnetsInput,self.getEstimateOpponent],axis=1))
+			#print(self.getEstimateOpponent.get_shape())
+			#print(self.nnetsInput.get_shape())
+		return self.fModel(tf.concat(values=[self.nnetsInput,self.getEstimateOpponent],concat_dim = 1))
 
 	@define_scope
 	def costPolicyValue(self):
 		p , v = self.getPolicyValue
 		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.policyNetTarget,logits=p))
-		print(p_cost)
+		#print(p_cost)
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.valueNetTarget)))
-		print(v_cost)
+		#print(v_cost)
 		return tf.add(p_cost,tf.multiply(self.alpha,v_cost))
 
 	@define_scope
@@ -118,7 +117,9 @@ class nnets:
 		return p,v
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
+		#print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
+		#print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsInput: [playerInfo]})
 		return np.reshape(estimate,(self.estimNetTarget.get_shape()[1]))
 
