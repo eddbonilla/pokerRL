@@ -25,10 +25,9 @@ class nnets:
 	def __init__(self,session, gameParams,alpha =1.):
 
 		self.sess=session
-		self.gameParams=gameParams
 
 		#Create placeholders
-		self.rawData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
+		self.rawData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["historySize"]+gameParams["handSize"]+gameParams["publicCardSize"])),
 						"estimTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["handSize"])),
 						"policyTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["actionSize"])),
 						"valuesTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["valueSize"])) }
@@ -53,6 +52,7 @@ class nnets:
 		self.getEstimateOpponent
 		self.costEstimate
 		self.trainEstimate
+		self.getLogitsValue
 		self.getPolicyValue #sets up the graph and computes the Policy/Value
 		self.costPolicyValue
 		self.trainPolicyValue
@@ -62,8 +62,8 @@ class nnets:
 	def getEstimateOpponent(self):
 		with tf.variable_scope("estimate_opponent_scope"):
 			print("something")
-			input_size = int(self.gameParams["inputSize"])
-			target_size= int(self.gameParams["handSize"])
+			input_size = int(self.nnetsData["input"].get_shape()[1])
+			target_size= int(self.estimNetTarget.get_shape()[1])
 			inputs = Input(shape=(input_size,))
 			model = Dense(output_dim=256, activation='relu')(inputs)
 			model = Dense(output_dim=256, activation='relu')(model)
@@ -83,25 +83,32 @@ class nnets:
 		return optimizer.minimize(self.costEstimate,var_list = variables)
 
 	@define_scope
-	def getPolicyValue(self):
-		with tf.variable_scope("policy_value_scope"):
-			input_size = int(self.gameParams["inputSize"]+self.gameParams["handSize"])
-			policy_size= int(self.gameParams["actionSize"])
-			value_size= int(self.gameParams["valueSize"])
-			inputs = Input(shape=(input_size,))
-			model = Dense(output_dim=256, activation='relu')(inputs)
-			model = Dense(output_dim=256, activation='relu')(model)
-			p_values = Dense(output_dim=policy_size, activation='softmax')(model)
-			v_values = Dense(output_dim=value_size, activation='linear')(model)
-			self.fModel = Model(input=inputs, output=[p_values , v_values])
-			#print(self.getEstimateOpponent.get_shape())
-			#print(self.nnetsData["input"].get_shape())
+	def getLogitsValue(self):
+		
+		input_size = int(self.nnetsData["input"].get_shape()[1]+self.estimNetTarget.get_shape()[1])
+		policy_size= int(self.policyNetTarget.get_shape()[1])
+		value_size= int(self.valueNetTarget.get_shape()[1])
+		
+		inputs = Input(shape=(input_size,))
+		model = Dense(output_dim=256, activation='relu')(inputs)
+		model = Dense(output_dim=256, activation='relu')(model)
+		logits = Dense(output_dim=policy_size, activation='linear')(model)
+		v_values = Dense(output_dim=value_size, activation='sigmoid')(model)
+		self.fModel = Model(input=inputs, output=[logits , v_values])
+		#print(self.getEstimateOpponent.get_shape())
+		#print(self.nnetsData["input"].get_shape())
 		return self.fModel(tf.concat(values=[self.nnetsData["input"],self.getEstimateOpponent],axis=1))
 
 	@define_scope
+	def getPolicyValue(self):
+		logits ,v = getLogitsValue
+		p = tf.nn.softmax(logits)
+		return p,v
+
+	@define_scope
 	def costPolicyValue(self):
-		p , v = self.getPolicyValue
-		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.nnetsData["policyTarget"],logits=p))
+		logits , v = self.getLogitsValue
+		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.nnetsData["policyTarget"],logits=logits))
 		print(p_cost)
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.nnetsData["valuesTarget"])))
 		print(v_cost)
@@ -123,16 +130,16 @@ class nnets:
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		#print(playerInfo.shape)
 		p, v = self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsData["input"] : [playerInfo]})
-		p=np.reshape(p,(self.gameParams["actionSize"]))
-		v=np.reshape(v,(self.gameParams["valueSize"]))
+		p=np.reshape(p,(self.policyNetTarget.get_shape()[1]))
+		v=np.reshape(v,(self.valueNetTarget.get_shape()[1]))
 		return p,v
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		#print(playerInfo.shape)
+		print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsData["input"]: [playerInfo]})
 
-		return np.reshape(estimate,(self.gameParams["handSize"]))
+		return np.reshape(estimate,(self.estimNetTarget.get_shape()[1]))
 
 	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
 		#playerCard=np.reshape(playerCard,-1)
