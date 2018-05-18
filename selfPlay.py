@@ -3,7 +3,7 @@ import numpy as np
 from MCTS import MCTS
 
 class selfPlay:
-	def __init__(self,game, eta, numMCTSSims,nnets,cpuct):
+	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1):
 		self.game=game
 		self.trees = [MCTS(nnets, numMCTSSims, cpuct), MCTS(nnets, numMCTSSims, cpuct)]             #Index labels player
 		self.eta=eta # array with the probabilities of following the average strategy for each player
@@ -16,7 +16,8 @@ class selfPlay:
 		cache = []
 		allPlayersCards = self.game.getPlayerStates()
 		ante = self.game.getAnte()
-		v = np.array([-ante,-ante],dtype = float)
+		v = np.zeros(2)
+		v-=ante
 		#self.cleanTrees()             clean trees each game if we want
 		while not self.game.isFinished():
 
@@ -50,7 +51,7 @@ class selfPlay:
 
 		for i in range(len(cache)):
 			dict = cache[i]
-			v = (v[dict["player"]] - dict["moneyBet"])/float(dict["pot"])
+			v = (v[dict["player"]] - dict["moneyBet"])/dict["pot"]
 			inputs[i,:] = (self.nnets.preprocessInput(dict["playerCard"],dict["publicHistory"],dict["publicCard"]))
 			opponentCards[i,:] = (dict["opponentCard"])
 			policies[i,:] = (dict["treeStrategy"])
