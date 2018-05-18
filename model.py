@@ -118,9 +118,7 @@ class nnets:
 		return p,v
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
-		print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsInput: [playerInfo]})
 		return np.reshape(estimate,(self.estimNetTarget.get_shape()[1]))
 

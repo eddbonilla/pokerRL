@@ -14,7 +14,6 @@ class selfPlay:
 	def runGame(self):
 		self.game.resetGame()
 		cache = []
-		allPlayersCards = self.game.getPlayerStates()
 		ante = self.game.getAnte()
 		v = np.array([-ante,-ante],dtype = float)
 		#self.cleanTrees()             clean trees each game if we want
@@ -58,12 +57,45 @@ class selfPlay:
 
 		return inputs, opponentCards, policies, vs
 
-		def cleanTrees():
-			for tree in self.trees:
-				tree.cleanTree()
+	def cleanTrees():
+		for tree in self.trees:
+			tree.cleanTree()
 
-		def setSimulationParams(self, newNumMCTSSims, newEta):
-			self.eta=newEta
-			self.numMCTSSims=newNumMCTSSims
-			for tree in self.trees:
-				tree.setNumSimulations(newNumMCTSSims)
+	def setSimulationParams(self, newNumMCTSSims, newEta):
+		self.eta=newEta
+		self.numMCTSSims=newNumMCTSSims
+		for tree in self.trees:
+			tree.setNumSimulations(newNumMCTSSims)
+
+	def testGame(self,numTests):
+		testPlayer=0; #Id of the player we are testing
+		v_TR=0.
+		v_TA=0.
+		v_AR=0.
+		randomStrategy=np.ones(self.game.params["actionSize"],dtype=float)/self.game.params["actionSize"]
+		for j in range(3):
+			for i in range(numTests):
+				self.game.resetGame()
+				ante = self.game.getAnte()
+				v = np.array([-ante,-ante],dtype = float)
+				while not self.game.isFinished():
+
+					player = self.game.getPlayer()
+					averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
+					if player == testPlayer:
+						if j == 0:
+							strategy =treeStrategy
+						else:
+							strategy = averageStrategy
+					else:
+						if j==1:
+							strategy= averageStrategy
+						else:
+							strategy=randomStrategy
+					action,bet = self.game.action(strategy)
+					v[player]-= bet
+				v += self.game.getOutcome()
+				if j == 0: v_TR+=v[testPlayer]/numTests
+				if j == 1: v_TA+=v[testPlayer]/numTests
+				if j == 2: v_AR+=v[testPlayer]/numTests
+		return v_TR, v_TA, v_AR
