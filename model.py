@@ -129,7 +129,7 @@ class nnets:
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
-		print(playerInfo.shape)
+		#print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsData["input"]: [playerInfo]})
 
 		return np.reshape(estimate,(self.gameParams["handSize"]))
