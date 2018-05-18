@@ -68,7 +68,7 @@ class nnets:
 		inputs = Input(shape=(input_size,))
 		model = Dense(output_dim=256, activation='relu')(inputs)
 		model = Dense(output_dim=256, activation='relu')(model)
-		cards = Dense(output_dim=target_size, activation='softmax')(model)
+		cards = Dense(output_dim=target_size, activation='linear')(model)
 		self.gModel = Model(input=inputs, output=cards)
 		return self.gModel(self.nnetsData["input"])
 
@@ -103,7 +103,7 @@ class nnets:
 		self.fModel = Model(input=inputs, output=[logits , v_values])
 		#print(self.getEstimateOpponent.get_shape())
 		#print(self.nnetsData["input"].get_shape())
-		return self.fModel(tf.concat(values=[self.nnetsData["input"],self.getEstimateOpponent],axis=1))
+		return self.fModel(tf.concat(values=[self.nnetsData["input"],self.getLogitsOpponent],axis=1))
 
 	@define_scope
 	def getPolicyValue(self):
