@@ -84,15 +84,16 @@ class selfPlay:
 					player = self.game.getPlayer()
 					averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
 					if player == testPlayer:
-						if j == 0:
-							strategy =treeStrategy
+						if j == 2:
+							strategy =averageStrategy
 						else:
-							strategy = averageStrategy
+							strategy = treeStrategy
 					else:
-						if j==1:
+						if j == 1:
 							strategy= averageStrategy
 						else:
 							strategy=randomStrategy
+					#print(str(player)+" j= "+str(j)+" "+str(strategy))
 					action,bet = self.game.action(strategy)
 					v[player]-= bet
 				v += self.game.getOutcome()
