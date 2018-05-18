@@ -22,14 +22,19 @@ class Training:
 							"policyTarget" : np.zeros((maxMemory,self.gameParams["actionSize"])),
 							"valuesTarget" : np.zeros((maxMemory,self.gameParams["valueSize"])) }
 		self.gamesPerUpdateNets = 128
+		self.batchSize = 128
+		
+	def doTraining(self):
 		compGraph = tf.Graph()
-		with compGraph.as_default(), tf.Session() as sess:
-			K.set_session(sess)
-			self.nnets=nnets(sess,self.gameParams, alpha=1.)
-			#saver = tf.train.Saver() #This is probably good practice
-			sess.run(tf.global_variables_initializer())
-			self.selfPlay = selfPlay(eta=[0.3,0.3],game=LeducGame(), nnets = self.nnets, numMCTSSims=100,cpuct=1)
-			self.playGames()
+		compGraph.as_default()
+		self.sess = tf.Session()
+		K.set_session(sess)
+		self.nnets=nnets(sess,self.gameParams, alpha=1.)
+		#saver = tf.train.Saver() #This is probably good practice
+		sess.run(tf.global_variables_initializer())
+		self.selfPlay = selfPlay(eta=[0.3,0.3],game=LeducGame(), nnets = self.nnets, numMCTSSims=100,cpuct=1)
+		self.playGames()
+		self.sess.close()
 
 	def addToReservoirs(self,newData):
 		k = newData["input"].shape[0]
@@ -64,11 +69,15 @@ class Training:
 	def shuffleReservoirs():
 		for key in self.reservoirs:
 			np.shuffle(self.reservoirs[key])
+		if self.numShuffled < self.maxMemory:
+			self.nnets.initialiseIterator(self.reservoirs, self.batchSize)
+		self.numShuffled = self.N
+
 
 
 
 	def playGames(self): 
 		for i in range(self.gamesPerUpdateNets):
 			self.addToReservoirs(self.selfPlay.runGame())
-		if (self.N - self.numShuffled)/self.N > self.unShuffledFraction:
+		if self.N - self.numShuffled > self.maxMemory or (self.numShuffled < self.maxMemory and (self.N - self.numShuffled)/self.N > self.unShuffledFraction):
 			self.shuffleReservoirs()

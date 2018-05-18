@@ -34,8 +34,9 @@ class nnets:
 		self.batchSize = tf.placeholder(tf.int64, shape=[])
 		
 		self.dataset = tf.data.Dataset.from_tensor_slices(self.rawData)
-		self.dataset = dataset.repeat()
-		self.dataset = dataset.batch(self.batchSize)
+		self.dataset = self.dataset.repeat()
+		self.dataset = self.dataset.batch(self.batchSize)
+		self.dataset = self.dataset.prefetch(1)
 		self.iterator = self.dataset.make_initializable_iterator()
 
 		self.nnetsData =self.iterator.get_next()
@@ -139,7 +140,7 @@ class nnets:
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
 
 	def initialiseIterator(self, reservoirs, miniBatchSize):
-		self.sess.run(self.iterator.initialise,{i: d for i, d in zip(reservoirs, self.rawData), self.batchSize: miniBatchSize})
+		self.sess.run(self.iterator.initializer,{i: d for i, d in zip(reservoirs, self.rawData), self.batchSize: miniBatchSize})
 
 	def trainOnMinibatch(self):
 		self.sess.run([trainEstimate,trainPolicyValue])
