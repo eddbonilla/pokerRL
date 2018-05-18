@@ -126,10 +126,10 @@ class nnets:
 		return p,v
 
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
-		print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsData["input"]: [playerInfo]})
+
 		return np.reshape(estimate,(self.estimNetTarget.get_shape()[1]))
 
 	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
@@ -139,7 +139,7 @@ class nnets:
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
 
 	def initialiseIterator(self, reservoirs, miniBatchSize):
-		self.sess.run({i: d for i, d in zip(reservoirs, self.rawData), self.batchSize: miniBatchSize}
+		self.sess.run(self.iterator.initialise,{i: d for i, d in zip(reservoirs, self.rawData), self.batchSize: miniBatchSize})
 
 	def trainOnMinibatch(self):
 		self.sess.run([trainEstimate,trainPolicyValue])

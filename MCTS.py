@@ -50,7 +50,7 @@ class MCTS():
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
 			self.gameCopy.setOpponentCard(np.random.choice(int(self.gameCopy.params["actionSize"]),p=estimOpponentCards)) #choose the opponent cards with a guess
-			if i%100 == 0: print(i)
+			#if i%100 == 0: print(i)
 			self.search()
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
