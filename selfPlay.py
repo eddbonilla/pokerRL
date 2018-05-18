@@ -76,6 +76,7 @@ class selfPlay:
 		v_TA=0.
 		v_AC=0.
 		checkStrategy=np.array([0,1,0])
+
 		for j in range(3):
 			for i in range(numTests):
 				self.game.resetGame()
@@ -94,7 +95,9 @@ class selfPlay:
 						if j == 1:
 							strategy= averageStrategy
 						else:
+
 							strategy=checkStrategy
+
 					#print(str(player)+" j= "+str(j)+" "+str(strategy))
 					action,bet = self.game.action(strategy)
 					v[player]-= bet
@@ -102,6 +105,8 @@ class selfPlay:
 				if j == 0: v_TC+=v[testPlayer]/numTests
 				if j == 1: v_TA+=v[testPlayer]/numTests
 				if j == 2: v_AC+=v[testPlayer]/numTests
+
 		print("v_TC="+str(v_TC)+"\t"+"v_TA="+str(v_TA)+"\t"+"v_AC="+str(v_AC))
-		#return v_TR, v_TA, v_AR
+		return v_TC, v_TA, v_AC
+
 

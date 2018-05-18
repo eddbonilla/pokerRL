@@ -23,6 +23,7 @@ class Training:
 							"estimTarget" : np.zeros((maxMemory, self.gameParams["handSize"])),
 							"policyTarget" : np.zeros((maxMemory,self.gameParams["actionSize"])),
 							"valuesTarget" : np.zeros((maxMemory,self.gameParams["valueSize"])) }
+
 		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
 		self.randState = np.random.RandomState()
@@ -33,7 +34,7 @@ class Training:
 		self.sess= tf.Session()
 		K.set_session(self.sess)
 		self.nnets=nnets(self.sess,self.gameParams, alpha=1.)
-		#saver = tf.train.Saver() #This is probably good practice
+		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.3,0.3],game=LeducGame(), nnets = self.nnets, numMCTSSims=50,cpuct=1)
 
@@ -90,6 +91,9 @@ class Training:
 			self.nnets.initialiseIterator(shortenedReservoirs, self.batchSize)
 		self.numShuffled = self.N
 
+	def saveSession(self,checkpointPath):
+		self.saver.save(self.sess,checkpointPath)
+
 
 
 
@@ -101,4 +105,4 @@ class Training:
 		self.selfPlay.cleanTrees()
 
 	def closeSession(self):
-		sess.close()
+		self.sess.close()
