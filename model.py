@@ -140,7 +140,8 @@ class nnets:
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
 
 	def initialiseIterator(self, reservoirs, miniBatchSize):
-		self.sess.run(self.iterator.initializer,{i: d for i, d in zip(reservoirs, self.rawData), self.batchSize: miniBatchSize})
+		feed_dict = {i: d for i, d in zip(reservoirs, self.rawData)}
+		self.sess.run(self.iterator.initializer,{, self.batchSize: miniBatchSize})
 
 	def trainOnMinibatch(self):
 		self.sess.run([trainEstimate,trainPolicyValue])
