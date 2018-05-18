@@ -24,7 +24,7 @@ class Training:
 		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
 		
-	def doTraining(self):
+	def doTraining(self,steps):
 		compGraph = tf.Graph()
 		compGraph.as_default()
 		self.sess = tf.Session()
@@ -33,7 +33,9 @@ class Training:
 		#saver = tf.train.Saver() #This is probably good practice
 		sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.3,0.3],game=LeducGame(), nnets = self.nnets, numMCTSSims=100,cpuct=1)
-		self.playGames()
+		for i in range(steps):
+			self.playGames()
+			self.nnets.trainOnMinibatch()
 		self.sess.close()
 
 	def addToReservoirs(self,newData):
@@ -69,8 +71,9 @@ class Training:
 	def shuffleReservoirs():
 		for key in self.reservoirs:
 			np.shuffle(self.reservoirs[key])
+			shortenedReservoirs[key] = self.reservoirs[key][0:self.N,:]
 		if self.numShuffled < self.maxMemory:
-			self.nnets.initialiseIterator(self.reservoirs, self.batchSize)
+			self.nnets.initialiseIterator(shortenedReservoirs, self.batchSize)
 		self.numShuffled = self.N
 
 
