@@ -49,8 +49,8 @@ class selfPlay:
 
 
 		for i in range(len(cache["valuesTarget"])):
-			cache["valuesTarget"][i] += self.game.getOutcome()[cache["player"][i]]
-			cache["valuesTarget"][i] /= cache["pot"][i]
+			cache["valuesTarget"][i] = (value[cache["player"][i]] - cache["valuesTarget"][i])/cache["pot"][i]
+
 
 		return cache
 
