@@ -42,7 +42,7 @@ class selfPlay:
 			print(action,bet,v)
 		v += self.game.getOutcome()
 		print(v)
-		gameData = { "input" : np.zeros((len(cache), self.game.params["historySize"] + self.game.params["handSize"] + self.game.params["publicCardSize"])),
+		gameData = { "input" : np.zeros((len(cache), self.game.params["inputSize"])),
 					"estimTarget" : np.zeros((len(cache),self.game.params["handSize"])),
 					"policyTarget": np.zeros((len(cache),self.game.params["actionSize"])),
 					"valuesTarget" : np.zeros((len(cache),self.game.params["valueSize"])) }
