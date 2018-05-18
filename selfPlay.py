@@ -3,7 +3,7 @@ import numpy as np
 from MCTS import MCTS
 
 class selfPlay:
-	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1):
+	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =1):
 		self.game=game
 		self.trees = [MCTS(nnets, numMCTSSims, cpuct), MCTS(nnets, numMCTSSims, cpuct)]             #Index labels player
 		self.eta=eta # array with the probabilities of following the average strategy for each player
@@ -70,10 +70,10 @@ class selfPlay:
 
 	def testGame(self,numTests):
 		testPlayer=0; #Id of the player we are testing
-		v_TR=0.
+		v_TC=0.
 		v_TA=0.
-		v_AR=0.
-		randomStrategy=np.ones(self.game.params["actionSize"],dtype=float)/self.game.params["actionSize"]
+		v_AC=0.
+		checkStrategy=np.array([0,1,0])
 		for j in range(3):
 			for i in range(numTests):
 				self.game.resetGame()
@@ -92,14 +92,14 @@ class selfPlay:
 						if j == 1:
 							strategy= averageStrategy
 						else:
-							strategy=randomStrategy
+							strategy=checkStrategy
 					#print(str(player)+" j= "+str(j)+" "+str(strategy))
 					action,bet = self.game.action(strategy)
 					v[player]-= bet
 				v += self.game.getOutcome()
-				if j == 0: v_TR+=v[testPlayer]/numTests
+				if j == 0: v_TC+=v[testPlayer]/numTests
 				if j == 1: v_TA+=v[testPlayer]/numTests
-				if j == 2: v_AR+=v[testPlayer]/numTests
-		print("v_TR="+str(v_TR)+"\t"+"v_TA="+str(v_TA)+"\t"+"v_AR="+str(v_AR))
+				if j == 2: v_AC+=v[testPlayer]/numTests
+		print("v_TC="+str(v_TC)+"\t"+"v_TA="+str(v_TA)+"\t"+"v_AC="+str(v_AC))
 		#return v_TR, v_TA, v_AR
 
