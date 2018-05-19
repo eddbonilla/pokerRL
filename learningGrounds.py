@@ -54,9 +54,7 @@ class Training:
 		for key in self.reservoirs:
 			newData[key] = np.array(newData[key])
 			assert k == newData[key].shape[0]
-		print((k,1))
-		np.reshape(newData["valuesTarget"],(k,1))
-		print(newData["valuesTarget"].shape)
+		newData["valuesTarget"] = np.reshape(newData["valuesTarget"],(k,1))
 		if self.N + k < self.maxMemory:
 			for key in self.reservoirs:
 				self.reservoirs[key][self.N:self.N+k, :] = newData[key]

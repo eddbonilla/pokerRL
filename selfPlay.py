@@ -40,10 +40,10 @@ class selfPlay:
 			cache["player"].append(player)
 			cache["pot"].append(self.game.getPot())
 			#assert np.sum(value) + dict["pot"] == 0
-			print(strategy)
+			#print(strategy)
 			action,bet = self.game.action(strategy = strategy)
 			value[player]-= bet
-			print(action,bet,value)
+			#print(action,bet,value)
 
 		value += self.game.getOutcome()
 		#assert np.sum(value) == 0
