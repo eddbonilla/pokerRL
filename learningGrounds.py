@@ -16,7 +16,7 @@ class Training:
 	def __init__(self,maxMemory):
 		self.N = 0
 		self.numShuffled = 0
-		self.unShuffledFraction = 0.03
+		self.unShuffledFraction = 0.001
 		self.maxMemory = maxMemory
 		self.gameParams = LeducGame.params
 		self.reservoirs = {"input" : np.zeros((maxMemory, self.gameParams["historySize"] + self.gameParams["handSize"] + self.gameParams["publicCardSize"])),
@@ -27,7 +27,7 @@ class Training:
 		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 3
+		self.batchesPerTrain = 100
 
 		compGraph = tf.Graph()
 		compGraph.as_default()
@@ -83,6 +83,7 @@ class Training:
 
 	def shuffleReservoirs(self):
 		shortenedReservoirs = {}
+		start = time.time()
 		seed = random.randint(0,1000000)
 		for key in self.reservoirs:
 			self.randState.seed(seed)
@@ -92,6 +93,8 @@ class Training:
 		if self.numShuffled < self.maxMemory:
 			self.nnets.initialiseIterator(shortenedReservoirs, self.batchSize)
 		self.numShuffled = self.N
+		end = time.time()
+		print("shuffle time = " + str(end - start))
 
 	def saveSession(self,checkpointPath):
 		self.saver.save(self.sess,checkpointPath)
