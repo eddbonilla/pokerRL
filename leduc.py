@@ -13,19 +13,8 @@ class LeducGame(Game):
 
 
 	def __init__(self):
-		self.dealer = random.randint(0,1)
-		self.player = self.dealer  #0 for player 1, 1 for player 2
-		self.pot = 2
 		self.cards = {}
-		self.cards["player1"] = random.randint(0,2)
-		self.cards["player2"] = (self.cards["player1"] + (random.randint(0,4)%3) + 1)%3
-		self.round = 0   #0 for 1st round, 1 for 2nd round
-		self.bet = 2
-		self.finished = False
-		self.playerfolded = None
-		self.raisesInRound = 0
-		self.history = np.zeros((2,2,3,2))
-		self.winnings = None
+		self.resetGame()
 
 	def resetGame(self):
 		self.dealer = random.randint(0,1)
@@ -35,6 +24,8 @@ class LeducGame(Game):
 			del self.cards["public"] 
 		self.cards["player1"] = random.randint(0,2)
 		self.cards["player2"] = (self.cards["player1"] + (random.randint(0,4)%3) + 1)%3
+		self.playersCardsArray = np.eye(3)[[self.cards["player"+str(1)],self.cards["player"+str(2)]]]
+		self.publicCardArray = np.zeros(3)
 		self.round = 0   #0 for 1st round, 1 for 2nd round
 		self.bet = 2
 		self.finished = False
@@ -45,21 +36,10 @@ class LeducGame(Game):
 
 
 	def playerInfoStringRepresentation(self):
-		dict = { 	"player" : self.player,
-					"playerCard": self.cards["player" + str(self.player+1)], 
-					"publicHistory": self.getPublicHistory()}
-		if "public" in self.cards:
-			dict["publicCard"] = self.cards["public"]
-
-		return str(dict)
+		return (str(self.player)+str(self.cards["player" + str(self.player+1)])+str(self.history))
 
 	def publicInfoStringRepresentation(self):
-		dict = { 	"player" : self.player, 
-					"publicHistory": self.getPublicHistory()}
-		if "public" in self.cards:
-			dict["publicCard"] = self.cards["public"]
-
-		return str(dict)
+		return (str(self.player)+str(self.history))
 
 	def finishGame(self,playerfolded):
 		self.finished = True
@@ -90,6 +70,7 @@ class LeducGame(Game):
 				self.cards["public"] = (self.cards["player1"] + 1 + random.randint(0,1))%3
 			else:
 				self.cards["public"] = (random.randint(0,3) - self.cards["player1"] - self.cards["player2"]) % 3
+			self.publicCardArray[self.cards["public"]] = 1
 		else:
 			self.finishGame(None)
 
@@ -97,21 +78,17 @@ class LeducGame(Game):
 		return self.player
 
 	def getPlayerCard(self):
-		return np.eye(3)[self.cards["player"+str(self.player+1)]]
+		return self.playersCardsArray[self.player]
 
 	def getOpponentCard(self):
-		return np.eye(3)[self.cards["player"+str(2 - self.player)]]
+		return self.playersCardsArray[(self.player + 1) % 2]
 
 	def getPlayerStates(self):
 		#return tf.one_hot(self.cards["player1"],3),tf.one_hot(self.cards["player2"],3)
-		return np.eye(3)[[self.cards["player1"],self.cards["player2"]]]
+		return self.playersCardsArray
 
 	def getPublicCard(self):
-		if "public" in self.cards:
-			publicCard = (np.eye(3)[[self.cards["public"]]]).flatten()
-		else:
-			publicCard = np.zeros(3)
-		return publicCard
+		return self.publicCardArray
 		
 	def getPot(self):
 		return self.pot
@@ -119,6 +96,7 @@ class LeducGame(Game):
 	def setOpponentCard(self,card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards["player"+str(2 - self.player)] = card 
+		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
 
 	def getPublicHistory(self):
 		#Public history returned with player history at top
