@@ -99,7 +99,7 @@ class nnets:
 		model = Dense(output_dim=256, activation='relu')(inputs)
 		model = Dense(output_dim=256, activation='relu')(model)
 		logits = Dense(output_dim=policy_size, activation='linear')(model)
-		v_values = Dense(output_dim=value_size, activation='sigmoid')(model)
+		v_values = Dense(output_dim=value_size, activation='linear')(model)
 		self.fModel = Model(input=inputs, output=[logits , v_values])
 		#print(self.getEstimateOpponent.get_shape())
 		#print(self.nnetsData["input"].get_shape())
@@ -109,7 +109,8 @@ class nnets:
 	def getPolicyValue(self):
 		logits ,v = self.getLogitsValue
 		p = tf.nn.softmax(logits)
-		return p,v
+		v_reg = tf.nn.relu(v)
+		return p,v_reg
 
 	@define_scope
 	def costPolicyValue(self):

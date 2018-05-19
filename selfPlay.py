@@ -22,8 +22,14 @@ class selfPlay:
 		ante = self.game.getAnte()
 		value = np.zeros(2)
 		value-=ante
+		moveCount = 0
 		#self.cleanTrees()             clean trees each game if we want
 		while not self.game.isFinished():
+			if moveCount > 25:
+				print("Stuck in game loop")
+				print(cache)
+				break
+			moveCount += 1
 
 			player = self.game.getPlayer()
 			#print(player)
