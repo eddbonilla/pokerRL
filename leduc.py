@@ -122,7 +122,7 @@ class LeducGame(Game):
 
 	def getPublicHistory(self):
 		#Public history returned with player history at top
-		public_history = np.copy(self.history[::(-1)**self.player,:,:,:])
+		public_history = self.history[::(-1)**self.player,:,:,:]
 		return public_history
 
 	def getOutcome(self):
@@ -133,7 +133,7 @@ class LeducGame(Game):
 	def isFinished(self):
 		return self.finished
 
-	def action(self,strategy):
+	def action(self,action=None,strategy=None):
 		#Randomly select action from strategy.
 		#Args:
 		#	strategy (list(float)): Strategy of the node
@@ -141,24 +141,17 @@ class LeducGame(Game):
 		#	Chosen action, bet size
 		if self.finished:
 			return None
-		choice = random.random()
-		action = 2
-		betAmount = 0
-		probability_sum = 0
-		probabilities=[]
-		for i in range(3):
-			action_probability = strategy[i]
-			if action_probability == 0:
-				continue
-			probability_sum += action_probability
-			if choice < probability_sum:
-				action = i
-				break
+		if strategy is not None:
+			action = np.random.choice(3, p = strategy)
+		if action is None:
+			action = input("WTF?")
+
 		oldPlayer = self.player
 		oldRaisesInRound = self.raisesInRound
 		oldRound = self.round
 		self.player = (oldPlayer + 1)%2
 		endRound = False
+		betAmount = 0
 		if action ==2:
 			self.finishGame(oldPlayer)
 		elif oldRaisesInRound == 2:

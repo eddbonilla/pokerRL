@@ -31,6 +31,7 @@ class selfPlay:
 			averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			strategy = (1-self.eta[player])*averageStrategy + self.eta[player] * treeStrategy 
+			strategy /= np.sum(strategy)
 
 			cache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
 			cache["policyTarget"].append(treeStrategy)
@@ -39,7 +40,8 @@ class selfPlay:
 			cache["player"].append(player)
 			cache["pot"].append(self.game.getPot())
 			#assert np.sum(value) + dict["pot"] == 0
-			action,bet = self.game.action(strategy)
+			print(strategy)
+			action,bet = self.game.action(strategy = strategy)
 			value[player]-= bet
 			print(action,bet,value)
 
@@ -50,7 +52,6 @@ class selfPlay:
 
 		for i in range(len(cache["valuesTarget"])):
 			cache["valuesTarget"][i] = (value[cache["player"][i]] - cache["valuesTarget"][i])/cache["pot"][i]
-
 
 		return cache
 
@@ -93,7 +94,7 @@ class selfPlay:
 							strategy=checkStrategy
 
 					#print(str(player)+" j= "+str(j)+" "+str(strategy))
-					action,bet = self.game.action(strategy)
+					action,bet = self.game.action(strategy =strategy)
 					v[player]-= bet
 				v += self.game.getOutcome()
 				if j == 0: v_TC+=v[testPlayer]/numTests

@@ -20,7 +20,7 @@ class MCTS():
 		self.Nsa = {}	   # stores #times edge s,a was visited
 		self.Ns = {}		# stores #times board s was visited
 		self.Ps = {}		# stores initial policy (returned by neural net)
-		self.Qs = {}		# stores neural net value estimate for current position
+
 
 		self.Es = {}		# stores game.getGameEnded ended for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
@@ -56,7 +56,7 @@ class MCTS():
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
-		counts = np.array([self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.params["actionSize"])]) #Here you count the number of times that action a was taken in state s
+		counts = self.Nsa[s] #Here you count the number of times that action a was taken in state s
 
 		counts = counts**(1./temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
 		treeStrategy = counts /float(np.sum(counts)) #normalize
@@ -68,13 +68,8 @@ class MCTS():
 		s = self.gameCopy.playerInfoStringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
 		pot = self.gameCopy.getPot()
 		playerMove = self.gameCopy.getPlayer() == self.game.getPlayer()
-
-		if playerMove:
-			#print("Player")
-			sForN = s
-		else:
-			#print("opponent")
-			sForN = self.gameCopy.publicInfoStringRepresentation()
+		#print("opponent")
+		s_pub = self.gameCopy.publicInfoStringRepresentation()
 
 		if self.gameCopy.isFinished(): # check if s is a known terminal state
 
@@ -88,49 +83,39 @@ class MCTS():
 			self.Ps[s], v = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())   #Opponent Strategy.
 
 			#self.Vs[s] = valids
-			self.Qs[s] = v
-			self.Ns[sForN] = 0
+			if playerMove:
+				self.Ns[s] = 0
+				self.Nsa[s] = np.zeros(self.game.params["actionSize"])
+				self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
+			elif s_pub not in self.Ns:
+				self.Ns[s_pub] = 0
+				self.Nsa[s_pub] = np.zeros(self.game.params["actionSize"])
+
 			return pot*(1-v +(2*v-1)*playerMove)
 
-		cur_best = -float("inf")
-		best_act = -1
-
 		# pick the action with the highest upper confidence bound
-		for a in range(self.gameCopy.params["actionSize"]):
-			
-			if (sForN,a) in self.Nsa:
-				if playerMove:
-					u = self.Qsa[(s,a)] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
-				else:
-					u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN])/(1+self.Nsa[(sForN,a)])
-			else:
-				if playerMove:
-					u = self.Qs[s] + self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS) 
-				else:
-					u = self.cpuct*self.Ps[s][a]*math.sqrt(self.Ns[sForN] + EPS)
 
-
-			if u > cur_best:
-				cur_best = u
-				best_act = a
-
-		a=best_act
-		action = np.zeros((self.gameCopy.params["actionSize"],1)) # Encode the action in the one hot format
-		action[a]=1;
-		#print(action)
-		_,bet = self.gameCopy.action(action)
-		net_winnings = -bet*(playerMove) + self.search()
-		v = net_winnings/pot
-		if (s,a) in self.Nsa:
-			self.Qsa[(s,a)] = float (self.Nsa[(sForN,a)]*self.Qsa[(s,a)] + v)/(self.Nsa[(sForN,a)]+1)
-			self.Nsa[(sForN,a)] += 1
+		if playerMove:
+			u = self.Qsa[s] + math.sqrt(self.Ns[s])*self.cpuct*self.Ps[s]/(1+self.Nsa[s])
 
 		else:
-			self.Qsa[(s,a)] = v
-			self.Nsa[(sForN,a)] = 1
+			u = self.cpuct*self.Ps[s]*math.sqrt(self.Ns[s_pub])/(1+self.Nsa[s_pub])
+
+
+		a=np.argmax(u)
+		_,bet = self.gameCopy.action(action=a)
+		net_winnings = -bet*(playerMove) + self.search()
+		v = net_winnings/pot
+		if playerMove:
+			self.Qsa[s][a] = float (self.Nsa[s][a]*self.Qsa[s][a] + v)/(self.Nsa[s][a]+1)
+			self.Nsa[s][a] += 1
+			self.Ns[s] += 1
+		else:
+			self.Ns[s_pub] += 1
+			self.Nsa[s_pub][a] += 1
 		#print("Q="+str(self.Qsa[(s,a)]))
 		#print("net_winnings=" +str(net_winnings))
-		self.Ns[sForN] += 1
+		
 		return net_winnings
 
 	def setNumSimulations(self,newNumMCTSSims):
