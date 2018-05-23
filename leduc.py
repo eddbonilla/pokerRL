@@ -36,10 +36,10 @@ class LeducGame(Game):
 
 
 	def playerInfoStringRepresentation(self):
-		return (str(self.player)+str(self.cards["player" + str(self.player+1)])+str(self.history))
+		return (str(self.player)+str(self.cards["player" + str(self.player+1)])+str(self.history)+str(self.getPublicCard()))
 
 	def publicInfoStringRepresentation(self):
-		return (str(self.player)+str(self.history))
+		return (str(self.player)+str(self.history)+str(self.getPublicCard()))
 
 	def finishGame(self,playerfolded):
 		self.finished = True
@@ -98,6 +98,9 @@ class LeducGame(Game):
 		self.cards["player"+str(2 - self.player)] = card 
 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
 
+	def setPlayer(self,player):
+			self.player = player
+
 	def getPublicHistory(self):
 		#Public history returned with player history at top
 		public_history = self.history[::(-1)**self.player,:,:,:]
@@ -123,31 +126,39 @@ class LeducGame(Game):
 			action = np.random.choice(3, p = strategy)
 		if action is None:
 			action = input("WTF?")
-
 		oldPlayer = self.player
 		oldRaisesInRound = self.raisesInRound
 		oldRound = self.round
 		self.player = (oldPlayer + 1)%2
 		endRound = False
 		betAmount = 0
+		#print("Action")
 		if action ==2:
 			self.finishGame(oldPlayer)
+			#print("Fold")
 		elif oldRaisesInRound == 2:
 			betAmount = self.bet
 			self.history[oldPlayer,oldRound,oldRaisesInRound,1] = 1
 			endRound = True
+			#print("Two raises + call/raise")
 		elif action == 1:
 			if oldRaisesInRound==1:
 				betAmount = self.bet
 				endRound = True
-			elif oldRaisesInRound == 0 and not oldPlayer == self.dealer:
+				#print("One raise + call")
+			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):
 				endRound = True				
+				#print("Call + end round")
+			#else:
+				#print("Call")
 			self.history[oldPlayer,oldRound,oldRaisesInRound,1] = 1
-		if action == 0:
+		elif action == 0:
 			if oldRaisesInRound==1:
 				betAmount = 2*self.bet
+				#print("Second Raise")
 			else:
 				betAmount = self.bet
+				#print("First raise")
 			self.history[oldPlayer,oldRound,oldRaisesInRound,0] = 1
 			self.raisesInRound += 1
 		self.pot += betAmount

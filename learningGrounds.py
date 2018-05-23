@@ -27,7 +27,7 @@ class Training:
 		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 100
+		self.batchesPerTrain = 1024
 
 		compGraph = tf.Graph()
 		compGraph.as_default()
@@ -36,17 +36,21 @@ class Training:
 		self.nnets=nnets(self.sess,self.gameParams, alpha=1.)
 		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
-		self.selfPlay = selfPlay(eta=[0.3,0.3],game=LeducGame(), nnets = self.nnets, numMCTSSims=50,cpuct=1)
+		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets, numMCTSSims=100,cpuct=2)
 
 	def doTraining(self,steps):
 		for i in range(steps):
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
+			if i%10==9:
+				print("Exploitability =" + str(self.selfPlay.trees[0].findExploitability()))
+			self.selfPlay.cleanTrees()
+			prenets = time.time()
 			for j in range(self.batchesPerTrain):
 				self.nnets.trainOnMinibatch()
 			end = time.time()
-			print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - postGames))
+			print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
@@ -107,7 +111,9 @@ class Training:
 			self.addToReservoirs(self.selfPlay.runGame())
 		if self.N - self.numShuffled > self.maxMemory or (self.numShuffled < self.maxMemory and (self.N - self.numShuffled)/self.N > self.unShuffledFraction):
 			self.shuffleReservoirs()
-		self.selfPlay.cleanTrees()
+		for tree in self.selfPlay.trees:
+			tree.reduceTempAndAddSearches()
+
 
 	def closeSession(self):
 		self.sess.close()

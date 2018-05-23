@@ -66,8 +66,8 @@ class nnets:
 		input_size = int(self.gameParams["inputSize"])
 		target_size= int(self.gameParams["handSize"])
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=256, activation='relu')(model)
+		model = Dense(output_dim=128, activation='relu')(inputs)
+		model = Dense(output_dim=64, activation='relu')(model)
 		cards = Dense(output_dim=target_size, activation='linear')(model)
 		self.gModel = Model(input=inputs, output=cards)
 		return self.gModel(self.nnetsData["input"])
@@ -84,7 +84,7 @@ class nnets:
 
 	@define_scope
 	def trainEstimate(self):
-		optimizer=tf.train.AdamOptimizer(0.0001)
+		optimizer=tf.train.AdamOptimizer(0.000002)
 		variables = self.gModel.trainable_weights  #tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope = "estimate_opponent_scope")
 		return optimizer.minimize(self.costEstimate,var_list = variables)
 
@@ -96,8 +96,8 @@ class nnets:
 		value_size= int(self.gameParams["valueSize"])
 		
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=256, activation='relu')(model)
+		model = Dense(output_dim=128, activation='relu')(inputs)
+		model = Dense(output_dim=64, activation='relu')(model)
 		logits = Dense(output_dim=policy_size, activation='linear')(model)
 		v_values = Dense(output_dim=value_size, activation='linear')(model)
 		self.fModel = Model(input=inputs, output=[logits , v_values])
@@ -119,11 +119,12 @@ class nnets:
 		#print(p_cost)
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.nnetsData["valuesTarget"])))
 		#print(v_cost)
+		#reg_cost = tf.multiply(self.kappa,tf.nn.l2loss()
 		return tf.add(p_cost,tf.multiply(self.alpha,v_cost))
 
 	@define_scope
 	def trainPolicyValue(self):
-		optimizer=tf.train.AdamOptimizer(0.0001)
+		optimizer=tf.train.AdamOptimizer(0.000002)
 		variables = self.fModel.trainable_weights#tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope = "policy_value_scope")
 		return optimizer.minimize(self.costPolicyValue, var_list=variables)
 
