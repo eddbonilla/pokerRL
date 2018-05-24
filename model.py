@@ -21,7 +21,7 @@ def define_scope(function):
 	return decorator
 
 class nnets:
-	"""docstring for nnet"""
+	"""docstring for nnets"""
 	def __init__(self,session, gameParams,alpha =1.):
 
 		self.sess=session

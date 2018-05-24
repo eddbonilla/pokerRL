@@ -3,9 +3,14 @@ import numpy as np
 from MCTS import MCTS
 
 class selfPlay:
-	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =2):
+	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =2,simParams=None):
 		self.game=game
 		self.trees = [MCTS(nnets, numMCTSSims, cpuct), MCTS(nnets, numMCTSSims, cpuct)]             #Index labels player
+		
+		if simParams!= None: 
+			for tree in self.trees:
+				tree.setTreeSearchParams(simParams["TreeSearchParams"])
+
 		self.eta=eta # array with the probabilities of following the average strategy for each player
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
@@ -20,12 +25,12 @@ class selfPlay:
 					"player" : [],
 					"pot" : []}
 		ante = self.game.getAnte()
-		value = np.zeros(2)
+		value = np.zeros(2) #harcoded 2 players -E
 		value-=ante
 		moveCount = 0
 		#self.cleanTrees()             clean trees each game if we want
 		while not self.game.isFinished():
-			if moveCount > 25:
+			if moveCount > 25: #Harcoded max number of moves -E
 				print("Stuck in game loop")
 				print(cache)
 				break

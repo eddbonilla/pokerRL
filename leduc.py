@@ -12,7 +12,8 @@ class LeducGame(Game):
 	params = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize": 1}
 
 
-	def __init__(self):
+	def __init__(self,seed=None):
+		if seed!= None: random.seed(seed) #set a random seed if need be to reproduce a game
 		self.cards = {}
 		self.resetGame()
 

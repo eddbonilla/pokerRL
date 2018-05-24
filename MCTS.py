@@ -28,9 +28,13 @@ class MCTS():
 		self.Es = {}		# stores game.getGameEnded ended for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
+		#Harcoded Parameters. To be deprecated soon
+		self.tempDecayRate = 1.02
+		self.treeSimAdditionRate =5
+
 	def reduceTempAndAddSearches(self):
-		self.temp = self.temp/1.02
-		self.numMCTSSims += 5
+		self.temp = self.temp/self.tempDecayRate
+		self.numMCTSSims += self.treeSimAdditionRate
 
 	def cleanTree(self):
 	#Clean the temporal variables, so that the same instance of the simulation can be used more than once
@@ -144,7 +148,7 @@ class MCTS():
 
 		#winnings = 0
 		
-		self.game = LeducGame()
+		self.game = LeducGame() #explicit reference to leduc
 		for i in range(numExploitSims):
 			self.game.resetGame()
 			self.gameCopy= copy.deepcopy(self.game)
@@ -158,7 +162,9 @@ class MCTS():
 			history = np.zeros((2,2,3,2))
 			publicCard = np.zeros(3)
 			print(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
+			print("max= " +str(np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])))
 			exploitability += 1/3*np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
+			print(exploitability)
 			for oppCard in range(3):
 				p = self.Ps['1'+str(oppCard)+str(history)+str(publicCard)]
 				history[1,0,0,0] = 1
@@ -172,6 +178,12 @@ class MCTS():
 				if checkString in self.Qsa:
 					exploitability +=1/9*p[1]*np.max(self.Qsa[checkString])
 					exploitability +=1/9*p[2]
+					print(self.Qsa[checkString])
 		return exploitability
-
+	def setTreeSearchParams(params):
+		self.numMCTSSims=params["initialNumMCTS"]
+		self.temp=params["initialTreeTemperature"]
+		self.tempDecayRate=params["tempDeacyRate"]
+		self.treeSimAdditionRate=params["treeSimAdditionRate"]
+		self.cpuct=params["cpuct"]
 
