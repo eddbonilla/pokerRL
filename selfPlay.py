@@ -17,12 +17,13 @@ class selfPlay:
 		pCache = { "input" : [],
 					"policyTarget": []
 				 }
-		vAndEstimCache = {  "input" : [],
-							"estimTarget" : [],
-							"valuesTarget" : [],
-							"player" : [],
-							"pot" : []
-							}
+		vCache = {  "playerCard" : [],
+					"publicData" : [],
+					"estimTarget" : [],
+					"valuesTarget" : [],
+					"player" : [],
+					"pot" : []
+					}
 		ante = self.game.getAnte()
 		value = np.zeros(2)
 		value-=ante
@@ -39,17 +40,18 @@ class selfPlay:
 			#print(player)
 			if random.random() < self.eta[player]:
 				strategy = self.trees[player].strategy(self.game)
-				pCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
+				pCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), playerCard = self.game.getPlayerCard()))
 				pCache["policyTarget"].append(strategy)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			else:
 				strategy,_ = self.nnets.policyValue(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard())
 			
-			vAndEstimCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
-			vAndEstimCache["estimTarget"].append(self.game.getOpponentCard())
-			vAndEstimCache["valuesTarget"].append(value[player])
-			vAndEstimCache["player"].append(player)
-			vAndEstimCache["pot"].append(self.game.getPot())
+			vCache["playerCard"].append(self.game.getPlayerCard().copy())
+			vCache["publicData"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard()))
+			vCache["estimTarget"].append(self.game.getOpponentCard())
+			vCache["valuesTarget"].append(value[player])
+			vCache["player"].append(player)
+			vCache["pot"].append(self.game.getPot())
 			#assert np.sum(value) + dict["pot"] == 0
 			#print(strategy)
 			action,bet = self.game.action(strategy = strategy)
@@ -61,10 +63,10 @@ class selfPlay:
 		#print(value)
 
 
-		for i in range(len(vAndEstimCache["valuesTarget"])):
-			vAndEstimCache["valuesTarget"][i] = (value[vAndEstimCache["player"][i]] - vAndEstimCache["valuesTarget"][i])/vAndEstimCache["pot"][i]
+		for i in range(len(vCache["valuesTarget"])):
+			vCache["valuesTarget"][i] = (value[vCache["player"][i]] - vCache["valuesTarget"][i])/vCache["pot"][i]
 
-		return pCache, vAndEstimCache
+		return pCache, vCache
 
 	def cleanTrees(self):
 		for tree in self.trees:

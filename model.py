@@ -30,10 +30,12 @@ class nnets:
 
 		#Create placeholders
 		self.predictionInput = tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"]))
+		self.predictionPublicData = tf.placeholder(dtype=tf.float32,shape=(None,gameParams["historySize"]+self.gameParams["handSize"]))
 		self.rawPData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
 						"policyTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["actionSize"])) }
 		
-		self.rawVData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
+		self.rawVData={ "playerCard" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["handSize"])),
+						"publicData" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["historySize"]+gameParams["handSize"])),
 						"estimTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["handSize"])),
 						"valuesTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["valueSize"])) }
 		
@@ -74,7 +76,7 @@ class nnets:
 	@define_scope
 	def gModel(self):
 		#Takes an input and returns logits for opponent card
-		input_size = int(self.gameParams["inputSize"])
+		input_size = int(self.gameParams["historySize"]+self.gameParams["handSize"])
 		target_size= int(self.gameParams["handSize"])
 		inputs = Input(shape=(input_size,))
 		model = Dense(output_dim=256, activation='relu')(inputs)
@@ -110,17 +112,21 @@ class nnets:
 		return Dense(output_dim = policy_size, input_shape = self.fModel.output_shape, activation = 'linear')
 
 	@define_scope
+	def vInputData(self):
+		return tf.concat(values= [self.vnNetsData["playerCard"],self.vnNetsData["publicData"]],axis= 1)
+
+	@define_scope
 	def costPolicyValue(self):
 		if self.feedGIntoF:
-			logits = self.policyLayer(tf.concat(values=[self.pnNetsData["input"],self.gModel[self.pnNetsData["input"]]],axis=1))
-			v = self.valueLayer(self.fModel(tf.concat(values=[self.vnNetsData["input"],self.gModel[self.vnNetsData["input"]]],axis=1)))
+			logits = self.policyLayer(tf.concat(values=[self.pnNetsData["input"],self.gModel[self.pnNetsData["input"][gameParams["handSize"]:]]],axis=1))
+			v = self.valueLayer(self.fModel(tf.concat(values=[self.vInputData,self.gModel[self.vnNetsData["publicData"]]],axis=1)))
 
 		else:
 			logits = self.policyLayer(self.fModel(self.pnNetsData["input"]))
-			v = self.valueLayer(self.fModel(self.vnNetsData["input"]))
+			v = self.valueLayer(self.fModel(self.vInputData))
 
 		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.pnNetsData["policyTarget"],logits=logits))
-		#print(p_cost)
+		
 		
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.vnNetsData["valuesTarget"])))
 		#print(v_cost)
@@ -147,7 +153,7 @@ class nnets:
 
 	@define_scope
 	def costEstimate(self):
-		cardLogits=self.gModel(self.vnNetsData["input"])
+		cardLogits=self.gModel(self.vnNetsData["publicData"])
 		cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.vnNetsData["estimTarget"],logits=cardLogits))
 		for layer in self.gModel.layers:
 			if len(layer.get_weights()) > 0:
@@ -175,7 +181,7 @@ class nnets:
 	@define_scope
 	def getEstimateOpponent(self):
 		#Used for predictions only
-		return tf.nn.softmax(self.gModel(self.predictionInput))
+		return tf.nn.softmax(self.gModel(self.predictionPublicData))
 
 
 #Auxiliary functions
@@ -185,25 +191,29 @@ class nnets:
 	def policyValue(self,playerCard, publicHistory, publicCard):
 		#print(publicCard)
 		#print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
-		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
+		playerInfo=self.preprocessInput(publicHistory, publicCard, playerCard= playerCard)
 		#print(playerInfo.shape)
 		p, v = self.sess.run(self.getPolicyValue, feed_dict = {self.predictionInput : [playerInfo] })
 		p=np.reshape(p,(self.gameParams["actionSize"]))
 		v=np.reshape(v,(self.gameParams["valueSize"]))
 		return p,v
 
-	def estimateOpponent(self,playerCard, publicHistory, publicCard):
-		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
+	def estimateOpponent(self, publicHistory, publicCard):
+		playerInfo=self.preprocessInput(publicHistory, publicCard)
 		#print(playerInfo.shape)
-		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionInput: [playerInfo]})
+		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionPublicData: [playerInfo]})
 
 		return np.reshape(estimate,(self.gameParams["handSize"]))
 
-	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
-		playerCard=np.reshape(playerCard,-1)
+	def preprocessInput(self, publicHistory, publicCard, playerCard = None): #Method that is here only because of the input specifics
 		publicHistory=np.reshape(publicHistory,-1)
 		publicCard=np.reshape(publicCard,-1)
-		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
+		if playerCard is not None:
+			playerCard=np.reshape(playerCard,-1)
+			concat = np.concatenate((playerCard,publicHistory,publicCard),axis=0)
+		else:
+			concat = np.concatenate((publicHistory,publicCard),axis=0)
+		return concat
 
 	def initialisePIterator(self, pReservoirs):
 		feed_dict = {}

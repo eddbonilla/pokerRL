@@ -26,7 +26,8 @@ class Training:
 							"policyTarget" : np.zeros((maxPolicyMemory,self.gameParams["actionSize"]))
 							}
 
-		self.vReservoirs = { "input" : np.zeros((maxValueMemory, self.gameParams["inputSize"])),
+		self.vReservoirs = { "playerCard" : np.zeros((maxValueMemory, self.gameParams["handSize"])),
+							 "publicData" : np.zeros((maxValueMemory, self.gameParams["historySize"] + self.gameParams["handSize"])),
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
 		self.gamesPerUpdateNets = 128
@@ -55,7 +56,7 @@ class Training:
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
 				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
 				history[1,0,0,0] = 1
-				print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
+				print("If op raised, op cards:" + str(self.nnets.estimateOpponent(history,np.zeros(3))))
 				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
 			self.selfPlay.cleanTrees()
 			prenets = time.time()
@@ -100,7 +101,7 @@ class Training:
 					self.pReservoirs[key][replacements,:] = pData[key][keep_masks,:]
 			self.pN += pk
 
-		vk = len(vData["input"])
+		vk = len(vData["valuesTarget"])
 		vN = self.vN % self.maxValueMemory
 		for key in self.vReservoirs:
 			vData[key] = np.array(vData[key])

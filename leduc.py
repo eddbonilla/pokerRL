@@ -9,22 +9,21 @@ class LeducGame(Game):
 	def getAnte(self):
 		return 1
 
-	params = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "publicCardSize" : 3, "actionSize" : 3, "valueSize": 1}
+	params = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
 
 	def __init__(self):
-		self.cards = {}
 		self.resetGame()
 
 	def resetGame(self):
 		self.dealer = random.randint(0,1)
 		self.player = self.dealer  #0 for player 1, 1 for player 2
 		self.pot = 2
-		if "public" in self.cards: 
-			del self.cards["public"] 
-		self.cards["player1"] = random.randint(0,2)
-		self.cards["player2"] = (self.cards["player1"] + (random.randint(0,4)%3) + 1)%3
-		self.playersCardsArray = np.eye(3)[[self.cards["player"+str(1)],self.cards["player"+str(2)]]]
+		self.cards = np.zeros(3,dtype = int) 
+		self.cards[0] = random.randint(0,2)
+		self.cards[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
+		self.cards[2] = -1
+		self.playersCardsArray = np.eye(3)[self.cards[0:2]]
 		self.publicCardArray = np.zeros(3)
 		self.round = 0   #0 for 1st round, 1 for 2nd round
 		self.bet = 2
@@ -36,7 +35,7 @@ class LeducGame(Game):
 
 
 	def playerInfoStringRepresentation(self):
-		return (str(self.player)+str(self.cards["player" + str(self.player+1)])+str(self.history)+str(self.getPublicCard()))
+		return (str(self.player)+str(self.cards[self.player])+str(self.history)+str(self.getPublicCard()))
 
 	def publicInfoStringRepresentation(self):
 		return (str(self.player)+str(self.history)+str(self.getPublicCard()))
@@ -47,13 +46,13 @@ class LeducGame(Game):
 		self.winnings = np.zeros(2)
 		if not playerfolded == None:
 			self.winnings[(1+playerfolded)%2] = self.pot
-		elif self.cards["player1"] == self.cards["public"]:
+		elif self.cards[0] == self.cards[2]:
 			self.winnings[0] = self.pot
-		elif self.cards["player2"] == self.cards["public"]:
+		elif self.cards[1] == self.cards[2]:
 			self.winnings[1] = self.pot
-		elif self.cards["player1"] > self.cards["player2"] and self.cards["player1"] > self.cards["public"]:
+		elif self.cards[0] > self.cards[1] and self.cards[0] > self.cards[2]:
 			self.winnings[0] = self.pot
-		elif self.cards["player2"] > self.cards["player1"] and self.cards["player2"] > self.cards["public"]:
+		elif self.cards[1] > self.cards[0] and self.cards[1] > self.cards[2]:
 			self.winnings[1] = self.pot
 		else:
 			self.winnings += self.pot/2
@@ -66,11 +65,11 @@ class LeducGame(Game):
 			self.bet = 4
 			self.raisesInRound = 0
 			self.player = self.dealer
-			if self.cards["player1"] == self.cards["player2"]:
-				self.cards["public"] = (self.cards["player1"] + 1 + random.randint(0,1))%3
+			if self.cards[0] == self.cards[1]:
+				self.cards[2] = (self.cards[0] + 1 + random.randint(0,1))%3
 			else:
-				self.cards["public"] = (random.randint(0,3) - self.cards["player1"] - self.cards["player2"]) % 3
-			self.publicCardArray[self.cards["public"]] = 1
+				self.cards[2] = (random.randint(0,3) - self.cards[0] - self.cards[1]) % 3
+			self.publicCardArray[self.cards[0]] = 1
 		else:
 			self.finishGame(None)
 
@@ -95,7 +94,7 @@ class LeducGame(Game):
 
 	def setOpponentCard(self,card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
-		self.cards["player"+str(2 - self.player)] = card 
+		self.cards[(self.player+1)%2] = card 
 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
 
 	def setPlayer(self,player):
@@ -113,6 +112,12 @@ class LeducGame(Game):
 				
 	def isFinished(self):
 		return self.finished
+
+	def regulariseOpponentEstimate(self,estimate):
+		mask = 1 - 0.5*self.playersCardsArray[self.player] - 0.5*self.publicCardArray
+		probs= mask*estimate
+		probs /= np.sum(probs)
+		return probs
 
 	def action(self,action=None,strategy=None):
 		#Randomly select action from strategy.
