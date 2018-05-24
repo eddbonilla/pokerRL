@@ -28,9 +28,9 @@ class MCTS():
 		self.Es = {}		# stores game.getGameEnded ended for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
-	def reduceTempAndAddSearches(self):
-		self.temp = self.temp/1.02
-		self.numMCTSSims += 5
+	def reduceTemp(self):
+		self.temp = self.temp/1.002
+
 
 	def cleanTree(self):
 	#Clean the temporal variables, so that the same instance of the simulation can be used more than once
@@ -67,8 +67,8 @@ class MCTS():
 
 		counts = counts**(1./self.temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
 		treeStrategy = counts /float(np.sum(counts)) #normalize
-		averageStrategy = self.Ps[s]
-		return averageStrategy, treeStrategy 		#return pi,tree strategy
+		#averageStrategy = self.Ps[s]
+		return treeStrategy 		#return pi,tree strategy
 
 	def search(self, exploitSearch = False):
 
@@ -95,14 +95,12 @@ class MCTS():
 				self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
 				self.Ns[s] = 0
 				self.Nsa[s] = np.zeros(self.game.params["actionSize"])
+				return (v*pot)
 				#if exploitSearch:
 				#	self.Ps[s] = np.ones(3)/3
 			elif s_pub not in self.Ns:
 				self.Ns[s_pub] = 0
 				self.Nsa[s_pub] = np.zeros(self.game.params["actionSize"])
-
-			#if not exploitSearch:
-			return pot*(1-v +(2*v-1)*playerMove)
 
 		# pick the action with the highest upper confidence bound
 
