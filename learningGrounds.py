@@ -32,7 +32,7 @@ class Training:
 		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 128
+		self.batchesPerTrain = 512
 
 		compGraph = tf.Graph()
 		compGraph.as_default()
@@ -41,7 +41,7 @@ class Training:
 		self.nnets=nnets(self.sess,self.gameParams, alpha=1.)
 		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
-		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets, numMCTSSims=100,cpuct=2)
+		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
 
 	def doTraining(self,steps):
 		for i in range(steps):
@@ -49,10 +49,14 @@ class Training:
 			self.playGames()
 			postGames = time.time()
 			if i%30==0:
+				history = np.zeros((2,2,3,2))
 				print("Exploitability =" + str(self.selfPlay.trees[0].findExploitability()))
-				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], np.zeros((2,2,3,2)), np.zeros(3))))
-				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], np.zeros((2,2,3,2)), np.zeros(3))))
-				print("King p,v:"+ str(self.nnets.policyValue([0,0,1], np.zeros((2,2,3,2)), np.zeros(3))))
+				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
+				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
+				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
+				history[1,0,0,0] = 1
+				print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
+				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
 			self.selfPlay.cleanTrees()
 			prenets = time.time()
 			for j in range(self.batchesPerTrain):
