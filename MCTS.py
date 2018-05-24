@@ -92,6 +92,7 @@ class MCTS():
 
 			#self.Vs[s] = valids
 			if playerMove:
+				self.Ps[s] = self.Ps[s]**(self.temp)
 				self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
 				self.Ns[s] = 0
 				self.Nsa[s] = np.zeros(self.game.params["actionSize"])

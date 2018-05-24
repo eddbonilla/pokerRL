@@ -22,7 +22,7 @@ def define_scope(function):
 
 class nnets:
 	"""docstring for nnet"""
-	def __init__(self,session, gameParams,alpha =1.,feedGIntoF = False, batchSize = 128, lmbda = 0.001):
+	def __init__(self,session, gameParams,alpha =40.,feedGIntoF = False, batchSize = 128, lmbda = 0.005):
 
 		self.sess=session
 		self.gameParams=gameParams
@@ -125,7 +125,7 @@ class nnets:
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.vnNetsData["valuesTarget"])))
 		#print(v_cost)
 
-		cost = tf.add(p_cost,tf.multiply(self.alpha,v_cost))
+		cost = tf.add(tf.divide(p_cost,self.alpha),v_cost)
 
 		for layer in self.fModel.layers:
 			if len(layer.get_weights()) > 0:
@@ -139,7 +139,7 @@ class nnets:
 
 	@define_scope
 	def trainPolicyValue(self):
-		optimizer=tf.train.AdamOptimizer(0.00001)
+		optimizer=tf.train.AdamOptimizer(0.0001)
 		variables = self.fModel.trainable_weights
 		variables.append(self.valueLayer.trainable_weights)
 		variables.append(self.policyLayer.trainable_weights)
@@ -156,7 +156,7 @@ class nnets:
 
 	@define_scope
 	def trainEstimate(self):
-		optimizer=tf.train.AdamOptimizer(0.00001)
+		optimizer=tf.train.AdamOptimizer(0.0002)
 		variables = self.gModel.trainable_weights 
 		return optimizer.minimize(self.costEstimate,var_list = variables)
 

@@ -4,7 +4,7 @@ import random
 from MCTS import MCTS
 
 class selfPlay:
-	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =2):
+	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1):
 		self.game=game
 		self.trees = [MCTS(nnets, numMCTSSims, cpuct), MCTS(nnets, numMCTSSims, cpuct)]             #Index labels player
 		self.eta=eta # array with the probabilities of following the average strategy for each player
