@@ -22,7 +22,7 @@ def define_scope(function):
 
 class nnets:
 	"""docstring for nnet"""
-	def __init__(self,session, gameParams,alpha =1.,feedGIntoF = False, batchSize = 128):
+	def __init__(self,session, gameParams,alpha =1.,feedGIntoF = False, batchSize = 128, lmbda = 0.001):
 
 		self.sess=session
 		self.gameParams=gameParams
@@ -55,7 +55,8 @@ class nnets:
 		self.vnNetsData =self.vIterator.get_next()
 
 		#Properties that we are setting to be constants
-		self.alpha=float(alpha)		
+		self.alpha=tf.constant(alpha)		
+		self.lmbda = tf.constant(lmbda)
 
 		#Properties that are actually graph nodes
 		self.gModel
@@ -123,8 +124,18 @@ class nnets:
 		
 		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.vnNetsData["valuesTarget"])))
 		#print(v_cost)
-		#reg_cost = tf.multiply(self.kappa,tf.nn.l2loss()
-		return tf.add(p_cost,tf.multiply(self.alpha,v_cost))
+
+		cost = tf.add(p_cost,tf.multiply(self.alpha,v_cost))
+
+		for layer in self.fModel.layers:
+			if len(layer.get_weights()) > 0:
+				cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(layer.get_weights()[0])))
+
+		cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(self.policyLayer.get_weights()[0])))
+		cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(self.valueLayer.get_weights()[0])))
+
+		return cost
+
 
 	@define_scope
 	def trainPolicyValue(self):
@@ -137,7 +148,11 @@ class nnets:
 	@define_scope
 	def costEstimate(self):
 		cardLogits=self.gModel(self.vnNetsData["input"])
-		return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.vnNetsData["estimTarget"],logits=cardLogits))
+		cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.vnNetsData["estimTarget"],logits=cardLogits))
+		for layer in self.gModel.layers:
+			if len(layer.get_weights()) > 0:
+				cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(layer.get_weights()[0])))
+		return cost
 
 	@define_scope
 	def trainEstimate(self):

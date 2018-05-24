@@ -50,9 +50,9 @@ class Training:
 			postGames = time.time()
 			if i%30==0:
 				print("Exploitability =" + str(self.selfPlay.trees[0].findExploitability()))
-				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], np.zeros(2,2,3,2), np.zeros(3))))
-				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], np.zeros(2,2,3,2), np.zeros(3))))
-				print("King p,v:"+ str(self.nnets.policyValue([0,0,1], np.zeros(2,2,3,2), np.zeros(3))))
+				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], np.zeros((2,2,3,2)), np.zeros(3))))
+				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], np.zeros((2,2,3,2)), np.zeros(3))))
+				print("King p,v:"+ str(self.nnets.policyValue([0,0,1], np.zeros((2,2,3,2)), np.zeros(3))))
 			self.selfPlay.cleanTrees()
 			prenets = time.time()
 			for j in range(self.batchesPerTrain):
@@ -124,7 +124,7 @@ class Training:
 			self.randState.shuffle(self.pReservoirs[key][0:self.pN,:])
 		self.numShuffled = self.pN
 		end = time.time()
-		print("shuffle time = " + str(end - start))
+		#print("shuffle time = " + str(end - start))
 
 	def saveSession(self,checkpointPath):
 		self.saver.save(self.sess,checkpointPath)
