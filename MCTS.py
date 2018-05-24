@@ -156,7 +156,7 @@ class MCTS():
 			history = np.zeros((2,2,3,2))
 			publicCard = np.zeros(3)
 			print(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
-			exploitability += 1/3*np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
+			exploitability += 1./3*np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
 			for oppCard in range(3):
 				p = self.Ps['1'+str(oppCard)+str(history)+str(publicCard)]
 				history[1,0,0,0] = 1
@@ -166,10 +166,10 @@ class MCTS():
 				checkString = '0'+str(card)+str(history)+ str(publicCard)
 				history[1,0,0,1] = 0
 				if raiseString in self.Qsa:
-					exploitability += 1/9*p[0]*np.max(self.Qsa[raiseString])
+					exploitability += 1./9*p[0]*np.max(self.Qsa[raiseString])
 				if checkString in self.Qsa:
-					exploitability +=1/9*p[1]*np.max(self.Qsa[checkString])
-					exploitability +=1/9*p[2]
+					exploitability +=1./9*p[1]*np.max(self.Qsa[checkString])
+					exploitability +=1./9*p[2]
 		return exploitability
 
 
