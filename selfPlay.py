@@ -1,9 +1,12 @@
 import math
 import numpy as np
+import random
 from MCTS import MCTS
 
 class selfPlay:
-	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =2,simParams=None):
+
+	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1, simParams= None):
+
 		self.game=game
 		self.trees = [MCTS(nnets, numMCTSSims, cpuct), MCTS(nnets, numMCTSSims, cpuct)]             #Index labels player
 		
@@ -18,12 +21,15 @@ class selfPlay:
 
 	def runGame(self):
 		self.game.resetGame()
-		cache = { "input" : [],
-					"estimTarget" : [],
-					"policyTarget": [],
-					"valuesTarget" : [],
-					"player" : [],
-					"pot" : []}
+		pCache = { "input" : [],
+					"policyTarget": []
+				 }
+		vAndEstimCache = {  "input" : [],
+							"estimTarget" : [],
+							"valuesTarget" : [],
+							"player" : [],
+							"pot" : []
+							}
 		ante = self.game.getAnte()
 		value = np.zeros(2) #harcoded 2 players -E
 		value-=ante
@@ -38,18 +44,19 @@ class selfPlay:
 
 			player = self.game.getPlayer()
 			#print(player)
-
-			averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
+			if random.random() < self.eta[player]:
+				strategy = self.trees[player].strategy(self.game)
+				pCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
+				pCache["policyTarget"].append(strategy)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
-			strategy = (1-self.eta[player])*averageStrategy + self.eta[player] * treeStrategy 
-			strategy /= np.sum(strategy)
-
-			cache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
-			cache["policyTarget"].append(treeStrategy)
-			cache["estimTarget"].append(self.game.getOpponentCard())
-			cache["valuesTarget"].append(value[player])
-			cache["player"].append(player)
-			cache["pot"].append(self.game.getPot())
+			else:
+				strategy,_ = self.nnets.policyValue(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard())
+			
+			vAndEstimCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
+			vAndEstimCache["estimTarget"].append(self.game.getOpponentCard())
+			vAndEstimCache["valuesTarget"].append(value[player])
+			vAndEstimCache["player"].append(player)
+			vAndEstimCache["pot"].append(self.game.getPot())
 			#assert np.sum(value) + dict["pot"] == 0
 			#print(strategy)
 			action,bet = self.game.action(strategy = strategy)
@@ -61,10 +68,10 @@ class selfPlay:
 		#print(value)
 
 
-		for i in range(len(cache["valuesTarget"])):
-			cache["valuesTarget"][i] = (value[cache["player"][i]] - cache["valuesTarget"][i])/cache["pot"][i]
+		for i in range(len(vAndEstimCache["valuesTarget"])):
+			vAndEstimCache["valuesTarget"][i] = (value[vAndEstimCache["player"][i]] - vAndEstimCache["valuesTarget"][i])/vAndEstimCache["pot"][i]
 
-		return cache
+		return pCache, vAndEstimCache
 
 	def cleanTrees(self):
 		for tree in self.trees:
@@ -76,7 +83,7 @@ class selfPlay:
 		for tree in self.trees:
 			tree.setNumSimulations(newNumMCTSSims)
 
-	def testGame(self,numTests):
+	def testGame(self,numTests): #To be optimized, maybe will be deprecated soon -E
 		testPlayer=0; #Id of the player we are testing
 		v_TC=0.
 		v_TA=0.

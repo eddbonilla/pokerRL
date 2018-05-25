@@ -21,112 +21,163 @@ def define_scope(function):
 	return decorator
 
 class nnets:
-	"""docstring for nnets"""
-	def __init__(self,session, gameParams,alpha =1.):
+
+	"""docstring for nnet"""
+	def __init__(self,session, gameParams,alpha =40.,feedGIntoF = False, batchSize = 128, lmbda = 0.005):
 
 		self.sess=session
 		self.gameParams=gameParams
+		self.feedGIntoF = feedGIntoF
 
 		#Create placeholders
-		self.rawData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
-						"estimTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["handSize"])),
-						"policyTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["actionSize"])),
-						"valuesTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["valueSize"])) }
-		self.batchSize = tf.placeholder(tf.int64, shape=[])
+		self.predictionInput = tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"]))
+		self.rawPData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
+						"policyTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["actionSize"])) }
 		
-		self.dataset = tf.data.Dataset.from_tensor_slices(self.rawData)
-		self.dataset = self.dataset.repeat()
-		self.dataset = self.dataset.batch(self.batchSize)
-		self.dataset = self.dataset.prefetch(1)
-		self.iterator = self.dataset.make_initializable_iterator()
+		self.rawVData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
+						"estimTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["handSize"])),
+						"valuesTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["valueSize"])) }
+		
+		self.pDataset = tf.data.Dataset.from_tensor_slices(self.rawPData)
+		self.pDataset = self.pDataset.repeat()
+		self.pDataset = self.pDataset.batch(batchSize)
+		self.pDataset = self.pDataset.prefetch(1)
+		self.pIterator = self.pDataset.make_initializable_iterator()
 
-		self.nnetsData =self.iterator.get_next()
+		self.pnNetsData =self.pIterator.get_next()
+
+		self.vDataset = tf.data.Dataset.from_tensor_slices(self.rawVData)
+		self.vDataset = self.vDataset.repeat()
+		self.vDataset = self.vDataset.shuffle(buffer_size=16384)
+		self.vDataset = self.vDataset.batch(batchSize)
+		self.vDataset = self.vDataset.prefetch(1)
+		self.vIterator = self.vDataset.make_initializable_iterator()
+
+		self.vnNetsData =self.vIterator.get_next()
 
 		#Properties that we are setting to be constants
-		self.alpha=float(alpha)
-
-		#Model properties
-		self.gModel=None
-		self.fModel=None
+		self.alpha=tf.constant(alpha)		
+		self.lmbda = tf.constant(lmbda)
 
 		#Properties that are actually graph nodes
-		self.getLogitsOpponent
-		self.getEstimateOpponent
-		self.costEstimate
-		self.trainEstimate
-		self.getLogitsValue
-		self.getPolicyValue #sets up the graph and computes the Policy/Value
+		self.gModel
+		self.fModel
+		self.valueLayer
+		self.policyLayer
 		self.costPolicyValue
 		self.trainPolicyValue
+		self.costEstimate
+		self.trainEstimate
+		self.getPolicyValue #sets up the graph and computes the Policy/Value
+		self.getEstimateOpponent
 
 #Functions that set properties during initialization
 	@define_scope
-	def getLogitsOpponent(self):
-
+	def gModel(self):
+		#Takes an input and returns logits for opponent card
 		input_size = int(self.gameParams["inputSize"])
 		target_size= int(self.gameParams["handSize"])
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=128, activation='relu')(inputs)
-		model = Dense(output_dim=64, activation='relu')(model)
+		model = Dense(output_dim=256, activation='relu')(inputs)
+		model = Dense(output_dim=128, activation='relu')(model)
 		cards = Dense(output_dim=target_size, activation='linear')(model)
-		self.gModel = Model(input=inputs, output=cards)
-		return self.gModel(self.nnetsData["input"])
+		gModel = Model(input=inputs, output=cards)
+
+		return gModel
 
 	@define_scope
-	def getEstimateOpponent(self):
-		return tf.nn.softmax(self.getLogitsOpponent)
+	def fModel(self):
+		if not self.feedGIntoF:
+			input_size = int(self.gameParams["inputSize"])    #Use if not feeding gModel into fModel
+		else:
+			input_size = int(self.gameParams["inputSize"]+self.gameParams["handSize"])    # Use if feeding gModel into fModel
 
-
-	@define_scope
-	def costEstimate(self):
-		cardLogits=self.getLogitsOpponent
-		return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.nnetsData["estimTarget"],logits=cardLogits))
-
-	@define_scope
-	def trainEstimate(self):
-		optimizer=tf.train.AdamOptimizer(0.000002)
-		variables = self.gModel.trainable_weights  #tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope = "estimate_opponent_scope")
-		return optimizer.minimize(self.costEstimate,var_list = variables)
-
-	@define_scope
-	def getLogitsValue(self):
-		
-		input_size = int(self.gameParams["inputSize"]+self.gameParams["handSize"])
-		policy_size= int(self.gameParams["actionSize"])
-		value_size= int(self.gameParams["valueSize"])
-		
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=128, activation='relu')(inputs)
-		model = Dense(output_dim=64, activation='relu')(model)
-		logits = Dense(output_dim=policy_size, activation='linear')(model)
-		v_values = Dense(output_dim=value_size, activation='linear')(model)
-		self.fModel = Model(input=inputs, output=[logits , v_values])
-		#print(self.getEstimateOpponent.get_shape())
-		#print(self.nnetsData["input"].get_shape())
-		return self.fModel(tf.concat(values=[self.nnetsData["input"],self.getLogitsOpponent],axis=1))
+		model = Dense(output_dim=256, activation='relu')(inputs)
+		model = Dense(output_dim=128, activation='relu')(model)
+
+		fModel = Model(input=inputs, output=model)
+
+		return fModel
 
 	@define_scope
-	def getPolicyValue(self):
-		logits ,v = self.getLogitsValue
-		p = tf.nn.softmax(logits)
-		v_reg = tf.nn.relu(v)
-		return p,v_reg
+	def valueLayer(self):
+		value_size= int(self.gameParams["valueSize"])
+		return Dense(output_dim = value_size, input_shape = self.fModel.output_shape, activation='linear')
+
+	@define_scope
+	def policyLayer(self):
+		policy_size= int(self.gameParams["actionSize"])
+		return Dense(output_dim = policy_size, input_shape = self.fModel.output_shape, activation = 'linear')
 
 	@define_scope
 	def costPolicyValue(self):
-		logits , v = self.getLogitsValue
-		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.nnetsData["policyTarget"],logits=logits))
+		if self.feedGIntoF:
+			logits = self.policyLayer(tf.concat(values=[self.pnNetsData["input"],self.gModel[self.pnNetsData["input"]]],axis=1))
+			v = self.valueLayer(self.fModel(tf.concat(values=[self.vnNetsData["input"],self.gModel[self.vnNetsData["input"]]],axis=1)))
+
+		else:
+			logits = self.policyLayer(self.fModel(self.pnNetsData["input"]))
+			v = self.valueLayer(self.fModel(self.vnNetsData["input"]))
+
+		p_cost= tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.pnNetsData["policyTarget"],logits=logits))
 		#print(p_cost)
-		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.nnetsData["valuesTarget"])))
+		
+		v_cost= tf.reduce_mean(tf.square(tf.subtract(v,self.vnNetsData["valuesTarget"])))
 		#print(v_cost)
-		#reg_cost = tf.multiply(self.kappa,tf.nn.l2loss()
-		return tf.add(p_cost,tf.multiply(self.alpha,v_cost))
+
+		cost = tf.add(tf.divide(p_cost,self.alpha),v_cost)
+
+		for layer in self.fModel.layers:
+			if len(layer.get_weights()) > 0:
+				cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(layer.get_weights()[0])))
+
+		cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(self.policyLayer.get_weights()[0])))
+		cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(self.valueLayer.get_weights()[0])))
+
+		return cost
+
 
 	@define_scope
 	def trainPolicyValue(self):
-		optimizer=tf.train.AdamOptimizer(0.000002)
-		variables = self.fModel.trainable_weights#tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope = "policy_value_scope")
+		optimizer=tf.train.AdamOptimizer(0.0001)
+		variables = self.fModel.trainable_weights
+		variables.append(self.valueLayer.trainable_weights)
+		variables.append(self.policyLayer.trainable_weights)
 		return optimizer.minimize(self.costPolicyValue, var_list=variables)
+
+	@define_scope
+	def costEstimate(self):
+		cardLogits=self.gModel(self.vnNetsData["input"])
+		cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.vnNetsData["estimTarget"],logits=cardLogits))
+		for layer in self.gModel.layers:
+			if len(layer.get_weights()) > 0:
+				cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(layer.get_weights()[0])))
+		return cost
+
+	@define_scope
+	def trainEstimate(self):
+		optimizer=tf.train.AdamOptimizer(0.0002)
+		variables = self.gModel.trainable_weights 
+		return optimizer.minimize(self.costEstimate,var_list = variables)
+
+	@define_scope
+	def getPolicyValue(self):
+		#Used for predictions only
+		if self.feedGIntoF:
+			lastHiddenLayer = self.fModel(tf.concat(values=[self.predictionInput,self.gModel[self.predictionInput]],axis=1))
+		else:
+			lastHiddenLayer = self.fModel(self.predictionInput)
+
+		p = tf.nn.softmax(self.policyLayer(lastHiddenLayer))
+		v = tf.nn.relu(self.valueLayer(lastHiddenLayer))
+		return p,v
+
+	@define_scope
+	def getEstimateOpponent(self):
+		#Used for predictions only
+		return tf.nn.softmax(self.gModel(self.predictionInput))
+
 
 #Auxiliary functions
 	def setAlpha(self,new_alpha):
@@ -137,7 +188,7 @@ class nnets:
 		#print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		#print(playerInfo.shape)
-		p, v = self.sess.run(self.getPolicyValue, feed_dict = {self.nnetsData["input"] : [playerInfo]})
+		p, v = self.sess.run(self.getPolicyValue, feed_dict = {self.predictionInput : [playerInfo] })
 		p=np.reshape(p,(self.gameParams["actionSize"]))
 		v=np.reshape(v,(self.gameParams["valueSize"]))
 		return p,v
@@ -145,7 +196,7 @@ class nnets:
 	def estimateOpponent(self,playerCard, publicHistory, publicCard):
 		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		#print(playerInfo.shape)
-		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.nnetsData["input"]: [playerInfo]})
+		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionInput: [playerInfo]})
 
 		return np.reshape(estimate,(self.gameParams["handSize"]))
 
@@ -155,12 +206,19 @@ class nnets:
 		publicCard=np.reshape(publicCard,-1)
 		return np.concatenate((playerCard,publicHistory,publicCard),axis=0)
 
-	def initialiseIterator(self, reservoirs, miniBatchSize):
+	def initialisePIterator(self, pReservoirs):
 		feed_dict = {}
-		for key,reservoir in reservoirs.items():
-			feed_dict[self.rawData[key]] = reservoir
-		feed_dict[self.batchSize] = miniBatchSize
-		self.sess.run(self.iterator.initializer,feed_dict = feed_dict)
+		for key,reservoir in pReservoirs.items():
+			feed_dict[self.rawPData[key]] = reservoir
+		self.sess.run(self.pIterator.initializer,feed_dict = feed_dict)
+
+	def initialiseVIterator(self, vReservoirs):
+		feed_dict = {}
+		for key,reservoir in vReservoirs.items():
+			feed_dict[self.rawVData[key]] = reservoir
+		self.sess.run(self.vIterator.initializer,feed_dict = feed_dict)
+
+
 
 	def trainOnMinibatch(self):
 		self.sess.run([self.trainEstimate,self.trainPolicyValue])

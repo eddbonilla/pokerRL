@@ -29,12 +29,11 @@ class MCTS():
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 		#Harcoded Parameters. To be deprecated soon
-		self.tempDecayRate = 1.02
-		self.treeSimAdditionRate =5
+		self.tempDecayRate = 1.002
 
-	def reduceTempAndAddSearches(self):
+	def reduceTemp(self):
 		self.temp = self.temp/self.tempDecayRate
-		self.numMCTSSims += self.treeSimAdditionRate
+
 
 	def cleanTree(self):
 	#Clean the temporal variables, so that the same instance of the simulation can be used more than once
@@ -71,8 +70,8 @@ class MCTS():
 
 		counts = counts**(1./self.temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
 		treeStrategy = counts /float(np.sum(counts)) #normalize
-		averageStrategy = self.Ps[s]
-		return averageStrategy, treeStrategy 		#return pi,tree strategy
+		#averageStrategy = self.Ps[s]
+		return treeStrategy 		#return pi,tree strategy
 
 	def search(self, exploitSearch = False):
 
@@ -96,17 +95,16 @@ class MCTS():
 
 			#self.Vs[s] = valids
 			if playerMove:
+				self.Ps[s] = self.Ps[s]**(self.temp)
 				self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
 				self.Ns[s] = 0
 				self.Nsa[s] = np.zeros(self.game.params["actionSize"])
+				return (v*pot)
 				#if exploitSearch:
 				#	self.Ps[s] = np.ones(3)/3
 			elif s_pub not in self.Ns:
 				self.Ns[s_pub] = 0
 				self.Nsa[s_pub] = np.zeros(self.game.params["actionSize"])
-
-			#if not exploitSearch:
-			return pot*(1-v +(2*v-1)*playerMove)
 
 		# pick the action with the highest upper confidence bound
 
@@ -157,14 +155,12 @@ class MCTS():
 		end = time.time()
 		print("Exploitability calculation time: "+str(end - start))
 		#print("Average Winnings: " + str(winnings/numExploitSims))
-		exploitability = -1
+		exploitability = -1.
 		for card in range(3):
 			history = np.zeros((2,2,3,2))
 			publicCard = np.zeros(3)
 			print(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
-			print("max= " +str(np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])))
-			exploitability += 1/3*np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
-			print(exploitability)
+			exploitability += 1./3*np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
 			for oppCard in range(3):
 				p = self.Ps['1'+str(oppCard)+str(history)+str(publicCard)]
 				history[1,0,0,0] = 1
@@ -174,11 +170,10 @@ class MCTS():
 				checkString = '0'+str(card)+str(history)+ str(publicCard)
 				history[1,0,0,1] = 0
 				if raiseString in self.Qsa:
-					exploitability += 1/9*p[0]*np.max(self.Qsa[raiseString])
+					exploitability += 1./9*p[0]*np.max(self.Qsa[raiseString])
 				if checkString in self.Qsa:
-					exploitability +=1/9*p[1]*np.max(self.Qsa[checkString])
-					exploitability +=1/9*p[2]
-					print(self.Qsa[checkString])
+					exploitability +=1./9*p[1]*np.max(self.Qsa[checkString])
+					exploitability +=1./9*p[2]
 		return exploitability
 	def setTreeSearchParams(params):
 		self.numMCTSSims=params["initialNumMCTS"]
