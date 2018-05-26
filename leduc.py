@@ -114,7 +114,7 @@ class LeducGame(Game):
 		return self.finished
 
 	def regulariseOpponentEstimate(self,estimate):
-		mask = 1 - 0.5*self.playersCardsArray[self.player] - 0.5*self.publicCardArray
+		mask = 1 - (0.5+0.5*(self.cards[self.player] == self.cards[2]))*self.playersCardsArray[self.player]
 		probs= mask*estimate
 		probs /= np.sum(probs)
 		return probs
@@ -169,7 +169,7 @@ class LeducGame(Game):
 		self.pot += betAmount
 		if endRound:
 			self.endRound()
-		return action,betAmount
+		return betAmount
 
 
 

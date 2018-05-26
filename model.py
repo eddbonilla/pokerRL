@@ -22,7 +22,7 @@ def define_scope(function):
 
 class nnets:
 	"""docstring for nnet"""
-	def __init__(self,session, gameParams,alpha =40.,feedGIntoF = False, batchSize = 128, lmbda = 0.005):
+	def __init__(self,session, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128, lmbda = 0.001):
 
 		self.sess=session
 		self.gameParams=gameParams
@@ -40,21 +40,19 @@ class nnets:
 						"valuesTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["valueSize"])) }
 		
 		self.pDataset = tf.data.Dataset.from_tensor_slices(self.rawPData)
-		self.pDataset = self.pDataset.repeat()
 		self.pDataset = self.pDataset.batch(batchSize)
 		self.pDataset = self.pDataset.prefetch(1)
 		self.pIterator = self.pDataset.make_initializable_iterator()
 
-		self.pnNetsData =self.pIterator.get_next()
+		self.pnNetsData =self.pIterator.get_next(name = "pIterator")
 
 		self.vDataset = tf.data.Dataset.from_tensor_slices(self.rawVData)
-		self.vDataset = self.vDataset.repeat()
-		self.vDataset = self.vDataset.shuffle(buffer_size=16384)
+		self.vDataset = self.vDataset.shuffle(buffer_size=10000)
 		self.vDataset = self.vDataset.batch(batchSize)
 		self.vDataset = self.vDataset.prefetch(1)
 		self.vIterator = self.vDataset.make_initializable_iterator()
 
-		self.vnNetsData =self.vIterator.get_next()
+		self.vnNetsData =self.vIterator.get_next(name = "vIterator")
 
 		#Properties that we are setting to be constants
 		self.alpha=tf.constant(alpha)		
@@ -162,7 +160,7 @@ class nnets:
 
 	@define_scope
 	def trainEstimate(self):
-		optimizer=tf.train.AdamOptimizer(0.0002)
+		optimizer=tf.train.AdamOptimizer(0.0001)
 		variables = self.gModel.trainable_weights 
 		return optimizer.minimize(self.costEstimate,var_list = variables)
 
@@ -230,4 +228,10 @@ class nnets:
 
 
 	def trainOnMinibatch(self):
-		self.sess.run([self.trainEstimate,self.trainPolicyValue])
+		try:
+			self.sess.run([self.trainEstimate,self.trainPolicyValue])
+		except tf.errors.OutOfRangeError as error:
+			return error.op.name
+		except  tf.errors.FailedPreconditionError as error:
+			return error.op.name
+		return None

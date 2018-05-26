@@ -1,12 +1,12 @@
 import math
 import numpy as np
 import random
-from MCTS import MCTS
+from MCTS_c import MCTS
 
 class selfPlay:
 	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1):
 		self.game=game
-		self.trees = [MCTS(nnets, numMCTSSims, cpuct), MCTS(nnets, numMCTSSims, cpuct)]             #Index labels player
+		self.trees = [MCTS(nnets, numMCTSSims, cpuct,floor=0.05), MCTS(nnets, numMCTSSims, cpuct,floor=0.03)]             #Index labels player
 		self.eta=eta # array with the probabilities of following the average strategy for each player
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
@@ -54,7 +54,7 @@ class selfPlay:
 			vCache["pot"].append(self.game.getPot())
 			#assert np.sum(value) + dict["pot"] == 0
 			#print(strategy)
-			action,bet = self.game.action(strategy = strategy)
+			bet = self.game.action(strategy = strategy)
 			value[player]-= bet
 			#print(action,bet,value)
 
