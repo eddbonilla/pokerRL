@@ -30,10 +30,10 @@ class Training:
 							 "publicData" : np.zeros((maxValueMemory, self.gameParams["historySize"] + self.gameParams["handSize"])),
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
-		self.gamesPerUpdateNets = 64
+		self.gamesPerUpdateNets = 128
 		self.batchSize = 128
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 256
+		self.batchesPerTrain = 512
 
 		compGraph = tf.Graph()
 		compGraph.as_default()

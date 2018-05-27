@@ -6,7 +6,7 @@ from MCTS_c import MCTS
 class selfPlay:
 	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1):
 		self.game=game
-		self.trees = [MCTS(nnets, numMCTSSims, cpuct,floor=0.05), MCTS(nnets, numMCTSSims, cpuct,floor=0.03)]             #Index labels player
+		self.trees = [MCTS(nnets, numMCTSSims, cpuct,floor=0.15), MCTS(nnets, numMCTSSims, cpuct,floor=0.03)]             #Index labels player
 		self.eta=eta # array with the probabilities of following the average strategy for each player
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct

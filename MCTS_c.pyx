@@ -39,8 +39,8 @@ cdef class MCTS():
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 	cpdef void reduceTemp(self):
-		if self.temp > 0.5:
-			self.temp = self.temp/1.0002
+		if self.temp > 0.2:
+			self.temp = self.temp/1.001
 
 
 	cpdef void cleanTree(self):
@@ -178,7 +178,7 @@ cdef class MCTS():
 			history = np.zeros((2,2,3,2),dtype=int)
 			publicCard = np.zeros(3,dtype=int)
 			print(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
-			print(np.max(self.Qsa[str(0)+str(card)+str(history)+str(publicCard)]))
+			#print(np.max(self.Qsa[str(0)+str(card)+str(history)+str(publicCard)]))
 			exploitability += np.max(self.Qsa[str(0)+str(card)+str(history)+str(publicCard)])/3.
 			for oppCard in range(3):
 				p = self.Ps['1'+str(oppCard)+str(history)+str(publicCard)]
