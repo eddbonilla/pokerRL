@@ -14,22 +14,24 @@ import time
 #One idea that might be better is play a couple games to warm up the reservoir first and then sample from it
 #another idea is that maybe we want to get rid of very old memories, the long term average should wash them away anyways
 treeSearchParams={
-"initialNumMCTS":50,
-"treeSimAdditionRate":5, #..
+"initialNumMCTS":100,
 "initialTreeTemperature":1,
-"tempDecayRate":1.2, #This is the number dividing the initial temperature
-"cpuct":2
+"tempDecayRate":1.002, #This is the number dividing the initial temperature
+"cpuct":1
 }
 simParams={
-"maxMemory": 1048576, #maximum memory of a single  actor learner thread
+"maxValueMemory": 1048576, #maximum memory of a single  actor learner thread
+"maxPolicyMemory":1048576,
 "unShuffledFraction":0.001,
-"batchesPerTrain":128,
-"gamesPerUpdateNets":32,
-"batchSize":32,
+"batchesPerTrain":512,
+"gamesPerUpdateNets":128,
+"batchSize":128,
 "eta":[0.1,0.1],
-"alpha":1,
+"alpha":40.,
 "numStepsEpoch":10,
-"treeSearchParams":treeSearchParams
+"treeSearchParams":treeSearchParams,
+"printExploitFreq":30,
+"printSelfPlayFreq":10
 }
 global T
 T=0

@@ -34,7 +34,13 @@ class LeducGame(Game):
 		self.raisesInRound = 0
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
+		self.manualPublicCard = None 	#Need to set this consistently to test my code -E
 
+	def setGame(self,player1Card,player2Card,publicCard):
+		self.cards["player1"] = player1Card
+		self.cards["player2"] = player2Card
+		self.playersCardsArray = np.eye(3)[[self.cards["player"+str(1)],self.cards["player"+str(2)]]]
+		self.manualPublicCard = publicCard
 
 	def playerInfoStringRepresentation(self):
 		return (str(self.player)+str(self.cards["player" + str(self.player+1)])+str(self.history)+str(self.getPublicCard()))
@@ -67,10 +73,13 @@ class LeducGame(Game):
 			self.bet = 4
 			self.raisesInRound = 0
 			self.player = self.dealer
-			if self.cards["player1"] == self.cards["player2"]:
-				self.cards["public"] = (self.cards["player1"] + 1 + random.randint(0,1))%3
+			if self.manualPublicCard ==None: #no manually set card, this is normal operation
+				if self.cards["player1"] == self.cards["player2"]:
+					self.cards["public"] = (self.cards["player1"] + 1 + random.randint(0,1))%3
+				else:
+					self.cards["public"] = (random.randint(0,3) - self.cards["player1"] - self.cards["player2"]) % 3
 			else:
-				self.cards["public"] = (random.randint(0,3) - self.cards["player1"] - self.cards["player2"]) % 3
+				self.cards["public"]=self.manualPublicCard
 			self.publicCardArray[self.cards["public"]] = 1
 		else:
 			self.finishGame(None)
@@ -90,7 +99,7 @@ class LeducGame(Game):
 
 	def getPublicCard(self):
 		return self.publicCardArray
-		
+
 	def getPot(self):
 		return self.pot
 
@@ -98,6 +107,11 @@ class LeducGame(Game):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards["player"+str(2 - self.player)] = card 
 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
+
+	def setPlayerCard(self,card):
+		#input: card as scalar number e.g. 2=K,1=Q,0=J
+		self.cards["player"+str(self.player+1)] = card 
+		self.playersCardsArray[self.player] = np.eye(3)[card]
 
 	def setPlayer(self,player):
 			self.player = player

@@ -1,5 +1,5 @@
 #Code adapted from https://github.com/suragnair/alpha-zero-general (needs heavy adaptation for imperfect information games)
-
+import sys
 import math
 import numpy as np
 from leduc import LeducGame
@@ -95,7 +95,7 @@ class MCTS():
 
 			#self.Vs[s] = valids
 			if playerMove:
-				self.Ps[s] = self.Ps[s]**(self.temp)
+				self.Ps[s] = self.Ps[s]**(self.temp) #What?
 				self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
 				self.Ns[s] = 0
 				self.Nsa[s] = np.zeros(self.game.params["actionSize"])
@@ -175,10 +175,139 @@ class MCTS():
 					exploitability +=1./9*p[1]*np.max(self.Qsa[checkString])
 					exploitability +=1./9*p[2]
 		return exploitability
-	def setTreeSearchParams(params):
+		
+	def setTreeSearchParams(self,params):
 		self.numMCTSSims=params["initialNumMCTS"]
 		self.temp=params["initialTreeTemperature"]
-		self.tempDecayRate=params["tempDeacyRate"]
-		self.treeSimAdditionRate=params["treeSimAdditionRate"]
+		self.tempDecayRate=params["tempDecayRate"]
 		self.cpuct=params["cpuct"]
+
+	def exploitabilitySearch(self,localGame,belief,prevGame,prevAction, nextP=1.): #it returns net winnings for exploiting strategy by doing an exhaustive search
+
+			if prevGame.getPlayer()!=self.game.getPlayer(): #if the previous player was the exploited one, update the belief # Otimize -E
+					belief=np.multiply(belief,nextP)
+					if np.sum(belief)!=0:
+						belief=np.divide(belief,np.sum(belief))
+
+			if "public" not in prevGame.cards and "public" in localGame.cards: #time to set the public card (or something)
+					Ppub=np.sum(belief,axis=1) #marginalize over the opponent card
+					Qsc=np.zeros((3,1)) #numcards,1
+					for pubCard in range(3):
+						nextGame=copy.deepcopy(prevGame) #copy the current game
+						nextGame.manualPublicCard=pubCard;
+						nextGame.action(prevAction) #put a different public card on it and repeat the move
+						updatedBelief=np.multiply(belief.T,nextGame.publicCardArray).T
+						if np.sum(updatedBelief)!=0:
+							updatedBelief=updatedBelief/np.sum(updatedBelief)
+						Qsc[pubCard]=self.exploitabilitySearch(nextGame,belief=updatedBelief,nextP=nextP,prevGame=nextGame,prevAction=prevAction)
+					return np.dot(Ppub,Qsc)
+			else:
+
+				s = localGame.playerInfoStringRepresentation()
+				exploitingPlayer= (localGame.getPlayer()==self.game.getPlayer())
+
+				#if state is terminal return the value
+				if localGame.isFinished(): # check if s is a known terminal state
+					Vs=0.
+					print("D= "+str(belief))
+					print("public= "+str(prevGame.getPublicCard()))
+					for oppCard in range(3):
+						nextGame=copy.deepcopy(prevGame)
+						if nextGame.getPlayer()==self.game.getPlayer():
+							nextGame.setOpponentCard(oppCard)
+						else:
+							nextGame.setPlayerCard(oppCard)
+						print("public= "+str(prevGame.getPublicCard()))
+						print("player= "+ str(nextGame.cards["player"+str((self.game.getPlayer())+1)])+"  "+str(self.game.getPlayer()))
+						nextGame.action(action=prevAction)
+						vTerm=nextGame.getOutcome()[self.game.getPlayer()]
+						print("try: "+str(vTerm))
+						Vs+=vTerm*(np.sum(belief,axis=0)[oppCard])
+						print(nextGame.getOutcome())
+						print(Vs)
+					return Vs #Always get outcome for exploiting player
+
+				#initialize values and keep track of bets or something
+				numActions=localGame.params["actionSize"]
+				bets=np.zeros((numActions,1))
+				Qsa=np.zeros((numActions,1))
+
+				if not exploitingPlayer:  #if the strategy player plays return p.v (fut)
+					Ps=np.zeros((3,numActions))
+					for oppCard in range(3):
+					#Ps[oppCard] = self.nnets.policyValue(oppCard, localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card
+						Ps[oppCard,:]=[0.,1.,0.]
+					Pa=np.dot(np.sum(belief,axis=0),Ps) #sum over public cards, axis 0
+
+					#probability of taking an action
+					for a in range(numActions): #Make copies of the game with each action
+						nextGame=copy.deepcopy(localGame)
+						_,bets[a]=nextGame.action(action=a)
+						if Pa[a] !=0:
+							Qsa[a]=self.exploitabilitySearch(nextGame,belief=belief,nextP=Ps[:,a],prevGame=localGame,prevAction=a)#or something like that
+					return np.dot(Pa,Qsa)
+
+				else:#if the exploiting player plays return max(v), they only take optimal actions. this also takes into account the bet made at the time
+					print("exploiting!")
+					for a in range(numActions):
+						nextGame=copy.deepcopy(localGame)
+						_,bets[a]=nextGame.action(action=a)
+						Qsa[a]=self.exploitabilitySearch(nextGame,belief,prevGame=localGame,prevAction=a)
+
+					Vs=Qsa-bets
+					return max(Vs)
+
+	def findAnalyticalExploitability(self):
+
+		start = time.time()
+		self.game = LeducGame() #explicit reference to leduc
+		numPlayers=2 #2 player game
+		numCards=3 #Jack, Queen, King
+		cardCopies=2
+		numActions=self.game.params["actionSize"]
+		exploitability=-1.
+		exploitingPlayerId=1; #Id of the player that is exploited
+		self.game.resetGame()
+		self.game.setPlayer(exploitingPlayerId)
+		bets=np.zeros((numActions,1),dtype=float)
+		V_pfirst=0.
+		V_ofirst=0.
+		self.gameCopy=copy.deepcopy(self.game)#copy a fresh game
+		for firstToPlay in range(2): #two players
+			#Say the exploiting player starts:
+			for pCard in range(numCards): #take a card
+				Qsa=np.zeros((numActions,1),dtype=float)
+				self.gameCopy.setPlayerCard(pCard) #set the card specified by for loop
+				belief=np.zeros((numCards,numCards),dtype=float) #this is the joint (conditional) probability for opponent card and public card
+				for oppCard in range(numCards):
+					for pubCard in range(numCards):
+						belief[pubCard,oppCard]=1.*(2-(oppCard==pCard))*(2-(pubCard==oppCard)-(pubCard==pCard))/60
+				belief=belief/np.sum(belief)
+				if firstToPlay==exploitingPlayerId: #if the exploiting player starts, play the 
+					for a in range(numActions):
+						self.gameCopy.resetGame()
+						self.gameCopy.setPlayer(firstToPlay)
+						self.gameCopy.dealer=firstToPlay #This is super important for consistent results
+						self.gameCopy.setPlayerCard(pCard)
+						nextGame=copy.deepcopy(self.gameCopy)
+						_, bets[a]=nextGame.action(action=a)	#copy game and take action
+						Qsa[a]=self.exploitabilitySearch(nextGame,belief=belief,prevGame=self.gameCopy,prevAction=a)
+					Vs=Qsa-bets
+					V_pfirst+=(1./3)*max(Vs)
+				else: #The other player starts
+					self.gameCopy.resetGame()
+					self.gameCopy.setPlayer(firstToPlay)
+					self.gameCopy.dealer=firstToPlay
+					self.gameCopy.setOpponentCard(pCard)
+					nextGame=copy.deepcopy(self.gameCopy)
+					Vs=self.exploitabilitySearch(nextGame,belief=belief,prevGame=self.gameCopy,prevAction=-1)
+					V_ofirst+=(1./3)*Vs
+		exploitability+=0.5*V_ofirst+0.5*V_pfirst
+		#Say the exploited player starts
+
+		end = time.time()
+		print("Exploitability calculation time: "+str(end - start))
+		return exploitability
+
+
 

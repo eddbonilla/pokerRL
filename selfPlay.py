@@ -12,7 +12,7 @@ class selfPlay:
 		
 		if simParams!= None: 
 			for tree in self.trees:
-				tree.setTreeSearchParams(simParams["TreeSearchParams"])
+				tree.setTreeSearchParams(simParams["treeSearchParams"])
 
 		self.eta=eta # array with the probabilities of following the average strategy for each player
 		self.numMCTSSims=numMCTSSims

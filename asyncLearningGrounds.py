@@ -11,46 +11,54 @@ from leduc import LeducGame
 from selfPlay import selfPlay
 import time
 
-class Training:
+class trainingThread:
 
-	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000):
+	def __init__(self,game,simParams,nnets,threadId=1,seed=None):
+
+		#Game + NNet model params
+		self.gameParams = game.params
+		self.nnets=nnets
+		self.threadId=threadId #identifier for the thread
+		self.selfPlay = selfPlay(eta=simParams["eta"],game=game, nnets = nnets, numMCTSSims=simParams["treeSearchParams"]["initialNumMCTS"],cpuct=simParams["treeSearchParams"]["cpuct"],simParams=simParams)
+
+		#Reservoir details
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
-		self.unShuffledFraction = 0.005
-		self.maxPolicyMemory = maxPolicyMemory
-		self.maxValueMemory = maxValueMemory
-		self.gameParams = LeducGame.params
+		self.unShuffledFraction = simParams["unShuffledFraction"]
+		self.maxPolicyMemory = simParams["maxPolicyMemory"]
+		self.maxValueMemory = simParams["maxValueMemory"]
+		self.pReservoirs = {"input" : np.zeros((self.maxPolicyMemory, self.gameParams["inputSize"])),
+							"policyTarget" : np.zeros((self.maxPolicyMemory,self.gameParams["actionSize"]))}
+		
+		self.vReservoirs = {"input" : np.zeros((self.maxValueMemory, self.gameParams["inputSize"])),
+							"estimTarget" : np.zeros((self.maxValueMemory, self.gameParams["handSize"])),
+							"valuesTarget" : np.zeros((self.maxValueMemory,self.gameParams["valueSize"])) }
 
-		self.pReservoirs = {"input" : np.zeros((maxPolicyMemory, self.gameParams["inputSize"])),
-							"policyTarget" : np.zeros((maxPolicyMemory,self.gameParams["actionSize"]))
-							}
-
-		self.vReservoirs = { "input" : np.zeros((maxValueMemory, self.gameParams["inputSize"])),
-							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
-							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
-		self.gamesPerUpdateNets = 10
-		self.batchSize = 10
+		#simulation/ update params
+		self.gamesPerUpdateNets = simParams["gamesPerUpdateNets"]
+		self.batchSize = simParams["batchSize"]
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 5
-
-		compGraph = tf.Graph()
-		compGraph.as_default()
-		self.sess= tf.Session()
-		K.set_session(self.sess)
-		self.nnets=nnets(self.sess,self.gameParams, alpha=1.)
-		self.saver = tf.train.Saver() #This is probably good practice
-		self.sess.run(tf.global_variables_initializer())
-		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
+		if seed!= None: self.randState.seed(seed) #Seed the RNG only once, make sure multiple threads have different seeds
+		self.batchesPerTrain = simParams["batchesPerTrain"]
+		self.printExploitFreq= simParams["printExploitFreq"]
+		self.printSelfPlayFreq=simParams["printSelfPlayFreq"]
+		#compGraph = tf.Graph()
+		#compGraph.as_default()
+		#self.sess= tf.Session()
+		#K.set_session(self.sess)
+		#self.nnets=nnets(self.sess,self.gameParams, alpha=1.)
+		#self.saver = tf.train.Saver() #This is probably good practice
+		#self.sess.run(tf.global_variables_initializer())
 
 	def doTraining(self,steps):
 		for i in range(steps):
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
-			if i%30==0:
+			if i%self.printExploitFreq==0:
 				history = np.zeros((2,2,3,2))
-				print("Exploitability =" + str(self.selfPlay.trees[0].findAnalyticalExploitability()))
+				print("Exploitability =" + str(self.selfPlay.trees[0].findExploitability()))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
 				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
@@ -62,7 +70,7 @@ class Training:
 			for j in range(self.batchesPerTrain):
 				self.nnets.trainOnMinibatch()
 			end = time.time()
-			if i%10==0:
+			if i%self.printSelfPlayFreq==0:
 				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
 		#self.sess.close()
 
