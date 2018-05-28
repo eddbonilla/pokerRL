@@ -69,7 +69,7 @@ class LeducGame(Game):
 				self.cards[2] = (self.cards[0] + 1 + random.randint(0,1))%3
 			else:
 				self.cards[2] = (random.randint(0,3) - self.cards[0] - self.cards[1]) % 3
-			self.publicCardArray[self.cards[0]] = 1
+			self.publicCardArray[self.cards[2]] = 1
 		else:
 			self.finishGame(None)
 
@@ -96,6 +96,11 @@ class LeducGame(Game):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards[(self.player+1)%2] = card 
 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
+
+	def setPlayerCard(self,card):
+		#input: card as scalar number e.g. 2=K,1=Q,0=J
+		self.cards[self.player] = card 
+		self.playersCardsArray[self.player] = np.eye(3)[card]
 
 	def setPlayer(self,player):
 			self.player = player

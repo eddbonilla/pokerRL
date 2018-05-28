@@ -143,7 +143,7 @@ class nnets:
 
 	@define_scope
 	def trainPolicyValue(self):
-		optimizer=tf.train.AdamOptimizer(0.0001)
+		optimizer=tf.train.AdamOptimizer(0.00005)
 		variables = self.fModel.trainable_weights
 		variables.append(self.valueLayer.trainable_weights)
 		variables.append(self.policyLayer.trainable_weights)
@@ -160,7 +160,7 @@ class nnets:
 
 	@define_scope
 	def trainEstimate(self):
-		optimizer=tf.train.AdamOptimizer(0.0001)
+		optimizer=tf.train.AdamOptimizer(0.00005)
 		variables = self.gModel.trainable_weights 
 		return optimizer.minimize(self.costEstimate,var_list = variables)
 
