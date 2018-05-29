@@ -1,4 +1,5 @@
 #Code adapted from https://github.com/suragnair/alpha-zero-general (needs heavy adaptation for imperfect information games)
+#DEPRECATED USE MCTS_c
 import sys
 import math
 import numpy as np
@@ -19,7 +20,6 @@ class MCTS():
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
 		self.temp = temp
-		self.tempDecayRate = 1.001
 		self.floor = floor	#Creates a floor p value to ensure all possible paths are explored
 		self.Qsa = {}	   # stores Q values for s,a (as defined in the paper)
 		self.Nsa = {}	   # stores #times edge s,a was visited

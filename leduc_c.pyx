@@ -38,21 +38,21 @@ cdef class LeducGame():
 	cpdef void resetGame(self):
 		self.player = 0  #0 for player 1, 1 for player 2
 		self.pot = 2 
-		self.cards = np.zeros(3,dtype = int)
+		self.cards = np.zeros(3,dtype = "int32")
 		self.cards_view = self.cards
-		self.cards_view[0] = random.randint(0,2)
-		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
-		self.cards_view[2] = -1
-		self.playersCardsArray = np.eye(3, dtype = int)[self.cards[0:2]]
-		self.publicCardArray = np.zeros(3, dtype =int)
+		self.cards_view[0] = int(random.randint(0,2))
+		self.cards_view[1] = int((self.cards[0] + (random.randint(0,4)%3) + 1)%3)
+		self.cards_view[2] = int(-1)
+		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards[0:2]]
+		self.publicCardArray = np.zeros(3, dtype ="int32")
 		self.publicCardArray_view = self.publicCardArray
 		self.round = 0   #0 for 1st round, 1 for 2nd round
 		self.bet = 2
 		self.finished = False
 		self.raisesInRound = 0
-		self.history = np.zeros((2,2,3,2), dtype = int)
+		self.history = np.zeros((2,2,3,2), dtype = "int32")
 		self.history_view = self.history 
-		self.winnings = np.zeros(2, dtype = int) 
+		self.winnings = np.zeros(2, dtype = "int32") 
 		self.winnings_view = self.winnings
 
 	cpdef object copy(self):
@@ -144,7 +144,7 @@ cdef class LeducGame():
 	cpdef void setPublicCard(self,int card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[2] = card 
-		self.publicCardArray = np.eye(3, dtype = int)[card]
+		self.publicCardArray = np.eye(3, dtype = "int32")[card]
 		self.publicCardArray_view = self.publicCardArray
 
 	cpdef int getRound(self):

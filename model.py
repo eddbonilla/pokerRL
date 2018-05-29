@@ -78,10 +78,10 @@ class nnets:
 		input_size = int(self.gameParams["historySize"]+self.gameParams["handSize"])
 		target_size= int(self.gameParams["handSize"])
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=128, activation='relu')(model)
-		cards = Dense(output_dim=target_size, activation='linear')(model)
-		gModel = Model(input=inputs, output=cards)
+		model = Dense(units=256, activation='relu')(inputs)
+		model = Dense(units=128, activation='relu')(model)
+		cards = Dense(units=target_size, activation='linear')(model)
+		gModel = Model(inputs=inputs, outputs=cards)
 
 		return gModel
 
@@ -93,22 +93,22 @@ class nnets:
 			input_size = int(self.gameParams["inputSize"]+self.gameParams["handSize"])    # Use if feeding gModel into fModel
 
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=128, activation='relu')(model)
+		model = Dense(units=256, activation='relu')(inputs)
+		model = Dense(units=128, activation='relu')(model)
 
-		fModel = Model(input=inputs, output=model)
+		fModel = Model(inputs=inputs, outputs=model)
 
 		return fModel
 
 	@define_scope
 	def valueLayer(self):
 		value_size= int(self.gameParams["valueSize"])
-		return Dense(output_dim = value_size, input_shape = self.fModel.output_shape, activation='linear')
+		return Dense(units = value_size, input_shape = self.fModel.output_shape, activation='linear')
 
 	@define_scope
 	def policyLayer(self):
 		policy_size= int(self.gameParams["actionSize"])
-		return Dense(output_dim = policy_size, input_shape = self.fModel.output_shape, activation = 'linear')
+		return Dense(units = policy_size, input_shape = self.fModel.output_shape, activation = 'linear')
 
 	@define_scope
 	def vInputData(self):
