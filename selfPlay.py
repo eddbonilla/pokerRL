@@ -1,8 +1,8 @@
 import math
 import numpy as np
 import random
-from MCTS_c import MCTS
-#from MCTS import MCTS
+#from MCTS_c import MCTS
+from MCTS import MCTS
 
 class selfPlay:
 

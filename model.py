@@ -23,7 +23,7 @@ def define_scope(function):
 class nnets:
 
 	"""docstring for nnet"""
-	def __init__(self,session, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128, lmbda = 0.001):
+	def __init__(self,session,lmbda, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128):
 
 		self.sess=session
 		self.gameParams=gameParams
@@ -184,6 +184,13 @@ class nnets:
 
 
 #Auxiliary functions
+
+	def compute_cost_alpha(self):
+
+		cost = self.sess.run(self.costPolicyValue)
+
+		return cost
+
 	def setAlpha(self,new_alpha):
 		self.alpha=float(new_alpha)
 
