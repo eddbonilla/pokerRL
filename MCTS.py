@@ -294,14 +294,7 @@ class MCTS():
 			self.gameCopy.setPlayer(firstToPlay)
 			self.gameCopy.dealer=firstToPlay #This is super important for consistent results
 
-			#Say the exploiting player starts:
-			if firstToPlay==exploitingPlayerId: #if the exploiting player starts, play the 
-				self.gameCopy.setPlayerCard(pCard)
-				nextGame=copy.deepcopy(self.gameCopy)
-
-			else: #The other player starts
-				self.gameCopy.setOpponentCard(pCard)
-				nextGame=copy.deepcopy(self.gameCopy)
+			nextGame=copy.deepcopy(self.gameCopy)
 
 			#start the hunt
 			Vs=self.exploitabilitySearch(nextGame,belief=belief,prevGame=self.gameCopy,prevAction=-1)
