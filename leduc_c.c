@@ -1205,13 +1205,12 @@ struct __pyx_opt_args_7leduc_c_9LeducGame_action {
  * cimport numpy as np
  * 
  * cdef class LeducGame:             # <<<<<<<<<<<<<<
- * 	cdef int dealer,pot,player,round,bet,raisesInRound,finished
+ * 	cdef int pot,player,round,bet,raisesInRound,finished
  * 	cdef np.ndarray cards, winnings, playersCardsArray, publicCardArray, history
  */
 struct __pyx_obj_7leduc_c_LeducGame {
   PyObject_HEAD
   struct __pyx_vtabstruct_7leduc_c_LeducGame *__pyx_vtab;
-  int dealer;
   int pot;
   int player;
   int round;
@@ -2290,7 +2289,6 @@ static const char __pyx_k_start[] = "start";
 static const char __pyx_k_zeros[] = "zeros";
 static const char __pyx_k_action[] = "action";
 static const char __pyx_k_choice[] = "choice";
-static const char __pyx_k_dealer[] = "dealer";
 static const char __pyx_k_encode[] = "encode";
 static const char __pyx_k_format[] = "format";
 static const char __pyx_k_getPot[] = "getPot";
@@ -2378,8 +2376,8 @@ static const char __pyx_k_Cannot_assign_to_read_only_memor[] = "Cannot assign to
 static const char __pyx_k_Cannot_create_writable_memory_vi[] = "Cannot create writable memory view from read-only memoryview";
 static const char __pyx_k_Empty_shape_tuple_for_cython_arr[] = "Empty shape tuple for cython.array";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x54[] = "Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))";
 static const char __pyx_k_Incompatible_checksums_s_vs_0xb0[] = "Incompatible checksums (%s vs 0xb068931 = (name))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0xef[] = "Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))";
 static const char __pyx_k_Indirect_dimensions_not_supporte[] = "Indirect dimensions not supported";
 static const char __pyx_k_Invalid_mode_expected_c_or_fortr[] = "Invalid mode, expected 'c' or 'fortran', got %s";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
@@ -2402,8 +2400,8 @@ static PyObject *__pyx_kp_s_Empty_shape_tuple_for_cython_arr;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x54;
 static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xb0;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xef;
 static PyObject *__pyx_n_s_IndexError;
 static PyObject *__pyx_kp_s_Indirect_dimensions_not_supporte;
 static PyObject *__pyx_kp_s_Invalid_mode_expected_c_or_fortr;
@@ -2434,7 +2432,6 @@ static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_kp_s_contiguous_and_direct;
 static PyObject *__pyx_kp_s_contiguous_and_indirect;
 static PyObject *__pyx_n_s_copy;
-static PyObject *__pyx_n_s_dealer;
 static PyObject *__pyx_n_s_dict;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_dtype_is_object;
@@ -2533,7 +2530,7 @@ static PyObject *__pyx_n_s_update;
 static PyObject *__pyx_n_s_winnings;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_pf_7leduc_c_9LeducGame_getAnte(CYTHON_UNUSED struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self); /* proto */
-static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self, int __pyx_v_override, int __pyx_v_player, int __pyx_v_dealer, int __pyx_v_pot, int __pyx_v_round, int __pyx_v_bet, int __pyx_v_raisesInRound, int __pyx_v_finished, PyArrayObject *__pyx_v_cards, PyArrayObject *__pyx_v_winnings, PyArrayObject *__pyx_v_playersCardsArray, PyArrayObject *__pyx_v_publicCardArray, PyArrayObject *__pyx_v_history); /* proto */
+static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self, int __pyx_v_override, int __pyx_v_player, int __pyx_v_pot, int __pyx_v_round, int __pyx_v_bet, int __pyx_v_raisesInRound, int __pyx_v_finished, PyArrayObject *__pyx_v_cards, PyArrayObject *__pyx_v_winnings, PyArrayObject *__pyx_v_playersCardsArray, PyArrayObject *__pyx_v_publicCardArray, PyArrayObject *__pyx_v_history); /* proto */
 static PyObject *__pyx_pf_7leduc_c_9LeducGame_4resetGame(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7leduc_c_9LeducGame_6copy(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7leduc_c_9LeducGame_8getPlayer(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self); /* proto */
@@ -2609,30 +2606,30 @@ static PyObject *__pyx_int_1;
 static PyObject *__pyx_int_2;
 static PyObject *__pyx_int_3;
 static PyObject *__pyx_int_4;
-static PyObject *__pyx_int_88287534;
 static PyObject *__pyx_int_184977713;
+static PyObject *__pyx_int_251107178;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_tuple_;
-static PyObject *__pyx_slice__6;
+static PyObject *__pyx_slice__5;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__4;
-static PyObject *__pyx_tuple__5;
+static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
+static PyObject *__pyx_slice__15;
 static PyObject *__pyx_slice__16;
 static PyObject *__pyx_slice__17;
-static PyObject *__pyx_slice__18;
+static PyObject *__pyx_slice__44;
 static PyObject *__pyx_slice__45;
 static PyObject *__pyx_slice__46;
-static PyObject *__pyx_slice__47;
 static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__14;
-static PyObject *__pyx_tuple__15;
+static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__19;
 static PyObject *__pyx_tuple__20;
 static PyObject *__pyx_tuple__21;
@@ -2658,19 +2655,18 @@ static PyObject *__pyx_tuple__40;
 static PyObject *__pyx_tuple__41;
 static PyObject *__pyx_tuple__42;
 static PyObject *__pyx_tuple__43;
-static PyObject *__pyx_tuple__44;
+static PyObject *__pyx_tuple__47;
 static PyObject *__pyx_tuple__48;
 static PyObject *__pyx_tuple__49;
 static PyObject *__pyx_tuple__50;
-static PyObject *__pyx_tuple__51;
+static PyObject *__pyx_tuple__52;
 static PyObject *__pyx_tuple__53;
 static PyObject *__pyx_tuple__54;
 static PyObject *__pyx_tuple__55;
 static PyObject *__pyx_tuple__56;
 static PyObject *__pyx_tuple__57;
-static PyObject *__pyx_tuple__58;
-static PyObject *__pyx_codeobj__52;
-static PyObject *__pyx_codeobj__59;
+static PyObject *__pyx_codeobj__51;
+static PyObject *__pyx_codeobj__58;
 /* Late includes */
 
 /* "leduc_c.pyx":10
@@ -2729,7 +2725,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_getAnte(CYTHON_UNUSED struct __pyx
 /* "leduc_c.pyx":14
  * 
  * 
- * 	def __init__(self, int override = False, int player = 0, int dealer = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):             # <<<<<<<<<<<<<<
+ * 	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):             # <<<<<<<<<<<<<<
  * 		if override:
  * 			self.player = player
  */
@@ -2739,7 +2735,6 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
 static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_override;
   int __pyx_v_player;
-  int __pyx_v_dealer;
   int __pyx_v_pot;
   int __pyx_v_round;
   int __pyx_v_bet;
@@ -2754,19 +2749,17 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_override,&__pyx_n_s_player,&__pyx_n_s_dealer,&__pyx_n_s_pot,&__pyx_n_s_round,&__pyx_n_s_bet,&__pyx_n_s_raisesInRound,&__pyx_n_s_finished,&__pyx_n_s_cards,&__pyx_n_s_winnings,&__pyx_n_s_playersCardsArray,&__pyx_n_s_publicCardArray,&__pyx_n_s_history,0};
-    PyObject* values[13] = {0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_override,&__pyx_n_s_player,&__pyx_n_s_pot,&__pyx_n_s_round,&__pyx_n_s_bet,&__pyx_n_s_raisesInRound,&__pyx_n_s_finished,&__pyx_n_s_cards,&__pyx_n_s_winnings,&__pyx_n_s_playersCardsArray,&__pyx_n_s_publicCardArray,&__pyx_n_s_history,0};
+    PyObject* values[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    values[7] = (PyObject *)((PyArrayObject *)Py_None);
     values[8] = (PyObject *)((PyArrayObject *)Py_None);
     values[9] = (PyObject *)((PyArrayObject *)Py_None);
     values[10] = (PyObject *)((PyArrayObject *)Py_None);
     values[11] = (PyObject *)((PyArrayObject *)Py_None);
-    values[12] = (PyObject *)((PyArrayObject *)Py_None);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
-        case 13: values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
-        CYTHON_FALLTHROUGH;
         case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
         CYTHON_FALLTHROUGH;
         case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
@@ -2810,68 +2803,62 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dealer);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_pot);
           if (value) { values[2] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_pot);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_round);
           if (value) { values[3] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_round);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bet);
           if (value) { values[4] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bet);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_raisesInRound);
           if (value) { values[5] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_raisesInRound);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_finished);
           if (value) { values[6] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_finished);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cards);
           if (value) { values[7] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cards);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_winnings);
           if (value) { values[8] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  9:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_winnings);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_playersCardsArray);
           if (value) { values[9] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case 10:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_playersCardsArray);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_publicCardArray);
           if (value) { values[10] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case 11:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_publicCardArray);
-          if (value) { values[11] = value; kw_args--; }
-        }
-        CYTHON_FALLTHROUGH;
-        case 12:
-        if (kw_args > 0) {
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_history);
-          if (value) { values[12] = value; kw_args--; }
+          if (value) { values[11] = value; kw_args--; }
         }
       }
       if (unlikely(kw_args > 0)) {
@@ -2879,8 +2866,6 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case 13: values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
-        CYTHON_FALLTHROUGH;
         case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
         CYTHON_FALLTHROUGH;
         case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
@@ -2920,44 +2905,39 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
       __pyx_v_player = ((int)0);
     }
     if (values[2]) {
-      __pyx_v_dealer = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_dealer == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
-    } else {
-      __pyx_v_dealer = ((int)0);
-    }
-    if (values[3]) {
-      __pyx_v_pot = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_pot == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
+      __pyx_v_pot = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_pot == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
     } else {
       __pyx_v_pot = ((int)0);
     }
-    if (values[4]) {
-      __pyx_v_round = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_round == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
+    if (values[3]) {
+      __pyx_v_round = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_round == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
     } else {
       __pyx_v_round = ((int)0);
     }
-    if (values[5]) {
-      __pyx_v_bet = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_bet == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
+    if (values[4]) {
+      __pyx_v_bet = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_bet == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
     } else {
       __pyx_v_bet = ((int)0);
     }
-    if (values[6]) {
-      __pyx_v_raisesInRound = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_raisesInRound == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
+    if (values[5]) {
+      __pyx_v_raisesInRound = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_raisesInRound == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
     } else {
       __pyx_v_raisesInRound = ((int)0);
     }
-    if (values[7]) {
-      __pyx_v_finished = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_finished == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
+    if (values[6]) {
+      __pyx_v_finished = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_finished == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 14, __pyx_L3_error)
     } else {
       __pyx_v_finished = ((int)0);
     }
-    __pyx_v_cards = ((PyArrayObject *)values[8]);
-    __pyx_v_winnings = ((PyArrayObject *)values[9]);
-    __pyx_v_playersCardsArray = ((PyArrayObject *)values[10]);
-    __pyx_v_publicCardArray = ((PyArrayObject *)values[11]);
-    __pyx_v_history = ((PyArrayObject *)values[12]);
+    __pyx_v_cards = ((PyArrayObject *)values[7]);
+    __pyx_v_winnings = ((PyArrayObject *)values[8]);
+    __pyx_v_playersCardsArray = ((PyArrayObject *)values[9]);
+    __pyx_v_publicCardArray = ((PyArrayObject *)values[10]);
+    __pyx_v_history = ((PyArrayObject *)values[11]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 0, 13, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 14, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 0, 12, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 14, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("leduc_c.LeducGame.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2968,7 +2948,7 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_playersCardsArray), __pyx_ptype_5numpy_ndarray, 1, "playersCardsArray", 0))) __PYX_ERR(0, 14, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_publicCardArray), __pyx_ptype_5numpy_ndarray, 1, "publicCardArray", 0))) __PYX_ERR(0, 14, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_history), __pyx_ptype_5numpy_ndarray, 1, "history", 0))) __PYX_ERR(0, 14, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7leduc_c_9LeducGame_2__init__(((struct __pyx_obj_7leduc_c_LeducGame *)__pyx_v_self), __pyx_v_override, __pyx_v_player, __pyx_v_dealer, __pyx_v_pot, __pyx_v_round, __pyx_v_bet, __pyx_v_raisesInRound, __pyx_v_finished, __pyx_v_cards, __pyx_v_winnings, __pyx_v_playersCardsArray, __pyx_v_publicCardArray, __pyx_v_history);
+  __pyx_r = __pyx_pf_7leduc_c_9LeducGame_2__init__(((struct __pyx_obj_7leduc_c_LeducGame *)__pyx_v_self), __pyx_v_override, __pyx_v_player, __pyx_v_pot, __pyx_v_round, __pyx_v_bet, __pyx_v_raisesInRound, __pyx_v_finished, __pyx_v_cards, __pyx_v_winnings, __pyx_v_playersCardsArray, __pyx_v_publicCardArray, __pyx_v_history);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2979,7 +2959,7 @@ static int __pyx_pw_7leduc_c_9LeducGame_3__init__(PyObject *__pyx_v_self, PyObje
   return __pyx_r;
 }
 
-static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self, int __pyx_v_override, int __pyx_v_player, int __pyx_v_dealer, int __pyx_v_pot, int __pyx_v_round, int __pyx_v_bet, int __pyx_v_raisesInRound, int __pyx_v_finished, PyArrayObject *__pyx_v_cards, PyArrayObject *__pyx_v_winnings, PyArrayObject *__pyx_v_playersCardsArray, PyArrayObject *__pyx_v_publicCardArray, PyArrayObject *__pyx_v_history) {
+static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self, int __pyx_v_override, int __pyx_v_player, int __pyx_v_pot, int __pyx_v_round, int __pyx_v_bet, int __pyx_v_raisesInRound, int __pyx_v_finished, PyArrayObject *__pyx_v_cards, PyArrayObject *__pyx_v_winnings, PyArrayObject *__pyx_v_playersCardsArray, PyArrayObject *__pyx_v_publicCardArray, PyArrayObject *__pyx_v_history) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -2989,35 +2969,26 @@ static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_Ledu
 
   /* "leduc_c.pyx":15
  * 
- * 	def __init__(self, int override = False, int player = 0, int dealer = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
+ * 	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
  * 		if override:             # <<<<<<<<<<<<<<
  * 			self.player = player
- * 			self.dealer = dealer
+ * 
  */
   __pyx_t_1 = (__pyx_v_override != 0);
   if (__pyx_t_1) {
 
     /* "leduc_c.pyx":16
- * 	def __init__(self, int override = False, int player = 0, int dealer = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
+ * 	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
  * 		if override:
  * 			self.player = player             # <<<<<<<<<<<<<<
- * 			self.dealer = dealer
+ * 
  * 			self.pot = pot
  */
     __pyx_v_self->player = __pyx_v_player;
 
-    /* "leduc_c.pyx":17
- * 		if override:
- * 			self.player = player
- * 			self.dealer = dealer             # <<<<<<<<<<<<<<
- * 			self.pot = pot
- * 			self.round = round
- */
-    __pyx_v_self->dealer = __pyx_v_dealer;
-
     /* "leduc_c.pyx":18
  * 			self.player = player
- * 			self.dealer = dealer
+ * 
  * 			self.pot = pot             # <<<<<<<<<<<<<<
  * 			self.round = round
  * 			self.bet = bet
@@ -3025,7 +2996,7 @@ static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_Ledu
     __pyx_v_self->pot = __pyx_v_pot;
 
     /* "leduc_c.pyx":19
- * 			self.dealer = dealer
+ * 
  * 			self.pot = pot
  * 			self.round = round             # <<<<<<<<<<<<<<
  * 			self.bet = bet
@@ -3179,10 +3150,10 @@ static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_Ledu
 
     /* "leduc_c.pyx":15
  * 
- * 	def __init__(self, int override = False, int player = 0, int dealer = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
+ * 	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
  * 		if override:             # <<<<<<<<<<<<<<
  * 			self.player = player
- * 			self.dealer = dealer
+ * 
  */
     goto __pyx_L3;
   }
@@ -3192,7 +3163,7 @@ static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_Ledu
  * 		else:
  * 			self.resetGame()             # <<<<<<<<<<<<<<
  * 
- * 	cpdef void resetGame(self):
+ * 
  */
   /*else*/ {
     ((struct __pyx_vtabstruct_7leduc_c_LeducGame *)__pyx_v_self->__pyx_vtab)->resetGame(__pyx_v_self, 0);
@@ -3202,7 +3173,7 @@ static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_Ledu
   /* "leduc_c.pyx":14
  * 
  * 
- * 	def __init__(self, int override = False, int player = 0, int dealer = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):             # <<<<<<<<<<<<<<
+ * 	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):             # <<<<<<<<<<<<<<
  * 		if override:
  * 			self.player = player
  */
@@ -3220,12 +3191,12 @@ static int __pyx_pf_7leduc_c_9LeducGame_2__init__(struct __pyx_obj_7leduc_c_Ledu
   return __pyx_r;
 }
 
-/* "leduc_c.pyx":37
- * 			self.resetGame()
+/* "leduc_c.pyx":38
+ * 
  * 
  * 	cpdef void resetGame(self):             # <<<<<<<<<<<<<<
- * 		self.dealer = random.randint(0,1)
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
+ * 		self.player = 0  #0 for player 1, 1 for player 2
+ * 		self.pot = 2
  */
 
 static PyObject *__pyx_pw_7leduc_c_9LeducGame_5resetGame(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
@@ -3235,8 +3206,8 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  __Pyx_memviewslice __pyx_t_6 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_t_5 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  int __pyx_t_6;
   Py_ssize_t __pyx_t_7;
   int __pyx_t_8;
   Py_ssize_t __pyx_t_9;
@@ -3247,7 +3218,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_resetGame); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_resetGame); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7leduc_c_9LeducGame_5resetGame)) {
       __Pyx_INCREF(__pyx_t_1);
@@ -3262,10 +3233,10 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
         }
       }
       if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3276,38 +3247,18 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "leduc_c.pyx":38
+  /* "leduc_c.pyx":39
  * 
  * 	cpdef void resetGame(self):
- * 		self.dealer = random.randint(0,1)             # <<<<<<<<<<<<<<
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
- * 		self.pot = 2
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_randint); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_self->dealer = __pyx_t_5;
-
-  /* "leduc_c.pyx":39
- * 	cpdef void resetGame(self):
- * 		self.dealer = random.randint(0,1)
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2             # <<<<<<<<<<<<<<
+ * 		self.player = 0  #0 for player 1, 1 for player 2             # <<<<<<<<<<<<<<
  * 		self.pot = 2
  * 		self.cards = np.zeros(3,dtype = int)
  */
-  __pyx_t_5 = __pyx_v_self->dealer;
-  __pyx_v_self->player = __pyx_t_5;
+  __pyx_v_self->player = 0;
 
   /* "leduc_c.pyx":40
- * 		self.dealer = random.randint(0,1)
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
+ * 	cpdef void resetGame(self):
+ * 		self.player = 0  #0 for player 1, 1 for player 2
  * 		self.pot = 2             # <<<<<<<<<<<<<<
  * 		self.cards = np.zeros(3,dtype = int)
  * 		self.cards_view = self.cards
@@ -3315,7 +3266,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_v_self->pot = 2;
 
   /* "leduc_c.pyx":41
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
+ * 		self.player = 0  #0 for player 1, 1 for player 2
  * 		self.pot = 2
  * 		self.cards = np.zeros(3,dtype = int)             # <<<<<<<<<<<<<<
  * 		self.cards_view = self.cards
@@ -3329,7 +3280,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3347,11 +3298,11 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 		self.cards_view[0] = random.randint(0,2)
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
  */
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(((PyObject *)__pyx_v_self->cards), PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(((PyObject *)__pyx_v_self->cards), PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 42, __pyx_L1_error)
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->cards_view, 0);
-  __pyx_v_self->cards_view = __pyx_t_6;
-  __pyx_t_6.memview = NULL;
-  __pyx_t_6.data = NULL;
+  __pyx_v_self->cards_view = __pyx_t_5;
+  __pyx_t_5.memview = NULL;
+  __pyx_t_5.data = NULL;
 
   /* "leduc_c.pyx":43
  * 		self.cards = np.zeros(3,dtype = int)
@@ -3365,10 +3316,10 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_randint); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 43, __pyx_L1_error)}
   __pyx_t_7 = 0;
@@ -3381,7 +3332,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
     __Pyx_RaiseBufferIndexError(__pyx_t_8);
     __PYX_ERR(0, 43, __pyx_L1_error)
   }
-  *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_7 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_5;
+  *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_7 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_6;
 
   /* "leduc_c.pyx":44
  * 		self.cards_view = self.cards
@@ -3397,7 +3348,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_randint); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_PyInt_RemainderObjC(__pyx_t_1, __pyx_int_3, 3, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
@@ -3413,7 +3364,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_1 = __Pyx_PyInt_RemainderObjC(__pyx_t_2, __pyx_int_3, 3, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 44, __pyx_L1_error)}
   __pyx_t_9 = 1;
@@ -3426,7 +3377,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
     __Pyx_RaiseBufferIndexError(__pyx_t_8);
     __PYX_ERR(0, 44, __pyx_L1_error)
   }
-  *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_9 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_5;
+  *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_9 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_6;
 
   /* "leduc_c.pyx":45
  * 		self.cards_view[0] = random.randint(0,2)
@@ -3437,13 +3388,13 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  */
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 45, __pyx_L1_error)}
   __pyx_t_10 = 2;
-  __pyx_t_5 = -1;
+  __pyx_t_6 = -1;
   if (__pyx_t_10 < 0) {
     __pyx_t_10 += __pyx_v_self->cards_view.shape[0];
-    if (unlikely(__pyx_t_10 < 0)) __pyx_t_5 = 0;
-  } else if (unlikely(__pyx_t_10 >= __pyx_v_self->cards_view.shape[0])) __pyx_t_5 = 0;
-  if (unlikely(__pyx_t_5 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_5);
+    if (unlikely(__pyx_t_10 < 0)) __pyx_t_6 = 0;
+  } else if (unlikely(__pyx_t_10 >= __pyx_v_self->cards_view.shape[0])) __pyx_t_6 = 0;
+  if (unlikely(__pyx_t_6 != -1)) {
+    __Pyx_RaiseBufferIndexError(__pyx_t_6);
     __PYX_ERR(0, 45, __pyx_L1_error)
   }
   *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_10 * __pyx_v_self->cards_view.strides[0]) )) = -1;
@@ -3463,11 +3414,11 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__5, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__4, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->cards), 0, 2, NULL, NULL, &__pyx_slice__6, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->cards), 0, 2, NULL, NULL, &__pyx_slice__5, 1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -3495,7 +3446,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__7, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__6, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3513,11 +3464,11 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 		self.round = 0   #0 for 1st round, 1 for 2nd round
  * 		self.bet = 2
  */
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(((PyObject *)__pyx_v_self->publicCardArray), PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(((PyObject *)__pyx_v_self->publicCardArray), PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 48, __pyx_L1_error)
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->publicCardArray_view, 0);
-  __pyx_v_self->publicCardArray_view = __pyx_t_6;
-  __pyx_t_6.memview = NULL;
-  __pyx_t_6.data = NULL;
+  __pyx_v_self->publicCardArray_view = __pyx_t_5;
+  __pyx_t_5.memview = NULL;
+  __pyx_t_5.data = NULL;
 
   /* "leduc_c.pyx":49
  * 		self.publicCardArray = np.zeros(3, dtype =int)
@@ -3570,7 +3521,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 53, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__9, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__8, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3609,7 +3560,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 55, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__10, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__9, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3627,18 +3578,18 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 
  * 	cpdef object copy(self):
  */
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(((PyObject *)__pyx_v_self->winnings), PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(((PyObject *)__pyx_v_self->winnings), PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 56, __pyx_L1_error)
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->winnings_view, 0);
-  __pyx_v_self->winnings_view = __pyx_t_6;
-  __pyx_t_6.memview = NULL;
-  __pyx_t_6.data = NULL;
+  __pyx_v_self->winnings_view = __pyx_t_5;
+  __pyx_t_5.memview = NULL;
+  __pyx_t_5.data = NULL;
 
-  /* "leduc_c.pyx":37
- * 			self.resetGame()
+  /* "leduc_c.pyx":38
+ * 
  * 
  * 	cpdef void resetGame(self):             # <<<<<<<<<<<<<<
- * 		self.dealer = random.randint(0,1)
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
+ * 		self.player = 0  #0 for player 1, 1 for player 2
+ * 		self.pot = 2
  */
 
   /* function exit code */
@@ -3648,7 +3599,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
   __PYX_XDEC_MEMVIEW(&__pyx_t_11, 1);
   __Pyx_WriteUnraisable("leduc_c.LeducGame.resetGame", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
@@ -3674,7 +3625,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_4resetGame(struct __pyx_obj_7leduc
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("resetGame", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7leduc_c_9LeducGame_resetGame(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7leduc_c_9LeducGame_resetGame(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3695,7 +3646,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_4resetGame(struct __pyx_obj_7leduc
  * 		self.winnings_view = self.winnings
  * 
  * 	cpdef object copy(self):             # <<<<<<<<<<<<<<
- * 		cdef object newGame = LeducGame(override=True,player = self.player, dealer = self.dealer,pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
+ * 		cdef object newGame = LeducGame(override=True,player = self.player, pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
  * 
  */
 
@@ -3748,20 +3699,16 @@ static PyObject *__pyx_f_7leduc_c_9LeducGame_copy(struct __pyx_obj_7leduc_c_Ledu
   /* "leduc_c.pyx":59
  * 
  * 	cpdef object copy(self):
- * 		cdef object newGame = LeducGame(override=True,player = self.player, dealer = self.dealer,pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))             # <<<<<<<<<<<<<<
+ * 		cdef object newGame = LeducGame(override=True,player = self.player, pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))             # <<<<<<<<<<<<<<
  * 
  * 		return newGame
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_override, Py_True) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
   __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->player); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_player, __pyx_t_2) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->dealer); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dealer, __pyx_t_2) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->pot); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -4040,7 +3987,7 @@ static PyObject *__pyx_f_7leduc_c_9LeducGame_copy(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_2 = 0;
 
   /* "leduc_c.pyx":61
- * 		cdef object newGame = LeducGame(override=True,player = self.player, dealer = self.dealer,pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
+ * 		cdef object newGame = LeducGame(override=True,player = self.player, pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
  * 
  * 		return newGame             # <<<<<<<<<<<<<<
  * 
@@ -4055,7 +4002,7 @@ static PyObject *__pyx_f_7leduc_c_9LeducGame_copy(struct __pyx_obj_7leduc_c_Ledu
  * 		self.winnings_view = self.winnings
  * 
  * 	cpdef object copy(self):             # <<<<<<<<<<<<<<
- * 		cdef object newGame = LeducGame(override=True,player = self.player, dealer = self.dealer,pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
+ * 		cdef object newGame = LeducGame(override=True,player = self.player, pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
  * 
  */
 
@@ -4584,13 +4531,13 @@ static void __pyx_f_7leduc_c_9LeducGame_finishGame(struct __pyx_obj_7leduc_c_Led
 static void __pyx_f_7leduc_c_9LeducGame_endRound(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  int __pyx_t_2;
+  Py_ssize_t __pyx_t_2;
   Py_ssize_t __pyx_t_3;
   Py_ssize_t __pyx_t_4;
-  Py_ssize_t __pyx_t_5;
+  PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
+  int __pyx_t_8;
   Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
@@ -4623,7 +4570,7 @@ static void __pyx_f_7leduc_c_9LeducGame_endRound(struct __pyx_obj_7leduc_c_Leduc
  * 			self.round = 1
  * 			self.bet = 4             # <<<<<<<<<<<<<<
  * 			self.raisesInRound = 0
- * 			self.player = self.dealer
+ * 			self.player = 0
  */
     __pyx_v_self->bet = 4;
 
@@ -4631,7 +4578,7 @@ static void __pyx_f_7leduc_c_9LeducGame_endRound(struct __pyx_obj_7leduc_c_Leduc
  * 			self.round = 1
  * 			self.bet = 4
  * 			self.raisesInRound = 0             # <<<<<<<<<<<<<<
- * 			self.player = self.dealer
+ * 			self.player = 0
  * 			if self.cards_view[0] == self.cards_view[1]:
  */
     __pyx_v_self->raisesInRound = 0;
@@ -4639,62 +4586,61 @@ static void __pyx_f_7leduc_c_9LeducGame_endRound(struct __pyx_obj_7leduc_c_Leduc
     /* "leduc_c.pyx":97
  * 			self.bet = 4
  * 			self.raisesInRound = 0
- * 			self.player = self.dealer             # <<<<<<<<<<<<<<
+ * 			self.player = 0             # <<<<<<<<<<<<<<
  * 			if self.cards_view[0] == self.cards_view[1]:
  * 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
  */
-    __pyx_t_2 = __pyx_v_self->dealer;
-    __pyx_v_self->player = __pyx_t_2;
+    __pyx_v_self->player = 0;
 
     /* "leduc_c.pyx":98
  * 			self.raisesInRound = 0
- * 			self.player = self.dealer
+ * 			self.player = 0
  * 			if self.cards_view[0] == self.cards_view[1]:             # <<<<<<<<<<<<<<
  * 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
  * 			else:
  */
     if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 98, __pyx_L1_error)}
-    __pyx_t_3 = 0;
+    __pyx_t_2 = 0;
     if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 98, __pyx_L1_error)}
-    __pyx_t_4 = 1;
-    __pyx_t_1 = (((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_3 * __pyx_v_self->cards_view.strides[0]) ))) == (*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_4 * __pyx_v_self->cards_view.strides[0]) )))) != 0);
+    __pyx_t_3 = 1;
+    __pyx_t_1 = (((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_2 * __pyx_v_self->cards_view.strides[0]) ))) == (*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_3 * __pyx_v_self->cards_view.strides[0]) )))) != 0);
     if (__pyx_t_1) {
 
       /* "leduc_c.pyx":99
- * 			self.player = self.dealer
+ * 			self.player = 0
  * 			if self.cards_view[0] == self.cards_view[1]:
  * 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3             # <<<<<<<<<<<<<<
  * 			else:
  * 				self.cards_view[2] = (random.randint(0,3) - self.cards_view[0] - self.cards_view[1]) % 3
  */
       if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 99, __pyx_L1_error)}
-      __pyx_t_5 = 0;
-      __pyx_t_6 = __Pyx_PyInt_From_long(((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_5 * __pyx_v_self->cards_view.strides[0]) ))) + 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_4 = 0;
+      __pyx_t_5 = __Pyx_PyInt_From_long(((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_4 * __pyx_v_self->cards_view.strides[0]) ))) + 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_randint); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_randint); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 99, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 99, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Add(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 99, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyInt_RemainderObjC(__pyx_t_8, __pyx_int_3, 3, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_7 = PyNumber_Add(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_7); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_6 = __Pyx_PyInt_RemainderObjC(__pyx_t_7, __pyx_int_3, 3, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 99, __pyx_L1_error)}
       __pyx_t_9 = 2;
-      *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_9 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_2;
+      *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_9 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_8;
 
       /* "leduc_c.pyx":98
  * 			self.raisesInRound = 0
- * 			self.player = self.dealer
+ * 			self.player = 0
  * 			if self.cards_view[0] == self.cards_view[1]:             # <<<<<<<<<<<<<<
  * 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
  * 			else:
@@ -4710,38 +4656,38 @@ static void __pyx_f_7leduc_c_9LeducGame_endRound(struct __pyx_obj_7leduc_c_Leduc
  * 		else:
  */
     /*else*/ {
-      __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_randint); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 101, __pyx_L1_error)}
-      __pyx_t_10 = 0;
-      __pyx_t_8 = __Pyx_PyInt_From_int((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_10 * __pyx_v_self->cards_view.strides[0]) )))); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_6 = PyNumber_Subtract(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 101, __pyx_L1_error)}
-      __pyx_t_11 = 1;
-      __pyx_t_8 = __Pyx_PyInt_From_int((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_11 * __pyx_v_self->cards_view.strides[0]) )))); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_7 = PyNumber_Subtract(__pyx_t_6, __pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_randint); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = __Pyx_PyInt_RemainderObjC(__pyx_t_7, __pyx_int_3, 3, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_8); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 101, __pyx_L1_error)}
+      __pyx_t_10 = 0;
+      __pyx_t_7 = __Pyx_PyInt_From_int((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_10 * __pyx_v_self->cards_view.strides[0]) )))); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_5 = PyNumber_Subtract(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 101, __pyx_L1_error)}
+      __pyx_t_11 = 1;
+      __pyx_t_7 = __Pyx_PyInt_From_int((*((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_11 * __pyx_v_self->cards_view.strides[0]) )))); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_6 = PyNumber_Subtract(__pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_7 = __Pyx_PyInt_RemainderObjC(__pyx_t_6, __pyx_int_3, 3, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_7); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 101, __pyx_L1_error)}
       __pyx_t_12 = 2;
-      *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_12 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_2;
+      *((int *) ( /* dim=0 */ (__pyx_v_self->cards_view.data + __pyx_t_12 * __pyx_v_self->cards_view.strides[0]) )) = __pyx_t_8;
     }
     __pyx_L4:;
 
@@ -4791,9 +4737,9 @@ static void __pyx_f_7leduc_c_9LeducGame_endRound(struct __pyx_obj_7leduc_c_Leduc
   /* function exit code */
   goto __pyx_L0;
   __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
   __Pyx_WriteUnraisable("leduc_c.LeducGame.endRound", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -5648,7 +5594,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setOpponentCard(struct __pyx_obj_7leduc_
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 133, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__13, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__12, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -5835,7 +5781,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPlayerCard(struct __pyx_obj_7leduc_c_
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 140, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__14, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__13, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6022,7 +5968,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPublicCard(struct __pyx_obj_7leduc_c_
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 147, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__15, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__14, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6341,15 +6287,15 @@ static PyArrayObject *__pyx_f_7leduc_c_9LeducGame_getPublicHistory(struct __pyx_
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2);
+  __Pyx_INCREF(__pyx_slice__15);
+  __Pyx_GIVEREF(__pyx_slice__15);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_slice__15);
   __Pyx_INCREF(__pyx_slice__16);
   __Pyx_GIVEREF(__pyx_slice__16);
-  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_slice__16);
+  PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_slice__16);
   __Pyx_INCREF(__pyx_slice__17);
   __Pyx_GIVEREF(__pyx_slice__17);
-  PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_slice__17);
-  __Pyx_INCREF(__pyx_slice__18);
-  __Pyx_GIVEREF(__pyx_slice__18);
-  PyTuple_SET_ITEM(__pyx_t_1, 3, __pyx_slice__18);
+  PyTuple_SET_ITEM(__pyx_t_1, 3, __pyx_slice__17);
   __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_self->history), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -7072,7 +7018,7 @@ static int __pyx_f_7leduc_c_9LeducGame_action(struct __pyx_obj_7leduc_c_LeducGam
  * 		if action==-1:
  * 			action = np.random.choice(3, p = strategy)
  */
-    __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_tuple__19); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 187, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_tuple__18); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 187, __pyx_L1_error)
     __pyx_r = __pyx_t_6;
     goto __pyx_L0;
 
@@ -7113,7 +7059,7 @@ static int __pyx_f_7leduc_c_9LeducGame_action(struct __pyx_obj_7leduc_c_LeducGam
     __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_p, ((PyObject *)__pyx_v_strategy)) < 0) __PYX_ERR(0, 189, __pyx_L1_error)
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__20, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__19, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 189, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -7306,7 +7252,7 @@ static int __pyx_f_7leduc_c_9LeducGame_action(struct __pyx_obj_7leduc_c_LeducGam
  * 				betAmount = self.bet
  * 				endRound = 1             # <<<<<<<<<<<<<<
  * 				#print("One raise + call")
- * 			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):
+ * 			elif oldRaisesInRound == 0 and (oldPlayer == 1):
  */
       __pyx_v_endRound = 1;
 
@@ -7323,7 +7269,7 @@ static int __pyx_f_7leduc_c_9LeducGame_action(struct __pyx_obj_7leduc_c_LeducGam
     /* "leduc_c.pyx":210
  * 				endRound = 1
  * 				#print("One raise + call")
- * 			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):             # <<<<<<<<<<<<<<
+ * 			elif oldRaisesInRound == 0 and (oldPlayer == 1):             # <<<<<<<<<<<<<<
  * 				endRound = 1
  * 				#print("Call + end round")
  */
@@ -7333,14 +7279,14 @@ static int __pyx_f_7leduc_c_9LeducGame_action(struct __pyx_obj_7leduc_c_LeducGam
       __pyx_t_8 = __pyx_t_14;
       goto __pyx_L7_bool_binop_done;
     }
-    __pyx_t_14 = ((!((__pyx_v_oldPlayer == __pyx_v_self->dealer) != 0)) != 0);
+    __pyx_t_14 = ((__pyx_v_oldPlayer == 1) != 0);
     __pyx_t_8 = __pyx_t_14;
     __pyx_L7_bool_binop_done:;
     if (__pyx_t_8) {
 
       /* "leduc_c.pyx":211
  * 				#print("One raise + call")
- * 			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):
+ * 			elif oldRaisesInRound == 0 and (oldPlayer == 1):
  * 				endRound = 1             # <<<<<<<<<<<<<<
  * 				#print("Call + end round")
  * 			#else:
@@ -7350,7 +7296,7 @@ static int __pyx_f_7leduc_c_9LeducGame_action(struct __pyx_obj_7leduc_c_LeducGam
       /* "leduc_c.pyx":210
  * 				endRound = 1
  * 				#print("One raise + call")
- * 			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):             # <<<<<<<<<<<<<<
+ * 			elif oldRaisesInRound == 0 and (oldPlayer == 1):             # <<<<<<<<<<<<<<
  * 				endRound = 1
  * 				#print("Call + end round")
  */
@@ -7645,7 +7591,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_36action(struct __pyx_obj_7leduc_c
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef bint use_setstate
- *     state = (self.bet, self.cards, self.cards_view, self.dealer, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
+ *     state = (self.bet, self.cards, self.cards_view, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
  */
 
 /* Python wrapper */
@@ -7678,16 +7624,15 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
   PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
   PyObject *__pyx_t_11 = NULL;
-  PyObject *__pyx_t_12 = NULL;
+  int __pyx_t_12;
   int __pyx_t_13;
   int __pyx_t_14;
-  int __pyx_t_15;
   __Pyx_RefNannySetupContext("__reduce_cython__", 0);
 
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
  *     cdef bint use_setstate
- *     state = (self.bet, self.cards, self.cards_view, self.dealer, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)             # <<<<<<<<<<<<<<
+ *     state = (self.bet, self.cards, self.cards_view, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -7696,66 +7641,62 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
   __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_self->cards_view, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->dealer); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->finished); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->finished); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
   if (unlikely(!__pyx_v_self->history_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_self->history_view, 4, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_self->history_view, 4, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->player); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->player); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->pot); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->pot); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
   if (unlikely(!__pyx_v_self->publicCardArray_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_8 = __pyx_memoryview_fromslice(__pyx_v_self->publicCardArray_view, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_7 = __pyx_memoryview_fromslice(__pyx_v_self->publicCardArray_view, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->raisesInRound); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_self->raisesInRound); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_self->round); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_self->round); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_10);
   if (unlikely(!__pyx_v_self->winnings_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_11 = __pyx_memoryview_fromslice(__pyx_v_self->winnings_view, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_10 = __pyx_memoryview_fromslice(__pyx_v_self->winnings_view, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __pyx_t_11 = PyTuple_New(15); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  __pyx_t_12 = PyTuple_New(16); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_12);
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_1);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->cards));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->cards));
-  PyTuple_SET_ITEM(__pyx_t_12, 1, ((PyObject *)__pyx_v_self->cards));
+  PyTuple_SET_ITEM(__pyx_t_11, 1, ((PyObject *)__pyx_v_self->cards));
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_12, 2, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_12, 3, __pyx_t_3);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_12, 4, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_11, 3, __pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->history));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->history));
-  PyTuple_SET_ITEM(__pyx_t_12, 5, ((PyObject *)__pyx_v_self->history));
+  PyTuple_SET_ITEM(__pyx_t_11, 4, ((PyObject *)__pyx_v_self->history));
+  __Pyx_GIVEREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_11, 5, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_12, 6, __pyx_t_5);
-  __Pyx_GIVEREF(__pyx_t_6);
-  PyTuple_SET_ITEM(__pyx_t_12, 7, __pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_11, 6, __pyx_t_5);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->playersCardsArray));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->playersCardsArray));
-  PyTuple_SET_ITEM(__pyx_t_12, 8, ((PyObject *)__pyx_v_self->playersCardsArray));
-  __Pyx_GIVEREF(__pyx_t_7);
-  PyTuple_SET_ITEM(__pyx_t_12, 9, __pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_11, 7, ((PyObject *)__pyx_v_self->playersCardsArray));
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_11, 8, __pyx_t_6);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->publicCardArray));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->publicCardArray));
-  PyTuple_SET_ITEM(__pyx_t_12, 10, ((PyObject *)__pyx_v_self->publicCardArray));
+  PyTuple_SET_ITEM(__pyx_t_11, 9, ((PyObject *)__pyx_v_self->publicCardArray));
+  __Pyx_GIVEREF(__pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_11, 10, __pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_8);
-  PyTuple_SET_ITEM(__pyx_t_12, 11, __pyx_t_8);
+  PyTuple_SET_ITEM(__pyx_t_11, 11, __pyx_t_8);
   __Pyx_GIVEREF(__pyx_t_9);
-  PyTuple_SET_ITEM(__pyx_t_12, 12, __pyx_t_9);
-  __Pyx_GIVEREF(__pyx_t_10);
-  PyTuple_SET_ITEM(__pyx_t_12, 13, __pyx_t_10);
+  PyTuple_SET_ITEM(__pyx_t_11, 12, __pyx_t_9);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->winnings));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->winnings));
-  PyTuple_SET_ITEM(__pyx_t_12, 14, ((PyObject *)__pyx_v_self->winnings));
-  __Pyx_GIVEREF(__pyx_t_11);
-  PyTuple_SET_ITEM(__pyx_t_12, 15, __pyx_t_11);
+  PyTuple_SET_ITEM(__pyx_t_11, 13, ((PyObject *)__pyx_v_self->winnings));
+  __Pyx_GIVEREF(__pyx_t_10);
+  PyTuple_SET_ITEM(__pyx_t_11, 14, __pyx_t_10);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -7766,32 +7707,31 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
   __pyx_t_8 = 0;
   __pyx_t_9 = 0;
   __pyx_t_10 = 0;
+  __pyx_v_state = ((PyObject*)__pyx_t_11);
   __pyx_t_11 = 0;
-  __pyx_v_state = ((PyObject*)__pyx_t_12);
-  __pyx_t_12 = 0;
 
   /* "(tree fragment)":4
  *     cdef bint use_setstate
- *     state = (self.bet, self.cards, self.cards_view, self.dealer, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
+ *     state = (self.bet, self.cards, self.cards_view, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
  */
-  __pyx_t_12 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_12);
-  __pyx_v__dict = __pyx_t_12;
-  __pyx_t_12 = 0;
+  __pyx_t_11 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  __pyx_v__dict = __pyx_t_11;
+  __pyx_t_11 = 0;
 
   /* "(tree fragment)":5
- *     state = (self.bet, self.cards, self.cards_view, self.dealer, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
+ *     state = (self.bet, self.cards, self.cards_view, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
  *         use_setstate = True
  */
-  __pyx_t_13 = (__pyx_v__dict != Py_None);
-  __pyx_t_14 = (__pyx_t_13 != 0);
-  if (__pyx_t_14) {
+  __pyx_t_12 = (__pyx_v__dict != Py_None);
+  __pyx_t_13 = (__pyx_t_12 != 0);
+  if (__pyx_t_13) {
 
     /* "(tree fragment)":6
  *     _dict = getattr(self, '__dict__', None)
@@ -7800,16 +7740,16 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
  *         use_setstate = True
  *     else:
  */
-    __pyx_t_12 = PyTuple_New(1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 6, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_12);
+    __pyx_t_11 = PyTuple_New(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
     __Pyx_INCREF(__pyx_v__dict);
     __Pyx_GIVEREF(__pyx_v__dict);
-    PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_v__dict);
-    __pyx_t_11 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 6, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_11);
-    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_11));
-    __pyx_t_11 = 0;
+    PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_v__dict);
+    __pyx_t_10 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_11); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_10));
+    __pyx_t_10 = 0;
 
     /* "(tree fragment)":7
  *     if _dict is not None:
@@ -7821,7 +7761,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":5
- *     state = (self.bet, self.cards, self.cards_view, self.dealer, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
+ *     state = (self.bet, self.cards, self.cards_view, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -7835,42 +7775,42 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
  *     else:
  *         use_setstate = self.cards is not None or self.history is not None or self.playersCardsArray is not None or self.publicCardArray is not None or self.winnings is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, None), state
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, None), state
  */
   /*else*/ {
-    __pyx_t_13 = (((PyObject *)__pyx_v_self->cards) != Py_None);
-    __pyx_t_15 = (__pyx_t_13 != 0);
-    if (!__pyx_t_15) {
+    __pyx_t_12 = (((PyObject *)__pyx_v_self->cards) != Py_None);
+    __pyx_t_14 = (__pyx_t_12 != 0);
+    if (!__pyx_t_14) {
     } else {
-      __pyx_t_14 = __pyx_t_15;
+      __pyx_t_13 = __pyx_t_14;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_15 = (((PyObject *)__pyx_v_self->history) != Py_None);
-    __pyx_t_13 = (__pyx_t_15 != 0);
-    if (!__pyx_t_13) {
+    __pyx_t_14 = (((PyObject *)__pyx_v_self->history) != Py_None);
+    __pyx_t_12 = (__pyx_t_14 != 0);
+    if (!__pyx_t_12) {
     } else {
-      __pyx_t_14 = __pyx_t_13;
+      __pyx_t_13 = __pyx_t_12;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_13 = (((PyObject *)__pyx_v_self->playersCardsArray) != Py_None);
-    __pyx_t_15 = (__pyx_t_13 != 0);
-    if (!__pyx_t_15) {
+    __pyx_t_12 = (((PyObject *)__pyx_v_self->playersCardsArray) != Py_None);
+    __pyx_t_14 = (__pyx_t_12 != 0);
+    if (!__pyx_t_14) {
     } else {
-      __pyx_t_14 = __pyx_t_15;
+      __pyx_t_13 = __pyx_t_14;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_15 = (((PyObject *)__pyx_v_self->publicCardArray) != Py_None);
-    __pyx_t_13 = (__pyx_t_15 != 0);
-    if (!__pyx_t_13) {
+    __pyx_t_14 = (((PyObject *)__pyx_v_self->publicCardArray) != Py_None);
+    __pyx_t_12 = (__pyx_t_14 != 0);
+    if (!__pyx_t_12) {
     } else {
-      __pyx_t_14 = __pyx_t_13;
+      __pyx_t_13 = __pyx_t_12;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_13 = (((PyObject *)__pyx_v_self->winnings) != Py_None);
-    __pyx_t_15 = (__pyx_t_13 != 0);
-    __pyx_t_14 = __pyx_t_15;
+    __pyx_t_12 = (((PyObject *)__pyx_v_self->winnings) != Py_None);
+    __pyx_t_14 = (__pyx_t_12 != 0);
+    __pyx_t_13 = __pyx_t_14;
     __pyx_L4_bool_binop_done:;
-    __pyx_v_use_setstate = __pyx_t_14;
+    __pyx_v_use_setstate = __pyx_t_13;
   }
   __pyx_L3:;
 
@@ -7878,96 +7818,96 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
  *     else:
  *         use_setstate = self.cards is not None or self.history is not None or self.playersCardsArray is not None or self.publicCardArray is not None or self.winnings is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, None), state
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, None), state
  *     else:
  */
-  __pyx_t_14 = (__pyx_v_use_setstate != 0);
-  if (__pyx_t_14) {
+  __pyx_t_13 = (__pyx_v_use_setstate != 0);
+  if (__pyx_t_13) {
 
     /* "(tree fragment)":11
  *         use_setstate = self.cards is not None or self.history is not None or self.playersCardsArray is not None or self.publicCardArray is not None or self.winnings is not None
  *     if use_setstate:
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, state)
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, state)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_11 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_LeducGame); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 11, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_LeducGame); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 11, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __pyx_t_11 = PyTuple_New(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 11, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_12 = PyTuple_New(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 11, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_12);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_12, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_88287534);
-    __Pyx_GIVEREF(__pyx_int_88287534);
-    PyTuple_SET_ITEM(__pyx_t_12, 1, __pyx_int_88287534);
+    PyTuple_SET_ITEM(__pyx_t_11, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_251107178);
+    __Pyx_GIVEREF(__pyx_int_251107178);
+    PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_int_251107178);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
-    PyTuple_SET_ITEM(__pyx_t_12, 2, Py_None);
-    __pyx_t_10 = PyTuple_New(3); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 11, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
+    PyTuple_SET_ITEM(__pyx_t_11, 2, Py_None);
+    __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 11, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_GIVEREF(__pyx_t_10);
+    PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_10);
     __Pyx_GIVEREF(__pyx_t_11);
-    PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_11);
-    __Pyx_GIVEREF(__pyx_t_12);
-    PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_12);
+    PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_11);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_10, 2, __pyx_v_state);
-    __pyx_t_11 = 0;
-    __pyx_t_12 = 0;
-    __pyx_r = __pyx_t_10;
+    PyTuple_SET_ITEM(__pyx_t_9, 2, __pyx_v_state);
     __pyx_t_10 = 0;
+    __pyx_t_11 = 0;
+    __pyx_r = __pyx_t_9;
+    __pyx_t_9 = 0;
     goto __pyx_L0;
 
     /* "(tree fragment)":10
  *     else:
  *         use_setstate = self.cards is not None or self.history is not None or self.playersCardsArray is not None or self.publicCardArray is not None or self.winnings is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, None), state
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":13
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, None), state
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, None), state
  *     else:
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_LeducGame__set_state(self, __pyx_state)
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_10 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_LeducGame); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_12 = PyTuple_New(3); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_12);
+    __pyx_t_9 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_LeducGame); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_11 = PyTuple_New(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_12, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_88287534);
-    __Pyx_GIVEREF(__pyx_int_88287534);
-    PyTuple_SET_ITEM(__pyx_t_12, 1, __pyx_int_88287534);
+    PyTuple_SET_ITEM(__pyx_t_11, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_251107178);
+    __Pyx_GIVEREF(__pyx_int_251107178);
+    PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_int_251107178);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_12, 2, __pyx_v_state);
-    __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_11);
-    __Pyx_GIVEREF(__pyx_t_10);
-    PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_10);
-    __Pyx_GIVEREF(__pyx_t_12);
-    PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_12);
-    __pyx_t_10 = 0;
-    __pyx_t_12 = 0;
-    __pyx_r = __pyx_t_11;
+    PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_v_state);
+    __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_GIVEREF(__pyx_t_9);
+    PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9);
+    __Pyx_GIVEREF(__pyx_t_11);
+    PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_11);
+    __pyx_t_9 = 0;
     __pyx_t_11 = 0;
+    __pyx_r = __pyx_t_10;
+    __pyx_t_10 = 0;
     goto __pyx_L0;
   }
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef bint use_setstate
- *     state = (self.bet, self.cards, self.cards_view, self.dealer, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
+ *     state = (self.bet, self.cards, self.cards_view, self.finished, self.history, self.history_view, self.player, self.playersCardsArray, self.pot, self.publicCardArray, self.publicCardArray_view, self.raisesInRound, self.round, self.winnings, self.winnings_view)
  */
 
   /* function exit code */
@@ -7983,7 +7923,6 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
   __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
   __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_XDECREF(__pyx_t_12);
   __Pyx_AddTraceback("leduc_c.LeducGame.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -7996,7 +7935,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_38__reduce_cython__(struct __pyx_o
 
 /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, state)
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_LeducGame__set_state(self, __pyx_state)
  */
@@ -8021,7 +7960,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_40__setstate_cython__(struct __pyx
   __Pyx_RefNannySetupContext("__setstate_cython__", 0);
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, state)
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_LeducGame__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -8032,7 +7971,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_40__setstate_cython__(struct __pyx
 
   /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_LeducGame, (type(self), 0x543292e, state)
+ *         return __pyx_unpickle_LeducGame, (type(self), 0xef7976a, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_LeducGame__set_state(self, __pyx_state)
  */
@@ -8052,7 +7991,7 @@ static PyObject *__pyx_pf_7leduc_c_9LeducGame_40__setstate_cython__(struct __pyx
 
 /* "(tree fragment)":1
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x543292e:
+ *     if __pyx_checksum != 0xef7976a:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -8145,18 +8084,18 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
 
   /* "(tree fragment)":2
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x543292e:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0xef7976a:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
  */
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x543292e) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0xef7976a) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":3
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x543292e:
+ *     if __pyx_checksum != 0xef7976a:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
  *     __pyx_result = LeducGame.__new__(__pyx_type)
  */
     __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 3, __pyx_L1_error)
@@ -8175,15 +8114,15 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":4
- *     if __pyx_checksum != 0x543292e:
+ *     if __pyx_checksum != 0xef7976a:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = LeducGame.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x54, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0xef, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -8239,15 +8178,15 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
 
     /* "(tree fragment)":2
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x543292e:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0xef7976a:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":5
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
  *     __pyx_result = LeducGame.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_LeducGame__set_state(<LeducGame> __pyx_result, __pyx_state)
@@ -8301,7 +8240,7 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
  *     __pyx_result = LeducGame.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_LeducGame__set_state(<LeducGame> __pyx_result, __pyx_state)
@@ -8324,7 +8263,7 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x543292e = (bet, cards, cards_view, dealer, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xef7976a = (bet, cards, cards_view, finished, history, history_view, player, playersCardsArray, pot, publicCardArray, publicCardArray_view, raisesInRound, round, winnings, winnings_view))" % __pyx_checksum)
  *     __pyx_result = LeducGame.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_LeducGame__set_state(<LeducGame> __pyx_result, __pyx_state)
@@ -8337,7 +8276,7 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
  *         __pyx_unpickle_LeducGame__set_state(<LeducGame> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_LeducGame__set_state(LeducGame __pyx_result, tuple __pyx_state):
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v___pyx_result);
@@ -8346,7 +8285,7 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x543292e:
+ *     if __pyx_checksum != 0xef7976a:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -8371,8 +8310,8 @@ static PyObject *__pyx_pf_7leduc_c___pyx_unpickle_LeducGame(CYTHON_UNUSED PyObje
  *         __pyx_unpickle_LeducGame__set_state(<LeducGame> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_LeducGame__set_state(LeducGame __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]
- *     if len(__pyx_state) > 16 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]
+ *     if len(__pyx_state) > 15 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __pyx_obj_7leduc_c_LeducGame *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -8395,9 +8334,9 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
   /* "(tree fragment)":10
  *     return __pyx_result
  * cdef __pyx_unpickle_LeducGame__set_state(LeducGame __pyx_result, tuple __pyx_state):
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 16 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[16])
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 15 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[15])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -8440,21 +8379,12 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->dealer = __pyx_t_2;
-  if (unlikely(__pyx_v___pyx_state == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(1, 10, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v___pyx_result->finished = __pyx_t_2;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -8466,7 +8396,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_dsdsdsds_int(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8478,7 +8408,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8487,7 +8417,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -8499,7 +8429,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8508,7 +8438,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -8520,7 +8450,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8532,7 +8462,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8541,7 +8471,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8550,7 +8480,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -8562,7 +8492,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 15, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8573,16 +8503,16 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
 
   /* "(tree fragment)":11
  * cdef __pyx_unpickle_LeducGame__set_state(LeducGame __pyx_result, tuple __pyx_state):
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]
- *     if len(__pyx_state) > 16 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[16])
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]
+ *     if len(__pyx_state) > 15 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[15])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
     __PYX_ERR(1, 11, __pyx_L1_error)
   }
   __pyx_t_6 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(1, 11, __pyx_L1_error)
-  __pyx_t_7 = ((__pyx_t_6 > 16) != 0);
+  __pyx_t_7 = ((__pyx_t_6 > 15) != 0);
   if (__pyx_t_7) {
   } else {
     __pyx_t_5 = __pyx_t_7;
@@ -8595,9 +8525,9 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
   if (__pyx_t_5) {
 
     /* "(tree fragment)":12
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]
- *     if len(__pyx_state) > 16 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[16])             # <<<<<<<<<<<<<<
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]
+ *     if len(__pyx_state) > 15 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[15])             # <<<<<<<<<<<<<<
  */
     __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
@@ -8608,7 +8538,7 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 12, __pyx_L1_error)
     }
-    __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 16, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 12, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 15, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __pyx_t_11 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
@@ -8660,9 +8590,9 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
 
     /* "(tree fragment)":11
  * cdef __pyx_unpickle_LeducGame__set_state(LeducGame __pyx_result, tuple __pyx_state):
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]
- *     if len(__pyx_state) > 16 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[16])
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]
+ *     if len(__pyx_state) > 15 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[15])
  */
   }
 
@@ -8670,8 +8600,8 @@ static PyObject *__pyx_f_7leduc_c___pyx_unpickle_LeducGame__set_state(struct __p
  *         __pyx_unpickle_LeducGame__set_state(<LeducGame> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_LeducGame__set_state(LeducGame __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.dealer = __pyx_state[3]; __pyx_result.finished = __pyx_state[4]; __pyx_result.history = __pyx_state[5]; __pyx_result.history_view = __pyx_state[6]; __pyx_result.player = __pyx_state[7]; __pyx_result.playersCardsArray = __pyx_state[8]; __pyx_result.pot = __pyx_state[9]; __pyx_result.publicCardArray = __pyx_state[10]; __pyx_result.publicCardArray_view = __pyx_state[11]; __pyx_result.raisesInRound = __pyx_state[12]; __pyx_result.round = __pyx_state[13]; __pyx_result.winnings = __pyx_state[14]; __pyx_result.winnings_view = __pyx_state[15]
- *     if len(__pyx_state) > 16 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.bet = __pyx_state[0]; __pyx_result.cards = __pyx_state[1]; __pyx_result.cards_view = __pyx_state[2]; __pyx_result.finished = __pyx_state[3]; __pyx_result.history = __pyx_state[4]; __pyx_result.history_view = __pyx_state[5]; __pyx_result.player = __pyx_state[6]; __pyx_result.playersCardsArray = __pyx_state[7]; __pyx_result.pot = __pyx_state[8]; __pyx_result.publicCardArray = __pyx_state[9]; __pyx_result.publicCardArray_view = __pyx_state[10]; __pyx_result.raisesInRound = __pyx_state[11]; __pyx_result.round = __pyx_state[12]; __pyx_result.winnings = __pyx_state[13]; __pyx_result.winnings_view = __pyx_state[14]
+ *     if len(__pyx_state) > 15 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -8809,7 +8739,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 229, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -8865,7 +8795,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             info.buf = PyArray_DATA(self)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 233, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 233, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -9122,7 +9052,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 263, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -10002,7 +9932,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 810, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 810, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -10070,7 +10000,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 814, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 814, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -10179,7 +10109,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 834, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 834, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_Raise(__pyx_t_4, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -10853,7 +10783,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1000, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1000, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -10982,7 +10912,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1006, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1006, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -11108,7 +11038,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1012, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1012, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -11352,7 +11282,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if itemsize <= 0:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__30, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 132, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 132, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -11384,7 +11314,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if not isinstance(format, bytes):
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 135, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__30, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 135, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -11419,7 +11349,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  */
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_format, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 138, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_format, __pyx_t_5);
@@ -11499,7 +11429,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  * 
  */
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__33, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 147, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -11773,7 +11703,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *             if self.dtype_is_object:
  */
-      __pyx_t_10 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__34, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 175, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__33, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_Raise(__pyx_t_10, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -12014,7 +11944,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(stru
  *         info.buf = self.data
  *         info.len = self.len
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 191, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__34, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 191, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -12730,7 +12660,7 @@ static PyObject *__pyx_pf___pyx_array___reduce_cython__(CYTHON_UNUSED struct __p
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__36, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -12783,7 +12713,7 @@ static PyObject *__pyx_pf___pyx_array_2__setstate_cython__(CYTHON_UNUSED struct 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__36, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -14427,7 +14357,7 @@ static int __pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_6__setit
  * 
  *         have_slices, index = _unellipsify(index, self.view.ndim)
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 413, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 413, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -15454,7 +15384,7 @@ static PyObject *__pyx_memoryview_convert_item_to_object(struct __pyx_memoryview
  *         else:
  *             if len(self.view.format) == 1:
  */
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__39, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 490, __pyx_L5_except_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 490, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -15810,7 +15740,7 @@ static int __pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_8__getbu
  * 
  *         if flags & PyBUF_STRIDES:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__40, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 515, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__39, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 515, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -16350,7 +16280,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_7strides___get__(st
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__41, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 565, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__40, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 565, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -16464,7 +16394,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_10suboffsets___get_
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->view.ndim); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 572, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__42, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 572, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__41, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 572, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_r = __pyx_t_3;
@@ -17465,7 +17395,7 @@ static PyObject *__pyx_pf___pyx_memoryview___reduce_cython__(CYTHON_UNUSED struc
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__43, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__42, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -17518,7 +17448,7 @@ static PyObject *__pyx_pf___pyx_memoryview_2__setstate_cython__(CYTHON_UNUSED st
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__44, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__43, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -17869,9 +17799,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
         __Pyx_GOTREF(__pyx_t_7);
         { Py_ssize_t __pyx_temp;
           for (__pyx_temp=0; __pyx_temp < ((__pyx_v_ndim - __pyx_t_8) + 1); __pyx_temp++) {
-            __Pyx_INCREF(__pyx_slice__45);
-            __Pyx_GIVEREF(__pyx_slice__45);
-            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__45);
+            __Pyx_INCREF(__pyx_slice__44);
+            __Pyx_GIVEREF(__pyx_slice__44);
+            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__44);
           }
         }
         __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_7); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(1, 677, __pyx_L1_error)
@@ -17904,7 +17834,7 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
  *         else:
  */
       /*else*/ {
-        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__46); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(1, 680, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__45); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(1, 680, __pyx_L1_error)
       }
       __pyx_L7:;
 
@@ -18044,9 +17974,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
     __Pyx_GOTREF(__pyx_t_3);
     { Py_ssize_t __pyx_temp;
       for (__pyx_temp=0; __pyx_temp < __pyx_v_nslices; __pyx_temp++) {
-        __Pyx_INCREF(__pyx_slice__47);
-        __Pyx_GIVEREF(__pyx_slice__47);
-        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__47);
+        __Pyx_INCREF(__pyx_slice__46);
+        __Pyx_GIVEREF(__pyx_slice__46);
+        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__46);
       }
     }
     __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_3); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(1, 691, __pyx_L1_error)
@@ -18170,7 +18100,7 @@ static PyObject *assert_direct_dimensions(Py_ssize_t *__pyx_v_suboffsets, int __
  * 
  * 
  */
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__48, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 698, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__47, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 698, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -20333,7 +20263,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__49, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__48, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -20386,7 +20316,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUS
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__50, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__49, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -24962,8 +24892,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x54, __pyx_k_Incompatible_checksums_s_vs_0x54, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x54), 0, 0, 1, 0},
   {&__pyx_kp_s_Incompatible_checksums_s_vs_0xb0, __pyx_k_Incompatible_checksums_s_vs_0xb0, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xb0), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0xef, __pyx_k_Incompatible_checksums_s_vs_0xef, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xef), 0, 0, 1, 0},
   {&__pyx_n_s_IndexError, __pyx_k_IndexError, sizeof(__pyx_k_IndexError), 0, 0, 1, 1},
   {&__pyx_kp_s_Indirect_dimensions_not_supporte, __pyx_k_Indirect_dimensions_not_supporte, sizeof(__pyx_k_Indirect_dimensions_not_supporte), 0, 0, 1, 0},
   {&__pyx_kp_s_Invalid_mode_expected_c_or_fortr, __pyx_k_Invalid_mode_expected_c_or_fortr, sizeof(__pyx_k_Invalid_mode_expected_c_or_fortr), 0, 0, 1, 0},
@@ -24994,7 +24924,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_contiguous_and_direct, __pyx_k_contiguous_and_direct, sizeof(__pyx_k_contiguous_and_direct), 0, 0, 1, 0},
   {&__pyx_kp_s_contiguous_and_indirect, __pyx_k_contiguous_and_indirect, sizeof(__pyx_k_contiguous_and_indirect), 0, 0, 1, 0},
   {&__pyx_n_s_copy, __pyx_k_copy, sizeof(__pyx_k_copy), 0, 0, 1, 1},
-  {&__pyx_n_s_dealer, __pyx_k_dealer, sizeof(__pyx_k_dealer), 0, 0, 1, 1},
   {&__pyx_n_s_dict, __pyx_k_dict, sizeof(__pyx_k_dict), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_n_s_dtype_is_object, __pyx_k_dtype_is_object, sizeof(__pyx_k_dtype_is_object), 0, 0, 1, 1},
@@ -25114,27 +25043,16 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "leduc_c.pyx":38
- * 
- * 	cpdef void resetGame(self):
- * 		self.dealer = random.randint(0,1)             # <<<<<<<<<<<<<<
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
- * 		self.pot = 2
- */
-  __pyx_tuple_ = PyTuple_Pack(2, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple_);
-  __Pyx_GIVEREF(__pyx_tuple_);
-
   /* "leduc_c.pyx":41
- * 		self.player = self.dealer  #0 for player 1, 1 for player 2
+ * 		self.player = 0  #0 for player 1, 1 for player 2
  * 		self.pot = 2
  * 		self.cards = np.zeros(3,dtype = int)             # <<<<<<<<<<<<<<
  * 		self.cards_view = self.cards
  * 		self.cards_view[0] = random.randint(0,2)
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__2);
-  __Pyx_GIVEREF(__pyx_tuple__2);
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple_);
+  __Pyx_GIVEREF(__pyx_tuple_);
 
   /* "leduc_c.pyx":43
  * 		self.cards = np.zeros(3,dtype = int)
@@ -25143,9 +25061,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
  * 		self.cards_view[2] = -1
  */
-  __pyx_tuple__3 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_2); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
+  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_2); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__2);
+  __Pyx_GIVEREF(__pyx_tuple__2);
 
   /* "leduc_c.pyx":44
  * 		self.cards_view = self.cards
@@ -25154,9 +25072,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.cards_view[2] = -1
  * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards[0:2]]
  */
-  __pyx_tuple__4 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_4); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 44, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__4);
-  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_tuple__3 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_4); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
 
   /* "leduc_c.pyx":46
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
@@ -25165,12 +25083,12 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.publicCardArray = np.zeros(3, dtype =int)
  * 		self.publicCardArray_view = self.publicCardArray
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_slice__6 = PySlice_New(__pyx_int_0, __pyx_int_2, Py_None); if (unlikely(!__pyx_slice__6)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__6);
-  __Pyx_GIVEREF(__pyx_slice__6);
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_slice__5 = PySlice_New(__pyx_int_0, __pyx_int_2, Py_None); if (unlikely(!__pyx_slice__5)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__5);
+  __Pyx_GIVEREF(__pyx_slice__5);
 
   /* "leduc_c.pyx":47
  * 		self.cards_view[2] = -1
@@ -25179,9 +25097,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.publicCardArray_view = self.publicCardArray
  * 		self.round = 0   #0 for 1st round, 1 for 2nd round
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 47, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
 
   /* "leduc_c.pyx":53
  * 		self.finished = False
@@ -25190,12 +25108,12 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.history_view = self.history
  * 		self.winnings = np.zeros(2, dtype = int)
  */
-  __pyx_tuple__8 = PyTuple_Pack(4, __pyx_int_2, __pyx_int_2, __pyx_int_3, __pyx_int_2); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_int_2, __pyx_int_2, __pyx_int_3, __pyx_int_2); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__7);
+  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_tuple__7); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_tuple__8); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
 
   /* "leduc_c.pyx":55
  * 		self.history = np.zeros((2,2,3,2), dtype = int)
@@ -25204,20 +25122,20 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.winnings_view = self.winnings
  * 
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_int_2); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__10);
-  __Pyx_GIVEREF(__pyx_tuple__10);
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_int_2); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__9);
+  __Pyx_GIVEREF(__pyx_tuple__9);
 
   /* "leduc_c.pyx":99
- * 			self.player = self.dealer
+ * 			self.player = 0
  * 			if self.cards_view[0] == self.cards_view[1]:
  * 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3             # <<<<<<<<<<<<<<
  * 			else:
  * 				self.cards_view[2] = (random.randint(0,3) - self.cards_view[0] - self.cards_view[1]) % 3
  */
-  __pyx_tuple__11 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 99, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_tuple__10 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
 
   /* "leduc_c.pyx":101
  * 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
@@ -25226,9 +25144,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 			self.publicCardArray_view[self.cards_view[2]] = 1
  * 		else:
  */
-  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_3); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 101, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
+  __pyx_tuple__11 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_3); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
 
   /* "leduc_c.pyx":133
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
@@ -25237,9 +25155,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 	@cython.boundscheck(False)
  */
-  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
 
   /* "leduc_c.pyx":140
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
@@ -25248,9 +25166,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 	@cython.boundscheck(False)
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "leduc_c.pyx":147
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
@@ -25259,9 +25177,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.publicCardArray_view = self.publicCardArray
  * 
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 147, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "leduc_c.pyx":159
  * 	cpdef np.ndarray getPublicHistory(self):
@@ -25270,15 +25188,15 @@ static int __Pyx_InitCachedConstants(void) {
  * 		return public_history
  * 
  */
+  __pyx_slice__15 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__15)) __PYX_ERR(0, 159, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__15);
+  __Pyx_GIVEREF(__pyx_slice__15);
   __pyx_slice__16 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__16)) __PYX_ERR(0, 159, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice__16);
   __Pyx_GIVEREF(__pyx_slice__16);
   __pyx_slice__17 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__17)) __PYX_ERR(0, 159, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice__17);
   __Pyx_GIVEREF(__pyx_slice__17);
-  __pyx_slice__18 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__18)) __PYX_ERR(0, 159, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__18);
-  __Pyx_GIVEREF(__pyx_slice__18);
 
   /* "leduc_c.pyx":187
  * 		#	Chosen action, bet size
@@ -25287,9 +25205,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 		if action==-1:
  * 			action = np.random.choice(3, p = strategy)
  */
-  __pyx_tuple__19 = PyTuple_Pack(2, __pyx_int_neg_1, __pyx_int_neg_1); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_tuple__18 = PyTuple_Pack(2, __pyx_int_neg_1, __pyx_int_neg_1); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
 
   /* "leduc_c.pyx":189
  * 			return -1,-1
@@ -25298,9 +25216,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 		cdef int oldPlayer = self.player
  * 		cdef int oldRaisesInRound = self.raisesInRound
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
+  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":229
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
@@ -25309,9 +25227,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(2, 229, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__21);
-  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(2, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":233
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
@@ -25320,9 +25238,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             info.buf = PyArray_DATA(self)
  */
-  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(2, 233, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__22);
-  __Pyx_GIVEREF(__pyx_tuple__22);
+  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(2, 233, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":263
  *                 if ((descr.byteorder == c'>' and little_endian) or
@@ -25331,9 +25249,9 @@ static int __Pyx_InitCachedConstants(void) {
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(2, 263, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(2, 263, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__22);
+  __Pyx_GIVEREF(__pyx_tuple__22);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":810
  * 
@@ -25342,9 +25260,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(2, 810, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__24);
-  __Pyx_GIVEREF(__pyx_tuple__24);
+  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(2, 810, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":814
  *         if ((child.byteorder == c'>' and little_endian) or
@@ -25353,9 +25271,9 @@ static int __Pyx_InitCachedConstants(void) {
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(2, 814, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__25);
-  __Pyx_GIVEREF(__pyx_tuple__25);
+  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(2, 814, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__24);
+  __Pyx_GIVEREF(__pyx_tuple__24);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":834
  *             t = child.type_num
@@ -25364,9 +25282,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(2, 834, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__26);
-  __Pyx_GIVEREF(__pyx_tuple__26);
+  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(2, 834, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1000
  *         _import_array()
@@ -25375,9 +25293,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(2, 1000, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
+  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(2, 1000, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1006
  *         _import_umath()
@@ -25386,18 +25304,18 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(2, 1006, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__28);
-  __Pyx_GIVEREF(__pyx_tuple__28);
+  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(2, 1006, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
 
   /* "../../../AppData/Local/Programs/Python/Python36/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1012
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__29 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(2, 1012, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__29);
-  __Pyx_GIVEREF(__pyx_tuple__29);
+  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(2, 1012, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__28);
+  __Pyx_GIVEREF(__pyx_tuple__28);
 
   /* "View.MemoryView":132
  * 
@@ -25406,9 +25324,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if itemsize <= 0:
  */
-  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__30);
-  __Pyx_GIVEREF(__pyx_tuple__30);
+  __pyx_tuple__29 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(1, 132, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__29);
+  __Pyx_GIVEREF(__pyx_tuple__29);
 
   /* "View.MemoryView":135
  * 
@@ -25417,9 +25335,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if not isinstance(format, bytes):
  */
-  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 135, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__31);
-  __Pyx_GIVEREF(__pyx_tuple__31);
+  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 135, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__30);
+  __Pyx_GIVEREF(__pyx_tuple__30);
 
   /* "View.MemoryView":138
  * 
@@ -25428,9 +25346,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         self._format = format  # keep a reference to the byte string
  *         self.format = self._format
  */
-  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_n_s_ASCII); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 138, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__32);
-  __Pyx_GIVEREF(__pyx_tuple__32);
+  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_n_s_ASCII); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 138, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__31);
+  __Pyx_GIVEREF(__pyx_tuple__31);
 
   /* "View.MemoryView":147
  * 
@@ -25439,9 +25357,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__33 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(1, 147, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__33);
-  __Pyx_GIVEREF(__pyx_tuple__33);
+  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 147, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__32);
+  __Pyx_GIVEREF(__pyx_tuple__32);
 
   /* "View.MemoryView":175
  *             self.data = <char *>malloc(self.len)
@@ -25450,9 +25368,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             if self.dtype_is_object:
  */
-  __pyx_tuple__34 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__34)) __PYX_ERR(1, 175, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__34);
-  __Pyx_GIVEREF(__pyx_tuple__34);
+  __pyx_tuple__33 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(1, 175, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__33);
+  __Pyx_GIVEREF(__pyx_tuple__33);
 
   /* "View.MemoryView":191
  *             bufmode = PyBUF_F_CONTIGUOUS | PyBUF_ANY_CONTIGUOUS
@@ -25461,9 +25379,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         info.buf = self.data
  *         info.len = self.len
  */
-  __pyx_tuple__35 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(1, 191, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__35);
-  __Pyx_GIVEREF(__pyx_tuple__35);
+  __pyx_tuple__34 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__34)) __PYX_ERR(1, 191, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__34);
+  __Pyx_GIVEREF(__pyx_tuple__34);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -25471,18 +25389,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__36 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__36)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__36);
-  __Pyx_GIVEREF(__pyx_tuple__36);
+  __pyx_tuple__35 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__35);
+  __Pyx_GIVEREF(__pyx_tuple__35);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__37);
-  __Pyx_GIVEREF(__pyx_tuple__37);
+  __pyx_tuple__36 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__36)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__36);
+  __Pyx_GIVEREF(__pyx_tuple__36);
 
   /* "View.MemoryView":413
  *     def __setitem__(memoryview self, object index, object value):
@@ -25491,9 +25409,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         have_slices, index = _unellipsify(index, self.view.ndim)
  */
-  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_s_Cannot_assign_to_read_only_memor); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(1, 413, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__38);
-  __Pyx_GIVEREF(__pyx_tuple__38);
+  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_Cannot_assign_to_read_only_memor); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(1, 413, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__37);
+  __Pyx_GIVEREF(__pyx_tuple__37);
 
   /* "View.MemoryView":490
  *             result = struct.unpack(self.view.format, bytesitem)
@@ -25502,9 +25420,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         else:
  *             if len(self.view.format) == 1:
  */
-  __pyx_tuple__39 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(1, 490, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__39);
-  __Pyx_GIVEREF(__pyx_tuple__39);
+  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(1, 490, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__38);
+  __Pyx_GIVEREF(__pyx_tuple__38);
 
   /* "View.MemoryView":515
  *     def __getbuffer__(self, Py_buffer *info, int flags):
@@ -25513,9 +25431,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if flags & PyBUF_STRIDES:
  */
-  __pyx_tuple__40 = PyTuple_Pack(1, __pyx_kp_s_Cannot_create_writable_memory_vi); if (unlikely(!__pyx_tuple__40)) __PYX_ERR(1, 515, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__40);
-  __Pyx_GIVEREF(__pyx_tuple__40);
+  __pyx_tuple__39 = PyTuple_Pack(1, __pyx_kp_s_Cannot_create_writable_memory_vi); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(1, 515, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__39);
+  __Pyx_GIVEREF(__pyx_tuple__39);
 
   /* "View.MemoryView":565
  *         if self.view.strides == NULL:
@@ -25524,9 +25442,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-  __pyx_tuple__41 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(1, 565, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__41);
-  __Pyx_GIVEREF(__pyx_tuple__41);
+  __pyx_tuple__40 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__40)) __PYX_ERR(1, 565, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__40);
+  __Pyx_GIVEREF(__pyx_tuple__40);
 
   /* "View.MemoryView":572
  *     def suboffsets(self):
@@ -25535,12 +25453,12 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([suboffset for suboffset in self.view.suboffsets[:self.view.ndim]])
  */
-  __pyx_tuple__42 = PyTuple_New(1); if (unlikely(!__pyx_tuple__42)) __PYX_ERR(1, 572, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__42);
+  __pyx_tuple__41 = PyTuple_New(1); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(1, 572, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__41);
   __Pyx_INCREF(__pyx_int_neg_1);
   __Pyx_GIVEREF(__pyx_int_neg_1);
-  PyTuple_SET_ITEM(__pyx_tuple__42, 0, __pyx_int_neg_1);
-  __Pyx_GIVEREF(__pyx_tuple__42);
+  PyTuple_SET_ITEM(__pyx_tuple__41, 0, __pyx_int_neg_1);
+  __Pyx_GIVEREF(__pyx_tuple__41);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -25548,18 +25466,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__43 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__43);
-  __Pyx_GIVEREF(__pyx_tuple__43);
+  __pyx_tuple__42 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__42)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__42);
+  __Pyx_GIVEREF(__pyx_tuple__42);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__44 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__44)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__44);
-  __Pyx_GIVEREF(__pyx_tuple__44);
+  __pyx_tuple__43 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__43);
+  __Pyx_GIVEREF(__pyx_tuple__43);
 
   /* "View.MemoryView":677
  *         if item is Ellipsis:
@@ -25568,9 +25486,9 @@ static int __Pyx_InitCachedConstants(void) {
  *                 seen_ellipsis = True
  *             else:
  */
-  __pyx_slice__45 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__45)) __PYX_ERR(1, 677, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__45);
-  __Pyx_GIVEREF(__pyx_slice__45);
+  __pyx_slice__44 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__44)) __PYX_ERR(1, 677, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__44);
+  __Pyx_GIVEREF(__pyx_slice__44);
 
   /* "View.MemoryView":680
  *                 seen_ellipsis = True
@@ -25579,9 +25497,9 @@ static int __Pyx_InitCachedConstants(void) {
  *             have_slices = True
  *         else:
  */
-  __pyx_slice__46 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__46)) __PYX_ERR(1, 680, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__46);
-  __Pyx_GIVEREF(__pyx_slice__46);
+  __pyx_slice__45 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__45)) __PYX_ERR(1, 680, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__45);
+  __Pyx_GIVEREF(__pyx_slice__45);
 
   /* "View.MemoryView":691
  *     nslices = ndim - len(result)
@@ -25590,9 +25508,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *     return have_slices or nslices, tuple(result)
  */
-  __pyx_slice__47 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__47)) __PYX_ERR(1, 691, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__47);
-  __Pyx_GIVEREF(__pyx_slice__47);
+  __pyx_slice__46 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__46)) __PYX_ERR(1, 691, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__46);
+  __Pyx_GIVEREF(__pyx_slice__46);
 
   /* "View.MemoryView":698
  *     for suboffset in suboffsets[:ndim]:
@@ -25601,9 +25519,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__48 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(1, 698, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__48);
-  __Pyx_GIVEREF(__pyx_tuple__48);
+  __pyx_tuple__47 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(1, 698, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__47);
+  __Pyx_GIVEREF(__pyx_tuple__47);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -25611,28 +25529,28 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__49);
-  __Pyx_GIVEREF(__pyx_tuple__49);
+  __pyx_tuple__48 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__48);
+  __Pyx_GIVEREF(__pyx_tuple__48);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__50 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__50);
-  __Pyx_GIVEREF(__pyx_tuple__50);
+  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__49);
+  __Pyx_GIVEREF(__pyx_tuple__49);
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x543292e:
+ *     if __pyx_checksum != 0xef7976a:
  *         from pickle import PickleError as __pyx_PickleError
  */
-  __pyx_tuple__51 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__51);
-  __Pyx_GIVEREF(__pyx_tuple__51);
-  __pyx_codeobj__52 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_LeducGame, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__52)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__50 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__50);
+  __Pyx_GIVEREF(__pyx_tuple__50);
+  __pyx_codeobj__51 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__50, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_LeducGame, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__51)) __PYX_ERR(1, 1, __pyx_L1_error)
 
   /* "View.MemoryView":285
  *         return self.name
@@ -25641,9 +25559,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_tuple__53 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(1, 285, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__53);
-  __Pyx_GIVEREF(__pyx_tuple__53);
+  __pyx_tuple__52 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(1, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__52);
+  __Pyx_GIVEREF(__pyx_tuple__52);
 
   /* "View.MemoryView":286
  * 
@@ -25652,9 +25570,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_tuple__54 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(1, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__54);
-  __Pyx_GIVEREF(__pyx_tuple__54);
+  __pyx_tuple__53 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(1, 286, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__53);
+  __Pyx_GIVEREF(__pyx_tuple__53);
 
   /* "View.MemoryView":287
  * cdef generic = Enum("<strided and direct or indirect>")
@@ -25663,9 +25581,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__55 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(1, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__55);
-  __Pyx_GIVEREF(__pyx_tuple__55);
+  __pyx_tuple__54 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__54);
+  __Pyx_GIVEREF(__pyx_tuple__54);
 
   /* "View.MemoryView":290
  * 
@@ -25674,9 +25592,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_tuple__56 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(1, 290, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__56);
-  __Pyx_GIVEREF(__pyx_tuple__56);
+  __pyx_tuple__55 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(1, 290, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__55);
+  __Pyx_GIVEREF(__pyx_tuple__55);
 
   /* "View.MemoryView":291
  * 
@@ -25685,19 +25603,19 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__57 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(1, 291, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__57);
-  __Pyx_GIVEREF(__pyx_tuple__57);
+  __pyx_tuple__56 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(1, 291, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__56);
+  __Pyx_GIVEREF(__pyx_tuple__56);
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Enum(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     if __pyx_checksum != 0xb068931:
  *         from pickle import PickleError as __pyx_PickleError
  */
-  __pyx_tuple__58 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__58);
-  __Pyx_GIVEREF(__pyx_tuple__58);
-  __pyx_codeobj__59 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__58, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__59)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__57 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__57);
+  __Pyx_GIVEREF(__pyx_tuple__57);
+  __pyx_codeobj__58 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__57, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__58)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -25713,8 +25631,8 @@ static int __Pyx_InitGlobals(void) {
   __pyx_int_2 = PyInt_FromLong(2); if (unlikely(!__pyx_int_2)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_3 = PyInt_FromLong(3); if (unlikely(!__pyx_int_3)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_4 = PyInt_FromLong(4); if (unlikely(!__pyx_int_4)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_88287534 = PyInt_FromLong(88287534L); if (unlikely(!__pyx_int_88287534)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_184977713 = PyInt_FromLong(184977713L); if (unlikely(!__pyx_int_184977713)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_251107178 = PyInt_FromLong(251107178L); if (unlikely(!__pyx_int_251107178)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -26094,7 +26012,7 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_LeducGame(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x543292e:
+ *     if __pyx_checksum != 0xef7976a:
  *         from pickle import PickleError as __pyx_PickleError
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7leduc_c_1__pyx_unpickle_LeducGame, NULL, __pyx_n_s_leduc_c); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
@@ -26132,7 +26050,7 @@ if (!__Pyx_RefNanny) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__53, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 285, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__52, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 285, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(generic);
   __Pyx_DECREF_SET(generic, __pyx_t_1);
@@ -26146,7 +26064,7 @@ if (!__Pyx_RefNanny) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__54, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 286, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__53, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 286, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(strided);
   __Pyx_DECREF_SET(strided, __pyx_t_1);
@@ -26160,7 +26078,7 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__55, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__54, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect);
   __Pyx_DECREF_SET(indirect, __pyx_t_1);
@@ -26174,7 +26092,7 @@ if (!__Pyx_RefNanny) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__56, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 290, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__55, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 290, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(contiguous);
   __Pyx_DECREF_SET(contiguous, __pyx_t_1);
@@ -26188,7 +26106,7 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__57, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 291, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__56, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 291, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect_contiguous);
   __Pyx_DECREF_SET(indirect_contiguous, __pyx_t_1);

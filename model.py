@@ -21,6 +21,7 @@ def define_scope(function):
 	return decorator
 
 class nnets:
+
 	"""docstring for nnet"""
 	def __init__(self,session, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128, lmbda = 0.001):
 

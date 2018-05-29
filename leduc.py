@@ -12,7 +12,8 @@ class LeducGame(Game):
 	params = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
 
-	def __init__(self):
+	def __init__(self,seed=None):
+		if seed!= None: random.seed(seed) #set a random seed if need be to reproduce a game
 		self.resetGame()
 
 	def resetGame(self):
@@ -32,7 +33,7 @@ class LeducGame(Game):
 		self.raisesInRound = 0
 		self.history = np.zeros((2,2,3,2))
 		self.winnings = None
-
+		self.manualPublicCard = None 	#Need to set this consistently to test my code -E
 
 	def playerInfoStringRepresentation(self):
 		return (str(self.player)+str(self.cards[self.player])+str(self.history)+str(self.getPublicCard()))
@@ -65,11 +66,15 @@ class LeducGame(Game):
 			self.bet = 4
 			self.raisesInRound = 0
 			self.player = self.dealer
-			if self.cards[0] == self.cards[1]:
-				self.cards[2] = (self.cards[0] + 1 + random.randint(0,1))%3
+
+			if self.manualPublicCard ==None: #no manually set card, this is normal operation
+				if self.cards[0] == self.cards[1]:
+					self.cards[2] = (self.cards[0] + 1 + random.randint(0,1))%3
+				else:
+					self.cards[2] = (random.randint(0,3) - self.cards[0] - self.cards[1]) % 3
 			else:
-				self.cards[2] = (random.randint(0,3) - self.cards[0] - self.cards[1]) % 3
-			self.publicCardArray[self.cards[2]] = 1
+				self.cards[2]=self.manualPublicCard
+			self.publicCardArray[self.cards[2]] = 1 #it said cards [0] in the original dev -E
 		else:
 			self.finishGame(None)
 
@@ -88,7 +93,7 @@ class LeducGame(Game):
 
 	def getPublicCard(self):
 		return self.publicCardArray
-		
+
 	def getPot(self):
 		return self.pot
 

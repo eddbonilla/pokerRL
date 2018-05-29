@@ -2,7 +2,7 @@ import numpy as np
 cimport numpy as np
 
 cdef class LeducGame:
-	cdef int dealer,pot,player,round,bet,raisesInRound,finished
+	cdef int pot,player,round,bet,raisesInRound,finished
 	cdef np.ndarray cards, winnings, playersCardsArray, publicCardArray, history
 	cdef int[:] cards_view, winnings_view, publicCardArray_view
 	cdef int[:,:,:,:] history_view

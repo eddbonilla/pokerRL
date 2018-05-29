@@ -11,10 +11,10 @@ cdef class LeducGame():
 		return 1
 
 
-	def __init__(self, int override = False, int player = 0, int dealer = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
+	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
 		if override:
 			self.player = player
-			self.dealer = dealer
+
 			self.pot = pot
 			self.round = round
 			self.bet = bet
@@ -34,9 +34,9 @@ cdef class LeducGame():
 		else:
 			self.resetGame()
 
+
 	cpdef void resetGame(self):
-		self.dealer = random.randint(0,1)
-		self.player = self.dealer  #0 for player 1, 1 for player 2
+		self.player = 0  #0 for player 1, 1 for player 2
 		self.pot = 2 
 		self.cards = np.zeros(3,dtype = int)
 		self.cards_view = self.cards
@@ -56,7 +56,7 @@ cdef class LeducGame():
 		self.winnings_view = self.winnings
 
 	cpdef object copy(self):
-		cdef object newGame = LeducGame(override=True,player = self.player, dealer = self.dealer,pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
+		cdef object newGame = LeducGame(override=True,player = self.player, pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
 
 		return newGame
 
@@ -94,7 +94,7 @@ cdef class LeducGame():
 			self.round = 1
 			self.bet = 4
 			self.raisesInRound = 0
-			self.player = self.dealer
+			self.player = 0
 			if self.cards_view[0] == self.cards_view[1]:
 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
 			else:
@@ -207,7 +207,7 @@ cdef class LeducGame():
 				betAmount = self.bet
 				endRound = 1
 				#print("One raise + call")
-			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):
+			elif oldRaisesInRound == 0 and (oldPlayer == 1):
 				endRound = 1				
 				#print("Call + end round")
 			#else:

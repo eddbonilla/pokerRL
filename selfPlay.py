@@ -2,11 +2,19 @@ import math
 import numpy as np
 import random
 from MCTS_c import MCTS
+#from MCTS import MCTS
 
 class selfPlay:
-	def __init__(self,game, eta, nnets,numMCTSSims=200,cpuct =1):
+
+	def __init__(self,game, eta, nnets,numMCTSSims=200,cpuct =1,simParams=None):
 		self.game=game
 		self.trees = [MCTS(nnets, numMCTSSims, cpuct,floor=0.08), MCTS(nnets, numMCTSSims, cpuct,floor=0.08)]             #Index labels player
+           #Index labels player
+		if simParams!= None: 
+			for tree in self.trees:
+				tree.setTreeSearchParams(simParams["treeSearchParams"])
+
+
 		self.eta=eta # array with the probabilities of following the average strategy for each player
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
@@ -25,12 +33,12 @@ class selfPlay:
 					"pot" : []
 					}
 		ante = self.game.getAnte()
-		value = np.zeros(2)
+		value = np.zeros(2) #harcoded 2 players -E
 		value-=ante
 		moveCount = 0
 		#self.cleanTrees()             clean trees each game if we want
 		while not self.game.isFinished():
-			if moveCount > 25:
+			if moveCount > 25: #Harcoded max number of moves -E
 				print("Stuck in game loop")
 				print(cache)
 				break
@@ -78,7 +86,7 @@ class selfPlay:
 		for tree in self.trees:
 			tree.setNumSimulations(newNumMCTSSims)
 
-	def testGame(self,numTests):
+	def testGame(self,numTests): #To be optimized, maybe will be deprecated soon -E
 		testPlayer=0; #Id of the player we are testing
 		v_TC=0.
 		v_TA=0.
