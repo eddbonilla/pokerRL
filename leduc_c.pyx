@@ -101,7 +101,7 @@ cdef class LeducGame():
 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
 			else:
 				self.cards_view[2] = (random.randint(0,3) - self.cards_view[0] - self.cards_view[1]) % 3
-			self.publicCardArray_view[self.cards_view[0]] = 1
+			self.publicCardArray_view[self.cards_view[2]] = 1
 		else:
 			self.finishGame()
 
@@ -133,6 +133,13 @@ cdef class LeducGame():
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[(self.player+1)%2] = card 
 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
+
+	@cython.boundscheck(False)
+	@cython.wraparound(False)
+	cpdef void setPlayerCard(self,int card):
+		#input: card as scalar number e.g. 2=K,1=Q,0=J
+		self.cards_view[self.player] = card 
+		self.playersCardsArray[self.player] = np.eye(3)[card]
 
 	cdef void setPlayer(self,int player):
 			self.player = player

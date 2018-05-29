@@ -75,7 +75,6 @@ class LeducGame(Game):
 			else:
 				self.cards[2]=self.manualPublicCard
 			self.publicCardArray[self.cards[2]] = 1 #it said cards [0] in the original dev -E
-
 		else:
 			self.finishGame(None)
 

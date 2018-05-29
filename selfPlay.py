@@ -5,11 +5,9 @@ import random
 from MCTS import MCTS
 class selfPlay:
 
-	def __init__(self,game, eta, nnets,numMCTSSims=100,cpuct =1, simParams= None):
-
+	def __init__(self,game, eta, nnets,numMCTSSims=200,cpuct =1,simParams=None):
 		self.game=game
-		self.trees = [MCTS(nnets, numMCTSSims, cpuct, floor =0.15), MCTS(nnets, numMCTSSims, cpuct, floor =0.03)]             #Index labels player
-		
+		self.trees = [MCTS(nnets, numMCTSSims, cpuct,floor=0.07), MCTS(nnets, numMCTSSims, cpuct,floor=0.07)]             #Index labels player
 		if simParams!= None: 
 			for tree in self.trees:
 				tree.setTreeSearchParams(simParams["treeSearchParams"])

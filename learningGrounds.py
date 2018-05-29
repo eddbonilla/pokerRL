@@ -34,7 +34,7 @@ class Training:
 		self.gamesPerUpdateNets = 10
 		self.batchSize = 10
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 5
+		self.batchesPerTrain = 1024
 
 		compGraph = tf.Graph()
 		compGraph.as_default()
@@ -51,7 +51,10 @@ class Training:
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
-			if i%100==0:
+			if i%30==0:
+				for tree in self.selfPlay.trees:
+					tree.increaseNumSimulations()
+			if i%30==0:
 				history = np.zeros((2,2,3,2))
 				print("Exploitability =" + str(self.selfPlay.trees[0].findAnalyticalExploitability()))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
