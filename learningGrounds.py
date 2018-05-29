@@ -110,7 +110,14 @@ class Training:
 			self.pN += pk
 
 		vk = len(vData["valuesTarget"])
-		vN = self.vN % self.maxValueMemory
+		#Overwritten data input so that we can feed only recent data to nnets without having to copy arrays
+		if self.vN + vk < 1.5*self.maxValueMemory and self.vN >= self.maxValueMemory:
+			vN = int(1.5*self.maxValueMemory) - self.vN - vk
+
+		#Normal data input
+		else:
+			vN = self.vN % self.maxValueMemory
+
 		for key in self.vReservoirs:
 			vData[key] = np.array(vData[key])
 			assert vk == vData[key].shape[0]
@@ -153,10 +160,14 @@ class Training:
 			self.nnets.initialisePIterator(shortenedPReservoirs)
 
 		if name == "vIterator":
-			if self.vN < self.maxValueMemory:
+			if self.vN <= self.maxValueMemory:
 				shortenedVReservoirs = {}
 				for key in self.vReservoirs:
-					shortenedVReservoirs[key] =self.vReservoirs[key] [self.vN:0:-1,:]
+					shortenedVReservoirs[key] =self.vReservoirs[key] [int(self.vN/2):self.vN,:]
+			elif self.vN < 1.5*self.maxValueMemory:
+				shortenedVReservoirs = {}
+				for key in self.vReservoirs:
+					shortenedVReservoirs[key] =self.vReservoirs[key] [(int(1.5*self.maxValueMemory) - self.vN):self.maxValueMemory,:]
 			else:
 				shortenedVReservoirs = self.vReservoirs
 			self.nnets.initialiseVIterator(shortenedVReservoirs)

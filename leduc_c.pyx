@@ -43,7 +43,7 @@ cdef class LeducGame():
 		self.cards_view[0] = random.randint(0,2)
 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
 		self.cards_view[2] = -1
-		self.playersCardsArray = np.eye(3, dtype = int)[self.cards[0:2]]
+		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
 		self.publicCardArray = np.zeros(3, dtype =int)
 		self.publicCardArray_view = self.publicCardArray
 		self.round = 0   #0 for 1st round, 1 for 2nd round
