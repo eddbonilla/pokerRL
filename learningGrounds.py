@@ -7,8 +7,8 @@ import time
 import threading
 from keras import backend as K
 from model import nnets
-#from leduc_c import LeducGame
-from leduc import LeducGame
+from leduc_c import LeducGame
+#from leduc import LeducGame
 from selfPlay import selfPlay
 import time
 
@@ -51,10 +51,10 @@ class Training:
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
-			if i%30==0:
+			if i%20==0:
 				for tree in self.selfPlay.trees:
 					tree.increaseNumSimulations()
-			if i%30==0:
+			if i%10==0:
 				history = np.zeros((2,2,3,2))
 				print("Exploitability =" + str(self.selfPlay.trees[0].findAnalyticalExploitability()))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
