@@ -31,13 +31,16 @@ class MCTS():
 
 		#Harcoded Parameters. To be deprecated soon
 		self.tempDecayRate = 1.002
+		self.addSims= 5
+		self.minTemp= 0.5
 
 	def reduceTemp(self):
 
-		if self.temp > 0.5: #hardcoded final temperature
+		if self.temp > self.minTemp: #hardcoded final temperature
 			self.temp = self.temp/self.tempDecayRate
 
-
+	def increaseNumSimulations(self):
+		self.numMCTSSims+=self.addSims
 
 	def cleanTree(self):
 	#Clean the temporal variables, so that the same instance of the simulation can be used more than once
