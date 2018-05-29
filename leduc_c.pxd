@@ -5,11 +5,10 @@ cdef class LeducGame:
 	cdef int dealer,pot,player,round,bet,raisesInRound,finished
 	cdef np.ndarray cards, winnings, playersCardsArray, publicCardArray, history
 	cdef int[:] cards_view, winnings_view, publicCardArray_view
-	cdef int[:,:] playersCardsArray_view,
 	cdef int[:,:,:,:] history_view
 
 	cpdef void resetGame(self)
-	cdef object copy(self)
+	cpdef object copy(self)
 	cdef str playerInfoStringRepresentation(self)
 	cdef str publicInfoStringRepresentation(self)
 	cdef void finishGame(self,int playerfolded = *)
@@ -23,6 +22,8 @@ cdef class LeducGame:
 	cpdef void setOpponentCard(self,int card)
 	cpdef void setPlayerCard(self,int card)
 	cdef void setPlayer(self,int player)
+	cpdef void setPublicCard(self,int card)
+	cpdef int getRound(self)
 	cpdef np.ndarray getPublicHistory(self)
 	cpdef np.ndarray getOutcome(self)
 	cpdef int isFinished(self)

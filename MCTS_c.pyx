@@ -84,7 +84,7 @@ cdef class MCTS():
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
-	cdef double search(self, int exploitSearch = False):
+	cdef double search(self):
 
 		cdef str s = self.gameCopy.playerInfoStringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
 		cdef int pot = self.gameCopy.getPot()
@@ -100,8 +100,10 @@ cdef class MCTS():
 		cdef np.ndarray strategy
 		cdef double value
 		if not playerMove:
-			strategy,_ = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())
-			return self.gameCopy.action(action = -1, strategy = strategy)
+			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())
+			self.gameCopy.action(action = -1, strategy = strategy)
+			return self.search()
+
 
 		if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
 			# leaf node
@@ -126,7 +128,7 @@ cdef class MCTS():
 
 
 		cdef int bet = self.gameCopy.action(action=a)
-		cdef double net_winnings = -bet*(playerMove) + self.search(exploitSearch = exploitSearch)
+		cdef double net_winnings = -bet*(playerMove) + self.search()
 		cdef double v = net_winnings/pot
 
 		self.Qsa[s][a] = float(self.Nsa[s][a]*self.Qsa[s][a] + v)/(self.Nsa[s][a]+1)
@@ -153,14 +155,14 @@ cdef class MCTS():
 					if np.sum(belief)!=0:
 						belief=np.divide(belief,np.sum(belief))
 
-			if not (prevGame.cards[2]== localGame.cards[2]): #time to set the public card (or something)
+			if prevGame.getRound() is not localGame.getRound(): #time to set the public card (or something)
 				Ppub=np.sum(belief,axis=1) #marginalize over the opponent card
 				Qsc=np.zeros((3,1)) #numcards,1
 				for pubCard in range(3):
 					nextGame=prevGame.copy() #copy the current game
-					nextGame.manualPublicCard=pubCard;
+					nextGame.setPublicCard(pubCard);
 					nextGame.action(prevAction) #put a different public card on it and repeat the move
-					updatedBelief=np.multiply(belief.T,nextGame.publicCardArray).T
+					updatedBelief=np.multiply(belief.T,nextGame.getPublicCard()).T
 					if np.sum(updatedBelief)!=0:
 						updatedBelief=updatedBelief/np.sum(updatedBelief)
 					Qsc[pubCard]=self.exploitabilitySearch(nextGame,belief=updatedBelief,nextP=nextP,prevGame=nextGame,prevAction=prevAction)
@@ -184,7 +186,7 @@ cdef class MCTS():
 					return Vs #Always get outcome for exploiting player
 
 				#initialize values and keep track of bets or something
-				numActions=localGame.params["actionSize"]
+				numActions=3
 				bets=np.zeros((numActions,1))
 				Qsa=np.zeros((numActions,1))
 
@@ -224,7 +226,7 @@ cdef class MCTS():
 		numPlayers=2 #2 player game
 		numCards=3 #Jack, Queen, King
 		cardCopies=2
-		numActions=self.game.params["actionSize"]
+		numActions=3
 		exploitability=-1.
 		exploitingPlayerId=1; #Id of the player that is exploited
 		self.game.resetGame()

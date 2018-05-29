@@ -24,12 +24,11 @@ cdef class LeducGame():
 			self.winnings= winnings
 			self.playersCardsArray = playersCardsArray
 			self.publicCardArray = publicCardArray
+			self.publicCardArray_view = self.publicCardArray
 			self.history = history
 
 			self.cards_view = self.cards
 			self.winnings_view = self.winnings
-			self.publicCardArray_view = self.publicCardArray
-			self.playersCardsArray_view = self.playersCardsArray
 			self.history_view = self.history
 
 		else:
@@ -40,12 +39,11 @@ cdef class LeducGame():
 		self.player = self.dealer  #0 for player 1, 1 for player 2
 		self.pot = 2 
 		self.cards = np.zeros(3,dtype = int)
-		self.cards_view = self. cards
+		self.cards_view = self.cards
 		self.cards_view[0] = random.randint(0,2)
 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
 		self.cards_view[2] = -1
 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards[0:2]]
-		self.playersCardsArray_view = self.playersCardsArray
 		self.publicCardArray = np.zeros(3, dtype =int)
 		self.publicCardArray_view = self.publicCardArray
 		self.round = 0   #0 for 1st round, 1 for 2nd round
@@ -57,7 +55,7 @@ cdef class LeducGame():
 		self.winnings = np.zeros(2, dtype = int) 
 		self.winnings_view = self.winnings
 
-	cdef object copy(self):
+	cpdef object copy(self):
 		cdef object newGame = LeducGame(override=True,player = self.player, dealer = self.dealer,pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
 
 		return newGame
@@ -132,14 +130,25 @@ cdef class LeducGame():
 	cpdef void setOpponentCard(self,int card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[(self.player+1)%2] = card 
-		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3)[card]
+		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = int)[card]
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
 	cpdef void setPlayerCard(self,int card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[self.player] = card 
-		self.playersCardsArray[self.player] = np.eye(3)[card]
+		self.playersCardsArray[self.player] = np.eye(3, dtype = int)[card]
+
+	@cython.boundscheck(False)
+	@cython.wraparound(False)
+	cpdef void setPublicCard(self,int card):
+		#input: card as scalar number e.g. 2=K,1=Q,0=J
+		self.cards_view[2] = card 
+		self.publicCardArray = np.eye(3, dtype = int)[card]
+		self.publicCardArray_view = self.publicCardArray
+
+	cpdef int getRound(self):
+		return self.round
 
 	cdef void setPlayer(self,int player):
 			self.player = player
