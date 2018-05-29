@@ -2,13 +2,13 @@ import math
 import numpy as np
 import tensorflow as tf
 import copy
-from model import nnets
+from model_tunable import nnets
 from keras import backend as K
 from keras.layers import Convolution2D, Flatten, Dense, Input
 from keras.models import Model
 from leduc import LeducGame
 #from leduc_c import LeducGame
-from learningGrounds import Training
+from learningGrounds_tunable import Training
 from selfPlay import selfPlay
 import time
 

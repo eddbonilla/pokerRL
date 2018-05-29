@@ -19,6 +19,7 @@ class MCTS():
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
 		self.temp = temp
+		self.tempDecayRate = 1.001
 		self.floor = floor	#Creates a floor p value to ensure all possible paths are explored
 		self.Qsa = {}	   # stores Q values for s,a (as defined in the paper)
 		self.Nsa = {}	   # stores #times edge s,a was visited
@@ -145,43 +146,6 @@ class MCTS():
 
 	def setNumSimulations(self,newNumMCTSSims):
 		self.numMCTSSims=numMCTSSims
-
-	def findExploitability(self, numExploitSims = 5000 ):
-		start = time.time()
-		#if searchBlind:
-		#	self.cleanTree()
-
-		#winnings = 0
-		
-		self.game = LeducGame() #explicit reference to leduc
-		for i in range(numExploitSims):
-			self.game.resetGame()
-			self.gameCopy= copy.deepcopy(self.game)
-			self.game.setPlayer(0)
-			self.search()
-		end = time.time()
-		print("Exploitability calculation time: "+str(end - start))
-		#print("Average Winnings: " + str(winnings/numExploitSims))
-		exploitability = -1.
-		for card in range(3):
-			history = np.zeros((2,2,3,2))
-			publicCard = np.zeros(3)
-			print(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
-			exploitability += 1./3*np.max(self.Qsa['0'+str(card)+str(history)+str(publicCard)])
-			for oppCard in range(3):
-				p = self.Ps['1'+str(oppCard)+str(history)+str(publicCard)]
-				history[1,0,0,0] = 1
-				raiseString = '0'+str(card)+str(history)+str(publicCard)
-				history[1,0,0,0] = 0
-				history[1,0,0,1] = 1
-				checkString = '0'+str(card)+str(history)+ str(publicCard)
-				history[1,0,0,1] = 0
-				if raiseString in self.Qsa:
-					exploitability += 1./9*p[0]*np.max(self.Qsa[raiseString])
-				if checkString in self.Qsa:
-					exploitability +=1./9*p[1]*np.max(self.Qsa[checkString])
-					exploitability +=1./9*p[2]
-		return exploitability
 		
 	def setTreeSearchParams(self,params):
 		self.numMCTSSims=params["initialNumMCTS"]
