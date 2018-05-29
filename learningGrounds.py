@@ -14,13 +14,16 @@ import time
 
 class Training:
 
-	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000):
+	def __init__(self,lmbda,maxPolicyMemory = 1000000, maxValueMemory = 100000):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
 		self.unShuffledFraction = 0.005
 		self.maxPolicyMemory = maxPolicyMemory
 		self.maxValueMemory = maxValueMemory
+
+		self.lmbda = lmbda
+
 		self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
 		self.pReservoirs = {"input" : np.zeros((maxPolicyMemory, self.gameParams["inputSize"])),
@@ -32,15 +35,16 @@ class Training:
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
 		self.gamesPerUpdateNets = 10
-		self.batchSize = 10
+		self.batchSize = 128
 		self.randState = np.random.RandomState()
 		self.batchesPerTrain = 1024
+
 
 		compGraph = tf.Graph()
 		compGraph.as_default()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
-		self.nnets=nnets(self.sess,self.gameParams)
+		self.nnets=nnets(self.sess,self.lmbda,self.gameParams)
 		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
@@ -73,6 +77,9 @@ class Training:
 			end = time.time()
 			if i%10==0:
 				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
+				
+		return self.selfPlay.trees[0].findAnalyticalExploitability() #Want to minimize final exploitability after training when sampling over hyperparameters -D
+				#print("cost = " + str(self.nnets.compute_cost_alpha()))
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
