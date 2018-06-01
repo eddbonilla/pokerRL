@@ -7,22 +7,20 @@ import time
 import threading
 from keras import backend as K
 from model import nnets
-#from leduc_c import LeducGame
-from leduc import LeducGame
+from leduc_c import LeducGame
+#from leduc import LeducGame
 from selfPlay import selfPlay
 import time
 
 class Training:
 
-	def __init__(self,lmbda,maxPolicyMemory = 1000000, maxValueMemory = 100000):
+	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp=None):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
-		self.unShuffledFraction = 0.005
+		self.unShuffledFraction = 0.005 #Maximum fraction of unshuffled data llowed to be in the reservoir
 		self.maxPolicyMemory = maxPolicyMemory
 		self.maxValueMemory = maxValueMemory
-
-		self.lmbda = lmbda
 
 		self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
@@ -34,21 +32,26 @@ class Training:
 							 "publicData" : np.zeros((maxValueMemory, self.gameParams["historySize"] + self.gameParams["handSize"])),
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
-
-		self.gamesPerUpdateNets = 10
-
-		self.gamesPerUpdateNets = 128
-
-		self.batchSize = 128
+		
 		self.randState = np.random.RandomState()
-		self.batchesPerTrain = 1024
-
-
 		compGraph = tf.Graph()
 		compGraph.as_default()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
-		self.nnets=nnets(self.sess,self.lmbda,self.gameParams)
+
+		if hyp !=None: #Get parameters form dictionary
+			self.gamesPerUpdateNets = hyp["gamesPerUpdateNets"]
+			self.batchSize = hyp["batchSize"]
+			self.batchesPerTrain = hyp["batchesPerTrain"]
+			self.stepsToIncreaseNumSimulations=hyp["stepsToIncreaseNumSimulations"]
+			self.nnets=nnets(self.sess,gameParams=self.gameParams,hyp=hyp)
+		else:
+			self.gamesPerUpdateNets = 128 
+			self.batchSize = 128
+			self.batchesPerTrain = 1024
+			self.stepsToIncreaseNumSimulations=20
+			self.nnets=nnets(self.sess,gameParams=self.gameParams)
+		
 		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
@@ -59,7 +62,7 @@ class Training:
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
-			if i%20==0:
+			if i%self.stepsToIncreaseNumSimulations==0:
 				for tree in self.selfPlay.trees:
 					tree.increaseNumSimulations()
 			if i%10==0:

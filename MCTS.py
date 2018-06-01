@@ -13,7 +13,7 @@ class MCTS():
 	This class handles the MCTS tree.
 	"""
 
-	def __init__(self, nnets, numMCTSSims, cpuct, temp = 1, floor = 0.05):
+	def __init__(self, nnets, numMCTSSims, cpuct, temp = 50, floor = 0.05):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -33,7 +33,7 @@ class MCTS():
 		#Harcoded Parameters. To be deprecated soon
 		self.tempDecayRate = 1.002
 		self.addSims= 5
-		self.minTemp= 0.5
+		self.minTemp= 0.1
 
 	def reduceTemp(self):
 
@@ -148,10 +148,8 @@ class MCTS():
 		self.numMCTSSims=numMCTSSims
 		
 	def setTreeSearchParams(self,params):
-		self.numMCTSSims=params["initialNumMCTS"]
-		self.temp=params["initialTreeTemperature"]
+		self.numMCTSSims=params["numMCTS"]
 		self.tempDecayRate=params["tempDecayRate"]
-		self.cpuct=params["cpuct"]
 
 	def exploitabilitySearch(self,localGame,belief,prevGame,prevAction): #it returns net winnings for exploiting strategy by doing an exhaustive search
 		
