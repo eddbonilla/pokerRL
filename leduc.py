@@ -17,8 +17,7 @@ class LeducGame(Game):
 		self.resetGame()
 
 	def resetGame(self):
-		self.dealer = random.randint(0,1)
-		self.player = self.dealer  #0 for player 1, 1 for player 2
+		self.player = 0  #0 for player 1, 1 for player 2
 		self.pot = 2
 		self.cards = np.zeros(3,dtype = int) 
 		self.cards[0] = random.randint(0,2)
@@ -65,7 +64,7 @@ class LeducGame(Game):
 			self.round = 1
 			self.bet = 4
 			self.raisesInRound = 0
-			self.player = self.dealer
+			self.player = 0
 
 			if self.manualPublicCard ==None: #no manually set card, this is normal operation
 				if self.cards[0] == self.cards[1]:
@@ -106,6 +105,11 @@ class LeducGame(Game):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards[self.player] = card 
 		self.playersCardsArray[self.player] = np.eye(3)[card]
+
+	def setPublicCard(self,card):
+		#input: card as scalar number e.g. 2=K,1=Q,0=J
+		self.cards[2] = card 
+		self.publicCardArray = np.eye(3)[card]
 
 	def setPlayer(self,player):
 			self.player = player
@@ -161,7 +165,7 @@ class LeducGame(Game):
 				betAmount = self.bet
 				endRound = True
 				#print("One raise + call")
-			elif oldRaisesInRound == 0 and not (oldPlayer == self.dealer):
+			elif oldRaisesInRound == 0 and not (oldPlayer == 0):
 				endRound = True				
 				#print("Call + end round")
 			#else:
