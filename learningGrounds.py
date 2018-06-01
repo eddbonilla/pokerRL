@@ -58,6 +58,8 @@ class Training:
 		
 
 	def doTraining(self,steps):
+		minExpoitability = 1000 #initialize expoitability to a high value
+
 		for i in range(steps):
 			start = time.time()
 			self.playGames()
@@ -67,13 +69,16 @@ class Training:
 					tree.increaseNumSimulations()
 			if i%10==0:
 				history = np.zeros((2,2,3,2))
-				print("Exploitability =" + str(self.selfPlay.trees[0].findAnalyticalExploitability()))
+				currentExploitability=self.selfPlay.trees[0].findAnalyticalExploitability()
+				print("Exploitability =" + str(currentExploitability))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
 				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
 				history[1,0,0,0] = 1
 				print("If op raised, op cards:" + str(self.nnets.estimateOpponent(history,np.zeros(3))))
 				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
+				if currentExploitability<minExpoitability: 
+					minExpoitability=currentExploitability
 			self.selfPlay.cleanTrees()
 			prenets = time.time()
 			for j in range(self.batchesPerTrain):
@@ -85,7 +90,7 @@ class Training:
 			if i%10==0:
 				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
 				
-		return self.selfPlay.trees[0].findAnalyticalExploitability() #Want to minimize final exploitability after training when sampling over hyperparameters -D
+		return self.selfPlay.trees[0].findAnalyticalExploitability(), minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D
 				#print("cost = " + str(self.nnets.compute_cost_alpha()))
 		#self.sess.close()
 

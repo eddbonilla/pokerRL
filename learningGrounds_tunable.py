@@ -6,7 +6,7 @@ import numpy as np
 import time
 import threading
 from keras import backend as K
-from model import nnets
+from model_tunable import nnets
 #from leduc_c import LeducGame
 from leduc import LeducGame
 from selfPlay import selfPlay
@@ -14,7 +14,7 @@ import time
 
 class Training:
 
-	def __init__(self,lmbda,maxPolicyMemory = 1000000, maxValueMemory = 100000):
+	def __init__(self,lmbda,alpha,maxPolicyMemory = 1000000, maxValueMemory = 100000):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
@@ -23,6 +23,7 @@ class Training:
 		self.maxValueMemory = maxValueMemory
 
 		self.lmbda = lmbda
+		self.alpha = alpha
 
 		self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
@@ -35,7 +36,7 @@ class Training:
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
 
-		self.gamesPerUpdateNets = 10
+		#self.gamesPerUpdateNets = 10
 
 		self.gamesPerUpdateNets = 128
 
@@ -48,7 +49,7 @@ class Training:
 		compGraph.as_default()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
-		self.nnets=nnets(self.sess,self.lmbda,self.gameParams)
+		self.nnets=nnets(self.sess,self.lmbda,self.gameParams,self.alpha)
 		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
