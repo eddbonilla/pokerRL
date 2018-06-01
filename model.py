@@ -56,8 +56,8 @@ class nnets:
 		self.vnNetsData =self.vIterator.get_next(name = "vIterator")
 
 		#Properties that we are setting to be constants
-		self.alpha=tf.constant(alpha)		
-		self.lmbda = tf.constant(lmbda)
+		self.alpha=tf.constant(alpha,dtype=tf.float32)		
+		self.lmbda = tf.constant(lmbda,dtype=tf.float32)
 
 		#Properties that are actually graph nodes
 		self.gModel
