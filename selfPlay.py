@@ -1,8 +1,8 @@
 import math
 import numpy as np
 import random
-#from MCTS_c import MCTS
-from MCTS import MCTS
+from MCTS_c import MCTS
+#from MCTS import MCTS
 
 class selfPlay:
 
@@ -12,7 +12,7 @@ class selfPlay:
            #Index labels player
 		if simParams!= None: 
 			for tree in self.trees:
-				tree.setTreeSearchParams(simParams["treeSearchParams"])
+				tree.setTreeSearchParams(simParams)
 
 
 		self.eta=eta # array with the probabilities of following the average strategy for each player
