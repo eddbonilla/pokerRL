@@ -40,7 +40,7 @@ def log_uniform_sample_plus(interval,plus):
 hyperparams = {"alpha": (0.001,10), "lmbda": (0.001,1), "tempDecayRate": (0.001,0.01), "gLearn": (0.0001,1), "fLearn": (0.0001,1)} 
 
 
-hyperparams2 = {"numMCTSsims": 200, "batchsize": 128, "batchesPerTrain": 1024, "gamesPerUpdateNets": 128, "stepstoIncreaseNumSimulations": 20}
+hyperparams2 = {"numMCTSsims": 200, "batchSize": 128, "batchesPerTrain": 1024, "gamesPerUpdateNets": 128, "stepsToIncreaseNumSimulations": 20}
 
 
 hyp_1 = {}
@@ -56,41 +56,11 @@ for key in hyperparams:
 hyp2 = dict(hyp_1, **hyperparams2)
 print(hyp2)
 
-"""
-hyp = {key: log_uniform_sample(hyperparams[key]) for key in hyperparams}
-print(hyp)
-"""
 
 
+A = Training(hyp=hyp2)
+A.doTraining(200)
 
-
- 
-
-
-#sample hyperparameters and do training
-
-
-
-
-
-"""
-A = Training(0.05,10)
-A.doTraining(10)
-"""
-
-
-
-"""
-
-Exploitability_final = []
-
-for i in range(len(hyperparams["lmbda"])):
-
-	print("lambda = " + str(hyperparams["lmbda"][i]))
-	A = Training(hyperparams["lmbda"][i].astype('float32'))
-	Exploitability = A.doTraining(200)
-	Exploitability_final.append(Exploitability)
-"""
 
 
 
