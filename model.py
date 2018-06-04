@@ -23,7 +23,7 @@ def define_scope(function):
 class nnets:
 
 	"""docstring for nnet"""
-	def __init__(self,session,lmbda, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128):
+	def __init__(self,session, gameParams, lmbda=0.002,alpha =10.,feedGIntoF = False, batchSize = 128):
 
 		self.sess=session
 		self.gameParams=gameParams

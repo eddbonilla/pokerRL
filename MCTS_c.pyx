@@ -5,6 +5,7 @@ import math
 import numpy as np
 cimport numpy as np
 from leduc_c cimport LeducGame
+from holdEm_c cimport HoldEmGame
 import copy
 import time
 EPS = 1e-8
@@ -18,18 +19,19 @@ cdef class MCTS():
 	cdef int numMCTSSims,cpuct
 	cdef double temp,floor,tempDecayRate
 	cdef dict Qsa,Nsa,Ns,Ps,
-	cdef LeducGame game, gameCopy
+	cdef Game game, gameCopy
 	cdef object nnets 
 
-	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double floor = 0.05):
+	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double floor = 0.05, double tempDecayRate = 1.0005,bool holdEm = False):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
 		self.temp = temp
-		self.tempDecayRate =1.001
+		self.tempDecayRate =tempDecayRate
 		self.floor = floor
+		self.holdEm = holdEm
 		self.Qsa = {}	   # stores Q values for s,a (as defined in the paper)
 		self.Nsa = {}	   # stores #times edge s,a was visited
 		self.Ns = {}		# stores #times board s was visited
@@ -81,7 +83,7 @@ cdef class MCTS():
 			self.gameCopy= self.game.copy()			 #Make another instance of the game for each search
 			self.gameCopy.setOpponentCard(np.random.choice(3,p=estimOpponentCards)) #choose the opponent cards with a guess
 			#if i%100 == 0: print(i)
-			self.search()
+			self.search(root = True)
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		cdef str s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
@@ -94,7 +96,7 @@ cdef class MCTS():
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
-	cdef double search(self):
+	cdef double search(self, int root = False):
 
 		cdef str s = self.gameCopy.playerInfoStringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
 		cdef int pot = self.gameCopy.getPot()
@@ -111,8 +113,11 @@ cdef class MCTS():
 		cdef double value
 		if not playerMove:
 			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())
-			self.gameCopy.action(action = -1, strategy = strategy)
-			return self.search()
+			pFold = strategy[2]
+			strategy[2] = 0
+			pot = self.gameCopy.getPot()
+			self.gameCopy.action(action = -1, strategy = strategy/np.sum(strategy))
+			return pFold*pot + (1 - pFold)*self.search()
 
 
 		if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
@@ -132,7 +137,11 @@ cdef class MCTS():
 			#	self.Ps[s] = np.ones(3)/3
 
 		# pick the action with the highest upper confidence bound
-		cdef np.ndarray u = self.Qsa[s] + np.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s]+self.floor)/(1+self.Nsa[s])
+		cdef np.ndarray u
+		if not root:
+			u = self.Qsa[s] + np.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s])/(1+self.Nsa[s])
+		else:
+			u = self.Qsa[s] + np.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s]**self.temp)/(1+self.Nsa[s])
 		cdef int a=np.argmax(u)
 		#print("probs =" +str(self.Ps[s])+", playerMove = "+str(playerMove)+ ", action ="+str(a))
 

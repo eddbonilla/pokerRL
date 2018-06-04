@@ -7,22 +7,20 @@ import time
 import threading
 from keras import backend as K
 from model import nnets
-#from leduc_c import LeducGame
-from leduc import LeducGame
+from leduc_c import LeducGame
+#from leduc import LeducGame
 from selfPlay import selfPlay
 import time
 
 class Training:
 
-	def __init__(self,lmbda,maxPolicyMemory = 1000000, maxValueMemory = 100000):
+	def __init__(self,lmbda=0.002,maxPolicyMemory = 1000000, maxValueMemory = 100000):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
 		self.unShuffledFraction = 0.005
 		self.maxPolicyMemory = maxPolicyMemory
 		self.maxValueMemory = maxValueMemory
-
-		self.lmbda = lmbda
 
 		self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
@@ -35,20 +33,15 @@ class Training:
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
 
-		self.gamesPerUpdateNets = 10
-
 		self.gamesPerUpdateNets = 128
-
-		self.batchSize = 128
-		self.randState = np.random.RandomState()
 		self.batchesPerTrain = 1024
 
-
+		self.randState = np.random.RandomState()
 		compGraph = tf.Graph()
 		compGraph.as_default()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
-		self.nnets=nnets(self.sess,self.lmbda,self.gameParams)
+		self.nnets=nnets(self.sess,self.gameParams,lmbda = lmbda)
 		self.saver = tf.train.Saver() #This is probably good practice
 		self.sess.run(tf.global_variables_initializer())
 		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
@@ -60,18 +53,17 @@ class Training:
 			self.playGames()
 			postGames = time.time()
 			if i%20==0:
-				for tree in self.selfPlay.trees:
-					tree.increaseNumSimulations()
+				self.selfPlay.tree.increaseNumSimulations()
 			if i%10==0:
 				history = np.zeros((2,2,3,2))
-				print("Exploitability =" + str(self.selfPlay.trees[0].findAnalyticalExploitability()))
+				print("Exploitability =" + str(self.selfPlay.tree.findAnalyticalExploitability()))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
 				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
 				history[1,0,0,0] = 1
 				print("If op raised, op cards:" + str(self.nnets.estimateOpponent(history,np.zeros(3))))
 				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
-			self.selfPlay.cleanTrees()
+			self.selfPlay.tree.cleanTree()
 			prenets = time.time()
 			for j in range(self.batchesPerTrain):
 				expiredIterator = self.nnets.trainOnMinibatch()
@@ -82,7 +74,7 @@ class Training:
 			if i%10==0:
 				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
 				
-		return self.selfPlay.trees[0].findAnalyticalExploitability() #Want to minimize final exploitability after training when sampling over hyperparameters -D
+		return self.selfPlay.tree.findAnalyticalExploitability() #Want to minimize final exploitability after training when sampling over hyperparameters -D
 				#print("cost = " + str(self.nnets.compute_cost_alpha()))
 		#self.sess.close()
 
@@ -195,8 +187,8 @@ class Training:
 		if (self.pN - self.numShuffled)/self.pN > self.unShuffledFraction:
 			self.shufflePReservoirs()
 
-		for tree in self.selfPlay.trees:
-			tree.reduceTemp()
+		
+		self.selfPlay.tree.reduceTemp()
 
 
 	def closeSession(self):

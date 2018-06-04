@@ -1,10 +1,11 @@
 cimport cython
 import numpy as np
 cimport numpy as np
+from game_c cimport Game
 import array
 import random
 
-cdef class LeducGame():
+cdef class LeducGame(Game):
 
 	#2 = K, 1 = Q, 0 = J
 	def getAnte(self):

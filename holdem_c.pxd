@@ -1,8 +1,7 @@
 import numpy as np
 cimport numpy as np
-from game_c cimport Game
 
-cdef class LeducGame(Game):
+cdef class LeducGame:
 	cdef int pot,player,round,bet,raisesInRound,finished
 	cdef np.ndarray cards, winnings, playersCardsArray, publicCardArray, history
 	cdef int[:] cards_view, winnings_view, publicCardArray_view
@@ -30,4 +29,3 @@ cdef class LeducGame(Game):
 	cpdef int isFinished(self)
 	cpdef np.ndarray regulariseOpponentEstimate(self, np.ndarray estimate)
 	cpdef int action(self,int action=*, np.ndarray strategy=*)
-	cpdef int sampleOpponent(self,object nnets)

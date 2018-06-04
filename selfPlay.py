@@ -1,18 +1,17 @@
 import math
 import numpy as np
 import random
-#from MCTS_c import MCTS
-from MCTS import MCTS
+from MCTS_c import MCTS
+#from MCTS import MCTS
 
 class selfPlay:
 
 	def __init__(self,game, eta, nnets,numMCTSSims=200,cpuct =1,simParams=None):
 		self.game=game
-		self.trees = [MCTS(nnets, numMCTSSims, cpuct,floor=0.08), MCTS(nnets, numMCTSSims, cpuct,floor=0.08)]             #Index labels player
+		self.tree = MCTS(nnets, numMCTSSims, cpuct,floor=0.08,tempDecayRate = 1.0005)             #Index labels player
            #Index labels player
 		if simParams!= None: 
-			for tree in self.trees:
-				tree.setTreeSearchParams(simParams["treeSearchParams"])
+			tree.setTreeSearchParams(simParams["treeSearchParams"])
 
 
 		self.eta=eta # array with the probabilities of following the average strategy for each player
@@ -47,7 +46,7 @@ class selfPlay:
 			player = self.game.getPlayer()
 			#print(player)
 			if random.random() < self.eta[player]:
-				strategy = self.trees[player].strategy(self.game)
+				strategy = self.tree.strategy(self.game)
 				pCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), playerCard = self.game.getPlayerCard()))
 				pCache["policyTarget"].append(strategy)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
@@ -76,9 +75,9 @@ class selfPlay:
 
 		return pCache, vCache
 
-	def cleanTrees(self):
-		for tree in self.trees:
-			tree.cleanTree()
+	#def cleanTrees(self):
+	#	for tree in self.trees:
+	#		tree.cleanTree()
 
 	def setSimulationParams(self, newNumMCTSSims, newEta):
 		self.eta=newEta
