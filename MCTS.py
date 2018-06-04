@@ -13,7 +13,7 @@ class MCTS():
 	This class handles the MCTS tree.
 	"""
 
-	def __init__(self, nnets, numMCTSSims, cpuct, temp = 50, floor = 0.05):
+	def __init__(self, nnets, numMCTSSims, cpuct, temp = 2, floor = 0.05):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -63,6 +63,7 @@ class MCTS():
 		probs: a policy vector where the probability of the ith action is
 		proportional to Nsa[(s,a)]**(1./temp)
 		"""
+		print(self.temp)
 		self.game=game
 		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
