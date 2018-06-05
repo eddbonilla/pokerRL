@@ -198,11 +198,11 @@ class MCTS():
 				for oppCard in range(3): #explicit reference to number of cards in leduc
 					localGame.setPlayerCard(oppCard)
 	
-					#Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
+					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
 					#s = localGame.playerInfoStringRepresentation() #We cannot use the information because it has been raised to the Temp
 					#if s not in self.Ps: #
 					#Ps[oppCard]=self.Ps[s]
-					Ps[oppCard,:]=[0.,1.,0.]
+					#Ps[oppCard,:]=[0.,1.,0.]
 				Pa=np.dot(np.sum(belief,axis=1),Ps) #marginalize over public cards, axis 1. Probability of taking an action a 
 				for a in range(numActions): #Make copies of the game with each action
 					if Pa[:,a].any() !=0: #if the action has any probability of happening
@@ -219,7 +219,6 @@ class MCTS():
 
 			else:#if the exploiting player plays return max(v), they only take optimal actions. this also takes into account the bet made at the time
 				bets=np.zeros((1,numActions))
-				cardV=np.zeros(3)
 				for a in range(numActions):
 					nextGame=copy.deepcopy(localGame)
 					bets[:,a]=nextGame.action(action=a)
