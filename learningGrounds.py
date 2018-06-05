@@ -14,7 +14,8 @@ import time
 
 class Training:
 
-	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp=None):
+
+	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp =None):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
@@ -28,17 +29,16 @@ class Training:
 							"policyTarget" : np.zeros((maxPolicyMemory,self.gameParams["actionSize"]))
 							}
 
-		self.vReservoirs = { "playerCard" : np.zeros((maxValueMemory, self.gameParams["handSize"])),
-							 "publicData" : np.zeros((maxValueMemory, self.gameParams["historySize"] + self.gameParams["handSize"])),
+		self.vReservoirs = { "input" : np.zeros((maxValueMemory, self.gameParams["inputSize"])),
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
-		
+
 		self.randState = np.random.RandomState()
 		compGraph = tf.Graph()
 		compGraph.as_default()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
-
+		
 		if hyp !=None: #Get parameters form dictionary
 			self.gamesPerUpdateNets = hyp["gamesPerUpdateNets"]
 			self.batchSize = hyp["batchSize"]
@@ -64,22 +64,24 @@ class Training:
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
+
 			if i%self.stepsToIncreaseNumSimulations==0:
-				for tree in self.selfPlay.trees:
-					tree.increaseNumSimulations()
+				self.selfPlay.tree.increaseNumSimulations()
 			if i%10==0:
 				history = np.zeros((2,2,3,2))
-				currentExploitability,_=self.selfPlay.trees[0].findAnalyticalExploitability()
+				currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
 				print("Exploitability =" + str(currentExploitability))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
 				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
 				history[1,0,0,0] = 1
-				print("If op raised, op cards:" + str(self.nnets.estimateOpponent(history,np.zeros(3))))
+				print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
 				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
+
 				if currentExploitability<minExpoitability: 
 					minExpoitability=currentExploitability
-			self.selfPlay.cleanTrees()
+			self.selfPlay.tree.cleanTree()
+
 			prenets = time.time()
 			for j in range(self.batchesPerTrain):
 				expiredIterator = self.nnets.trainOnMinibatch()
@@ -90,9 +92,8 @@ class Training:
 			if i%10==0:
 				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
 
-		currentExploitability=self.selfPlay.trees[0].findAnalyticalExploitability()
-		return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D
-				#print("cost = " + str(self.nnets.compute_cost_alpha()))
+		currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
+		return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
@@ -133,7 +134,6 @@ class Training:
 		#Overwritten data input so that we can feed only recent data to nnets without having to copy arrays
 		if self.vN + vk < 1.5*self.maxValueMemory and self.vN >= self.maxValueMemory:
 			vN = int(1.5*self.maxValueMemory) - self.vN - vk
-
 		#Normal data input
 		else:
 			vN = self.vN % self.maxValueMemory
@@ -170,7 +170,7 @@ class Training:
 		self.saver.save(self.sess,checkpointPath)
 
 	def initIterator(self, name):
-		if name == "pIterator":
+		if "pIterator" in str(name):
 			if self.pN < self.maxPolicyMemory:
 				shortenedPReservoirs = {}
 				for key in self.pReservoirs:
@@ -179,7 +179,7 @@ class Training:
 				shortenedPReservoirs = self.pReservoirs
 			self.nnets.initialisePIterator(shortenedPReservoirs)
 
-		if name == "vIterator":
+		elif "vIterator" in str(name):
 			if self.vN <= self.maxValueMemory:
 				shortenedVReservoirs = {}
 				for key in self.vReservoirs:
@@ -192,6 +192,8 @@ class Training:
 				shortenedVReservoirs = self.vReservoirs
 			self.nnets.initialiseVIterator(shortenedVReservoirs)
 			#print(self.vN)
+		else:
+			input("Unknown iterator: name ="+name)
 
 	def playGames(self): 
 		
@@ -204,8 +206,8 @@ class Training:
 		if (self.pN - self.numShuffled)/self.pN > self.unShuffledFraction:
 			self.shufflePReservoirs()
 
-		for tree in self.selfPlay.trees:
-			tree.reduceTemp()
+		
+		self.selfPlay.tree.reduceTemp()
 
 
 	def closeSession(self):
