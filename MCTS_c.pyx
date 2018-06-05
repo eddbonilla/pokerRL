@@ -78,7 +78,7 @@ cdef class MCTS():
 		proportional to Nsa[(s,a)]**(1./temp)
 		"""
 		self.game=game
-		cdef np.ndarray estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard(), self.game.getPlayerCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
+		cdef np.ndarray estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCard(), self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= self.game.copy()			 #Make another instance of the game for each search
@@ -129,7 +129,7 @@ cdef class MCTS():
 
 			#self.Vs[s] = valids
 			
-			self.Ps[s] = self.Ps[s]**(self.temp)
+			self.Ps[s] = self.Ps[s]
 			self.Qsa[s] = value * np.ones(3)
 			self.Ns[s] = 0
 			self.Nsa[s] = np.zeros(3)

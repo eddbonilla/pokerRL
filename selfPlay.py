@@ -45,14 +45,14 @@ class selfPlay:
 			#print(player)
 			if random.random() < self.eta[player]:
 				strategy = self.tree.strategy(self.game)
-				pCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), self.game.getPlayerCard()))
+				pCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
 				#print(strategy)
 				pCache["policyTarget"].append(strategy)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			else:
 				strategy,_ = self.nnets.policyValue(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard())
 			
-			vCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), self.game.getPlayerCard()))
+			vCache["input"].append(self.nnets.preprocessInput( self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard()))
 			vCache["estimTarget"].append(self.game.getOpponentCard())
 			vCache["valuesTarget"].append(value[player])
 			vCache["player"].append(player)
