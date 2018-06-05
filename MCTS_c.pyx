@@ -129,7 +129,7 @@ cdef class MCTS():
 
 			#self.Vs[s] = valids
 			
-			self.Ps[s] = self.Ps[s]
+			#self.Ps[s] = self.Ps[s]
 			self.Qsa[s] = value * np.ones(3)
 			self.Ns[s] = 0
 			self.Nsa[s] = np.zeros(3)
