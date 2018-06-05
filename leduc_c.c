@@ -2267,6 +2267,7 @@ static const char __pyx_k_class[] = "__class__";
 static const char __pyx_k_dtype[] = "dtype";
 static const char __pyx_k_error[] = "error";
 static const char __pyx_k_flags[] = "flags";
+static const char __pyx_k_int32[] = "int32";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_round[] = "round";
@@ -2444,6 +2445,7 @@ static PyObject *__pyx_kp_s_got_differing_extents_in_dimensi;
 static PyObject *__pyx_n_s_history;
 static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_import;
+static PyObject *__pyx_n_s_int32;
 static PyObject *__pyx_n_s_isFinished;
 static PyObject *__pyx_n_s_itemsize;
 static PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
@@ -3236,7 +3238,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 	cpdef void resetGame(self):
  * 		self.player = 0  #0 for player 1, 1 for player 2             # <<<<<<<<<<<<<<
  * 		self.pot = 2
- * 		self.cards = np.zeros(3,dtype = int)
+ * 		self.cards = np.zeros(3,dtype = "int32")
  */
   __pyx_v_self->player = 0;
 
@@ -3244,7 +3246,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 	cpdef void resetGame(self):
  * 		self.player = 0  #0 for player 1, 1 for player 2
  * 		self.pot = 2             # <<<<<<<<<<<<<<
- * 		self.cards = np.zeros(3,dtype = int)
+ * 		self.cards = np.zeros(3,dtype = "int32")
  * 		self.cards_view = self.cards
  */
   __pyx_v_self->pot = 2;
@@ -3252,7 +3254,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   /* "leduc_c.pyx":42
  * 		self.player = 0  #0 for player 1, 1 for player 2
  * 		self.pot = 2
- * 		self.cards = np.zeros(3,dtype = int)             # <<<<<<<<<<<<<<
+ * 		self.cards = np.zeros(3,dtype = "int32")             # <<<<<<<<<<<<<<
  * 		self.cards_view = self.cards
  * 		self.cards_view[0] = random.randint(0,2)
  */
@@ -3263,7 +3265,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3277,7 +3279,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
 
   /* "leduc_c.pyx":43
  * 		self.pot = 2
- * 		self.cards = np.zeros(3,dtype = int)
+ * 		self.cards = np.zeros(3,dtype = "int32")
  * 		self.cards_view = self.cards             # <<<<<<<<<<<<<<
  * 		self.cards_view[0] = random.randint(0,2)
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
@@ -3289,7 +3291,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __pyx_t_5.data = NULL;
 
   /* "leduc_c.pyx":44
- * 		self.cards = np.zeros(3,dtype = int)
+ * 		self.cards = np.zeros(3,dtype = "int32")
  * 		self.cards_view = self.cards
  * 		self.cards_view[0] = random.randint(0,2)             # <<<<<<<<<<<<<<
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
@@ -3323,7 +3325,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 		self.cards_view[0] = random.randint(0,2)
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3             # <<<<<<<<<<<<<<
  * 		self.cards_view[2] = -1
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
  */
   __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_self->cards), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
@@ -3367,8 +3369,8 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
  * 		self.cards_view[0] = random.randint(0,2)
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
  * 		self.cards_view[2] = -1             # <<<<<<<<<<<<<<
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
- * 		self.publicCardArray = np.zeros(3, dtype =int)
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")
  */
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 46, __pyx_L1_error)}
   __pyx_t_10 = 2;
@@ -3386,8 +3388,8 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   /* "leduc_c.pyx":47
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
  * 		self.cards_view[2] = -1
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]             # <<<<<<<<<<<<<<
- * 		self.publicCardArray = np.zeros(3, dtype =int)
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]             # <<<<<<<<<<<<<<
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")
  * 		self.publicCardArray_view = self.publicCardArray
  */
   __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
@@ -3397,7 +3399,7 @@ static void __pyx_f_7leduc_c_9LeducGame_resetGame(struct __pyx_obj_7leduc_c_Ledu
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__4, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3442,8 +3444,8 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
 
   /* "leduc_c.pyx":48
  * 		self.cards_view[2] = -1
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
- * 		self.publicCardArray = np.zeros(3, dtype =int)             # <<<<<<<<<<<<<<
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")             # <<<<<<<<<<<<<<
  * 		self.publicCardArray_view = self.publicCardArray
  * 		self.round = 0   #0 for 1st round, 1 for 2nd round
  */
@@ -3454,7 +3456,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__5, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3467,8 +3469,8 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   __pyx_t_3 = 0;
 
   /* "leduc_c.pyx":49
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
- * 		self.publicCardArray = np.zeros(3, dtype =int)
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")
  * 		self.publicCardArray_view = self.publicCardArray             # <<<<<<<<<<<<<<
  * 		self.round = 0   #0 for 1st round, 1 for 2nd round
  * 		self.bet = 2
@@ -3480,7 +3482,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   __pyx_t_5.data = NULL;
 
   /* "leduc_c.pyx":50
- * 		self.publicCardArray = np.zeros(3, dtype =int)
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")
  * 		self.publicCardArray_view = self.publicCardArray
  * 		self.round = 0   #0 for 1st round, 1 for 2nd round             # <<<<<<<<<<<<<<
  * 		self.bet = 2
@@ -3502,7 +3504,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
  * 		self.bet = 2
  * 		self.finished = False             # <<<<<<<<<<<<<<
  * 		self.raisesInRound = 0
- * 		self.history = np.zeros((2,2,3,2), dtype = int)
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")
  */
   __pyx_v_self->finished = 0;
 
@@ -3510,7 +3512,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
  * 		self.bet = 2
  * 		self.finished = False
  * 		self.raisesInRound = 0             # <<<<<<<<<<<<<<
- * 		self.history = np.zeros((2,2,3,2), dtype = int)
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")
  * 		self.history_view = self.history
  */
   __pyx_v_self->raisesInRound = 0;
@@ -3518,9 +3520,9 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   /* "leduc_c.pyx":54
  * 		self.finished = False
  * 		self.raisesInRound = 0
- * 		self.history = np.zeros((2,2,3,2), dtype = int)             # <<<<<<<<<<<<<<
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")             # <<<<<<<<<<<<<<
  * 		self.history_view = self.history
- * 		self.winnings = np.zeros(2, dtype = int)
+ * 		self.winnings = np.zeros(2, dtype = "int32")
  */
   __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
@@ -3529,7 +3531,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
   __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__7, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3543,9 +3545,9 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
 
   /* "leduc_c.pyx":55
  * 		self.raisesInRound = 0
- * 		self.history = np.zeros((2,2,3,2), dtype = int)
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")
  * 		self.history_view = self.history             # <<<<<<<<<<<<<<
- * 		self.winnings = np.zeros(2, dtype = int)
+ * 		self.winnings = np.zeros(2, dtype = "int32")
  * 		self.winnings_view = self.winnings
  */
   __pyx_t_11 = __Pyx_PyObject_to_MemoryviewSlice_dsdsdsds_int(((PyObject *)__pyx_v_self->history), PyBUF_WRITABLE); if (unlikely(!__pyx_t_11.memview)) __PYX_ERR(0, 55, __pyx_L1_error)
@@ -3555,9 +3557,9 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   __pyx_t_11.data = NULL;
 
   /* "leduc_c.pyx":56
- * 		self.history = np.zeros((2,2,3,2), dtype = int)
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")
  * 		self.history_view = self.history
- * 		self.winnings = np.zeros(2, dtype = int)             # <<<<<<<<<<<<<<
+ * 		self.winnings = np.zeros(2, dtype = "int32")             # <<<<<<<<<<<<<<
  * 		self.winnings_view = self.winnings
  * 
  */
@@ -3568,7 +3570,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
   __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__8, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3582,7 +3584,7 @@ __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_t_5, 1, (PyObject *(*)(char *)) __p
 
   /* "leduc_c.pyx":57
  * 		self.history_view = self.history
- * 		self.winnings = np.zeros(2, dtype = int)
+ * 		self.winnings = np.zeros(2, dtype = "int32")
  * 		self.winnings_view = self.winnings             # <<<<<<<<<<<<<<
  * 
  * 	cpdef object copy(self):
@@ -5581,7 +5583,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setOpponentCard(struct __pyx_obj_7leduc_
  * 	cpdef void setOpponentCard(self,int card):
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[(self.player+1)%2] = card             # <<<<<<<<<<<<<<
- * 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = int)[card]
+ * 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = "int32")[card]
  * 
  */
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 133, __pyx_L1_error)}
@@ -5591,7 +5593,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setOpponentCard(struct __pyx_obj_7leduc_
   /* "leduc_c.pyx":134
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[(self.player+1)%2] = card
- * 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = int)[card]             # <<<<<<<<<<<<<<
+ * 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = "int32")[card]             # <<<<<<<<<<<<<<
  * 
  * 	@cython.boundscheck(False)
  */
@@ -5602,7 +5604,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setOpponentCard(struct __pyx_obj_7leduc_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 134, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 134, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__11, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 134, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5768,7 +5770,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPlayerCard(struct __pyx_obj_7leduc_c_
  * 	cpdef void setPlayerCard(self,int card):
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[self.player] = card             # <<<<<<<<<<<<<<
- * 		self.playersCardsArray[self.player] = np.eye(3, dtype = int)[card]
+ * 		self.playersCardsArray[self.player] = np.eye(3, dtype = "int32")[card]
  * 
  */
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 140, __pyx_L1_error)}
@@ -5778,7 +5780,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPlayerCard(struct __pyx_obj_7leduc_c_
   /* "leduc_c.pyx":141
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[self.player] = card
- * 		self.playersCardsArray[self.player] = np.eye(3, dtype = int)[card]             # <<<<<<<<<<<<<<
+ * 		self.playersCardsArray[self.player] = np.eye(3, dtype = "int32")[card]             # <<<<<<<<<<<<<<
  * 
  * 	@cython.boundscheck(False)
  */
@@ -5789,7 +5791,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPlayerCard(struct __pyx_obj_7leduc_c_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 141, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 141, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__12, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 141, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5955,7 +5957,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPublicCard(struct __pyx_obj_7leduc_c_
  * 	cpdef void setPublicCard(self,int card):
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[2] = card             # <<<<<<<<<<<<<<
- * 		self.publicCardArray = np.eye(3, dtype = int)[card]
+ * 		self.publicCardArray = np.eye(3, dtype = "int32")[card]
  * 		self.publicCardArray_view = self.publicCardArray
  */
   if (unlikely(!__pyx_v_self->cards_view.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 147, __pyx_L1_error)}
@@ -5965,7 +5967,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPublicCard(struct __pyx_obj_7leduc_c_
   /* "leduc_c.pyx":148
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[2] = card
- * 		self.publicCardArray = np.eye(3, dtype = int)[card]             # <<<<<<<<<<<<<<
+ * 		self.publicCardArray = np.eye(3, dtype = "int32")[card]             # <<<<<<<<<<<<<<
  * 		self.publicCardArray_view = self.publicCardArray
  * 
  */
@@ -5976,7 +5978,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPublicCard(struct __pyx_obj_7leduc_c_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyInt_Type))) < 0) __PYX_ERR(0, 148, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_n_s_int32) < 0) __PYX_ERR(0, 148, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__13, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5993,7 +5995,7 @@ static void __pyx_f_7leduc_c_9LeducGame_setPublicCard(struct __pyx_obj_7leduc_c_
 
   /* "leduc_c.pyx":149
  * 		self.cards_view[2] = card
- * 		self.publicCardArray = np.eye(3, dtype = int)[card]
+ * 		self.publicCardArray = np.eye(3, dtype = "int32")[card]
  * 		self.publicCardArray_view = self.publicCardArray             # <<<<<<<<<<<<<<
  * 
  * 	cpdef int getRound(self):
@@ -24958,6 +24960,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_history, __pyx_k_history, sizeof(__pyx_k_history), 0, 0, 1, 1},
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
+  {&__pyx_n_s_int32, __pyx_k_int32, sizeof(__pyx_k_int32), 0, 0, 1, 1},
   {&__pyx_n_s_isFinished, __pyx_k_isFinished, sizeof(__pyx_k_isFinished), 0, 0, 1, 1},
   {&__pyx_n_s_itemsize, __pyx_k_itemsize, sizeof(__pyx_k_itemsize), 0, 0, 1, 1},
   {&__pyx_kp_s_itemsize_0_for_cython_array, __pyx_k_itemsize_0_for_cython_array, sizeof(__pyx_k_itemsize_0_for_cython_array), 0, 0, 1, 0},
@@ -25054,7 +25057,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "leduc_c.pyx":42
  * 		self.player = 0  #0 for player 1, 1 for player 2
  * 		self.pot = 2
- * 		self.cards = np.zeros(3,dtype = int)             # <<<<<<<<<<<<<<
+ * 		self.cards = np.zeros(3,dtype = "int32")             # <<<<<<<<<<<<<<
  * 		self.cards_view = self.cards
  * 		self.cards_view[0] = random.randint(0,2)
  */
@@ -25063,7 +25066,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple_);
 
   /* "leduc_c.pyx":44
- * 		self.cards = np.zeros(3,dtype = int)
+ * 		self.cards = np.zeros(3,dtype = "int32")
  * 		self.cards_view = self.cards
  * 		self.cards_view[0] = random.randint(0,2)             # <<<<<<<<<<<<<<
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
@@ -25078,7 +25081,7 @@ static int __Pyx_InitCachedConstants(void) {
  * 		self.cards_view[0] = random.randint(0,2)
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3             # <<<<<<<<<<<<<<
  * 		self.cards_view[2] = -1
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
  */
   __pyx_tuple__3 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_4); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
@@ -25087,8 +25090,8 @@ static int __Pyx_InitCachedConstants(void) {
   /* "leduc_c.pyx":47
  * 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
  * 		self.cards_view[2] = -1
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]             # <<<<<<<<<<<<<<
- * 		self.publicCardArray = np.zeros(3, dtype =int)
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]             # <<<<<<<<<<<<<<
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")
  * 		self.publicCardArray_view = self.publicCardArray
  */
   __pyx_tuple__4 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 47, __pyx_L1_error)
@@ -25097,8 +25100,8 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "leduc_c.pyx":48
  * 		self.cards_view[2] = -1
- * 		self.playersCardsArray = np.eye(3, dtype = int)[self.cards_view[0:2]]
- * 		self.publicCardArray = np.zeros(3, dtype =int)             # <<<<<<<<<<<<<<
+ * 		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
+ * 		self.publicCardArray = np.zeros(3, dtype ="int32")             # <<<<<<<<<<<<<<
  * 		self.publicCardArray_view = self.publicCardArray
  * 		self.round = 0   #0 for 1st round, 1 for 2nd round
  */
@@ -25109,9 +25112,9 @@ static int __Pyx_InitCachedConstants(void) {
   /* "leduc_c.pyx":54
  * 		self.finished = False
  * 		self.raisesInRound = 0
- * 		self.history = np.zeros((2,2,3,2), dtype = int)             # <<<<<<<<<<<<<<
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")             # <<<<<<<<<<<<<<
  * 		self.history_view = self.history
- * 		self.winnings = np.zeros(2, dtype = int)
+ * 		self.winnings = np.zeros(2, dtype = "int32")
  */
   __pyx_tuple__6 = PyTuple_Pack(4, __pyx_int_2, __pyx_int_2, __pyx_int_3, __pyx_int_2); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
@@ -25121,9 +25124,9 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__7);
 
   /* "leduc_c.pyx":56
- * 		self.history = np.zeros((2,2,3,2), dtype = int)
+ * 		self.history = np.zeros((2,2,3,2), dtype = "int32")
  * 		self.history_view = self.history
- * 		self.winnings = np.zeros(2, dtype = int)             # <<<<<<<<<<<<<<
+ * 		self.winnings = np.zeros(2, dtype = "int32")             # <<<<<<<<<<<<<<
  * 		self.winnings_view = self.winnings
  * 
  */
@@ -25156,7 +25159,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "leduc_c.pyx":134
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[(self.player+1)%2] = card
- * 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = int)[card]             # <<<<<<<<<<<<<<
+ * 		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = "int32")[card]             # <<<<<<<<<<<<<<
  * 
  * 	@cython.boundscheck(False)
  */
@@ -25167,7 +25170,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "leduc_c.pyx":141
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[self.player] = card
- * 		self.playersCardsArray[self.player] = np.eye(3, dtype = int)[card]             # <<<<<<<<<<<<<<
+ * 		self.playersCardsArray[self.player] = np.eye(3, dtype = "int32")[card]             # <<<<<<<<<<<<<<
  * 
  * 	@cython.boundscheck(False)
  */
@@ -25178,7 +25181,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "leduc_c.pyx":148
  * 		#input: card as scalar number e.g. 2=K,1=Q,0=J
  * 		self.cards_view[2] = card
- * 		self.publicCardArray = np.eye(3, dtype = int)[card]             # <<<<<<<<<<<<<<
+ * 		self.publicCardArray = np.eye(3, dtype = "int32")[card]             # <<<<<<<<<<<<<<
  * 		self.publicCardArray_view = self.publicCardArray
  * 
  */
