@@ -13,7 +13,7 @@ class MCTS():
 	This class handles the MCTS tree.
 	"""
 
-	def __init__(self, nnets, numMCTSSims, cpuct, temp = 50, floor = 0.05):
+	def __init__(self, nnets, numMCTSSims, cpuct, temp = 2, floor = 0.05):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -28,6 +28,7 @@ class MCTS():
 
 
 		self.Es = {}		# stores game.getGameEnded ended for board s
+		self.Bs = {} 		# stores best response to avg strategies for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 		#Harcoded Parameters. To be deprecated soon
@@ -63,14 +64,15 @@ class MCTS():
 		probs: a policy vector where the probability of the ith action is
 		proportional to Nsa[(s,a)]**(1./temp)
 		"""
+		print(self.temp)
 		self.game=game
-		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
+		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard(), self.game.getPlayerCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
 			self.gameCopy.setOpponentCard(np.random.choice(int(self.gameCopy.params["actionSize"]),p=estimOpponentCards)) #choose the opponent cards with a guess
 			#if i%100 == 0: print(i)
-			self.search()
+			self.search(root = True)
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
@@ -81,19 +83,23 @@ class MCTS():
 		#averageStrategy = self.Ps[s]
 		return treeStrategy 		#return pi,tree strategy
 
-	def search(self, exploitSearch = False):
+	def search(self, root = False):
 
 		s = self.gameCopy.playerInfoStringRepresentation() #gives a code for the state of the game, it is a unique string of characters that can be placed in a python dictionary
 		pot = self.gameCopy.getPot()
 		playerMove = self.gameCopy.getPlayer() == self.game.getPlayer()
 		#print("opponent")
-		s_pub = self.gameCopy.publicInfoStringRepresentation()
 
 		if self.gameCopy.isFinished(): # check if s is a known terminal state
 
 			#print("Terminal")
 			#input("player card =" + str(self.game.getPlayerCard()) + ", opponent card ="+str(self.game.getOpponentCard())+", public card ="+str(self.gameCopy.getPublicCard())+ ", net winnings = "+str(self.gameCopy.getOutcome()[self.game.getPlayer()]))
 			return self.gameCopy.getOutcome()[self.game.getPlayer()] #Always get outcome for original player
+
+		if not playerMove:
+			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())
+			self.gameCopy.action(action = -1, strategy = strategy)
+			return self.search()
 
 		if s not in self.Ps: #Have we been on this state during the search? if yes, then no need to reevaluate it
 			# leaf node
@@ -102,41 +108,32 @@ class MCTS():
 			self.Ps[s], v = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())   #Opponent Strategy.
 
 			#self.Vs[s] = valids
-			if playerMove:
-				self.Ps[s] = self.Ps[s]**(self.temp) #What? 
-				self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
-				self.Ns[s] = 0
-				self.Nsa[s] = np.zeros(self.game.params["actionSize"])
-				return (v*pot)
+
+			self.Qsa[s] = v * np.ones(self.game.params["actionSize"])
+			self.Ns[s] = 0
+			self.Nsa[s] = np.zeros(self.game.params["actionSize"])
+			return (v*pot)
 				#if exploitSearch:
 				#	self.Ps[s] = np.ones(3)/3
-			elif s_pub not in self.Ns:
-				self.Ns[s_pub] = 0
-				self.Nsa[s_pub] = np.zeros(self.game.params["actionSize"])
-
+			
 		# pick the action with the highest upper confidence bound
 
-		if playerMove:
-			u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s]+self.floor)/(1+self.Nsa[s])
-
-		else:
-			u = self.cpuct*self.Ps[s]*math.sqrt(self.Ns[s_pub]+EPS)/(1+self.Nsa[s_pub])
-
+		#if not root:
+		u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s])/(1+self.Nsa[s])
+		#else:
+			#u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(1/3)/(1+self.Nsa[s])
 		#print(u)
 		a=np.argmax(u)
 		#print("probs =" +str(self.Ps[s])+", playerMove = "+str(playerMove)+ ", action ="+str(a))
 
 		bet = self.gameCopy.action(action=a)
-		net_winnings = -bet*(playerMove) + self.search(exploitSearch = exploitSearch)
+		net_winnings = -bet*(playerMove) + self.search()
 		v = net_winnings/pot
 
-		if playerMove:
-			self.Qsa[s][a] = float (self.Nsa[s][a]*self.Qsa[s][a] + v)/(self.Nsa[s][a]+1)
-			self.Nsa[s][a] += 1
-			self.Ns[s] += 1
-		else:
-			self.Ns[s_pub] += 1
-			self.Nsa[s_pub][a] += 1
+
+		self.Qsa[s][a] = float (self.Nsa[s][a]*self.Qsa[s][a] + v)/(self.Nsa[s][a]+1)
+		self.Nsa[s][a] += 1
+		self.Ns[s] += 1
 		#print("Q="+str(self.Qsa[(s,a)]))
 		#print("net_winnings=" +str(net_winnings))
 		
@@ -201,11 +198,11 @@ class MCTS():
 				for oppCard in range(3): #explicit reference to number of cards in leduc
 					localGame.setPlayerCard(oppCard)
 	
-					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
+					#Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
 					#s = localGame.playerInfoStringRepresentation() #We cannot use the information because it has been raised to the Temp
 					#if s not in self.Ps: #
 					#Ps[oppCard]=self.Ps[s]
-					#Ps[oppCard,:]=[0.,1.,0.]
+					Ps[oppCard,:]=[0.,1.,0.]
 				Pa=np.dot(np.sum(belief,axis=1),Ps) #marginalize over public cards, axis 1. Probability of taking an action a 
 				for a in range(numActions): #Make copies of the game with each action
 					if Pa[:,a].any() !=0: #if the action has any probability of happening
@@ -227,8 +224,8 @@ class MCTS():
 					nextGame=copy.deepcopy(localGame)
 					bets[:,a]=nextGame.action(action=a)
 					Qsa[:,a]=np.reshape(self.exploitabilitySearch(nextGame,belief,prevGame=localGame,prevAction=a),3)
-				
 				Vs=Qsa-bets
+				self.Bs[localGame.publicInfoStringRepresentation()]=np.argmax(Vs,axis=1) #store the optimal action in the dict, index is the player card
 				return  np.max(Vs,axis=1)#take the max over actions of Vs
 
 	def findAnalyticalExploitability(self):
@@ -264,5 +261,5 @@ class MCTS():
 
 		end = time.time()
 		print("Exploitability calculation time: "+str(end - start))
-		return exploitability
+		return exploitability, self.Bs
 

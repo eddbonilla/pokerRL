@@ -1,6 +1,7 @@
 cimport cython
 import numpy as np
 cimport numpy as np
+#from game_c cimport Game
 import array
 import random
 
@@ -38,21 +39,21 @@ cdef class LeducGame():
 	cpdef void resetGame(self):
 		self.player = 0  #0 for player 1, 1 for player 2
 		self.pot = 2 
-		self.cards = np.zeros(3,dtype = "int32")
+		self.cards = np.zeros(3,dtype = np.int32)
 		self.cards_view = self.cards
 		self.cards_view[0] = random.randint(0,2)
 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
 		self.cards_view[2] = -1
-		self.playersCardsArray = np.eye(3, dtype = "int32")[self.cards_view[0:2]]
-		self.publicCardArray = np.zeros(3, dtype ="int32")
+		self.playersCardsArray = np.eye(3, dtype = np.int32)[self.cards_view[0:2]]
+		self.publicCardArray = np.zeros(3, dtype =np.int32)
 		self.publicCardArray_view = self.publicCardArray
 		self.round = 0   #0 for 1st round, 1 for 2nd round
 		self.bet = 2
 		self.finished = False
 		self.raisesInRound = 0
-		self.history = np.zeros((2,2,3,2), dtype = "int32")
+		self.history = np.zeros((2,2,3,2), dtype = np.int32)
 		self.history_view = self.history 
-		self.winnings = np.zeros(2, dtype = "int32") 
+		self.winnings = np.zeros(2, dtype = np.int32) 
 		self.winnings_view = self.winnings
 
 	cpdef object copy(self):
@@ -130,14 +131,14 @@ cdef class LeducGame():
 	cpdef void setOpponentCard(self,int card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[(self.player+1)%2] = card 
-		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = int)[card]
+		self.playersCardsArray[(self.player + 1) % 2] = np.eye(3,dtype = "int32")[card]
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
 	cpdef void setPlayerCard(self,int card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[self.player] = card 
-		self.playersCardsArray[self.player] = np.eye(3, dtype = int)[card]
+		self.playersCardsArray[self.player] = np.eye(3, dtype = "int32")[card]
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
@@ -170,10 +171,10 @@ cdef class LeducGame():
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
 	cpdef np.ndarray regulariseOpponentEstimate(self,np.ndarray estimate):
-		cdef np.ndarray mask = 1 - (0.5+0.5*(self.cards[self.player] == self.cards[2]))*self.playersCardsArray[self.player]
-		cdef np.ndarray probs= mask*estimate
-		probs /= np.sum(probs)
-		return probs
+		if self.cards[self.player] == self.cards[2]:
+			estimate= (1 - self.playersCardsArray[self.player])*estimate
+			estimate /= np.sum(estimate)
+		return estimate
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
