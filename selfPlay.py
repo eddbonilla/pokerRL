@@ -24,8 +24,7 @@ class selfPlay:
 		pCache = { "input" : [],
 					"policyTarget": []
 				 }
-		vCache = {  "playerCard" : [],
-					"publicData" : [],
+		vCache = {  "input" : [],
 					"estimTarget" : [],
 					"valuesTarget" : [],
 					"player" : [],
@@ -47,14 +46,14 @@ class selfPlay:
 			#print(player)
 			if random.random() < self.eta[player]:
 				strategy = self.tree.strategy(self.game)
-				pCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), playerCard = self.game.getPlayerCard()))
+				pCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), self.game.getPlayerCard()))
+				#print(strategy)
 				pCache["policyTarget"].append(strategy)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			else:
 				strategy,_ = self.nnets.policyValue(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard())
 			
-			vCache["playerCard"].append(self.game.getPlayerCard().copy())
-			vCache["publicData"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard()))
+			vCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), self.game.getPlayerCard()))
 			vCache["estimTarget"].append(self.game.getOpponentCard())
 			vCache["valuesTarget"].append(value[player])
 			vCache["player"].append(player)
@@ -72,6 +71,8 @@ class selfPlay:
 
 		for i in range(len(vCache["valuesTarget"])):
 			vCache["valuesTarget"][i] = (value[vCache["player"][i]] - vCache["valuesTarget"][i])/vCache["pot"][i]
+
+		#print("input: " + str(len(pCache["input"])) + ", target: " + str(len(pCache["policyTarget"])))
 
 		return pCache, vCache
 

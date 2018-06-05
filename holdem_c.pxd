@@ -1,7 +1,7 @@
 import numpy as np
 cimport numpy as np
 
-cdef class LeducGame:
+cdef class HoldEmGame:
 	cdef int pot,player,round,bet,raisesInRound,finished
 	cdef np.ndarray cards, winnings, playersCardsArray, publicCardArray, history
 	cdef int[:] cards_view, winnings_view, publicCardArray_view

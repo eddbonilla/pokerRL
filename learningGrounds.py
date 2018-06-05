@@ -28,8 +28,7 @@ class Training:
 							"policyTarget" : np.zeros((maxPolicyMemory,self.gameParams["actionSize"]))
 							}
 
-		self.vReservoirs = { "playerCard" : np.zeros((maxValueMemory, self.gameParams["handSize"])),
-							 "publicData" : np.zeros((maxValueMemory, self.gameParams["historySize"] + self.gameParams["handSize"])),
+		self.vReservoirs = { "input" : np.zeros((maxValueMemory, self.gameParams["inputSize"])),
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
 
@@ -61,7 +60,7 @@ class Training:
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
 				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
 				history[1,0,0,0] = 1
-				print("If op raised, op cards:" + str(self.nnets.estimateOpponent(history,np.zeros(3))))
+				print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
 				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
 			self.selfPlay.tree.cleanTree()
 			prenets = time.time()
@@ -116,7 +115,6 @@ class Training:
 		#Overwritten data input so that we can feed only recent data to nnets without having to copy arrays
 		if self.vN + vk < 1.5*self.maxValueMemory and self.vN >= self.maxValueMemory:
 			vN = int(1.5*self.maxValueMemory) - self.vN - vk
-
 		#Normal data input
 		else:
 			vN = self.vN % self.maxValueMemory
@@ -153,7 +151,7 @@ class Training:
 		self.saver.save(self.sess,checkpointPath)
 
 	def initIterator(self, name):
-		if name == "pIterator":
+		if "pIterator" in str(name):
 			if self.pN < self.maxPolicyMemory:
 				shortenedPReservoirs = {}
 				for key in self.pReservoirs:
@@ -162,7 +160,7 @@ class Training:
 				shortenedPReservoirs = self.pReservoirs
 			self.nnets.initialisePIterator(shortenedPReservoirs)
 
-		if name == "vIterator":
+		elif "vIterator" in str(name):
 			if self.vN <= self.maxValueMemory:
 				shortenedVReservoirs = {}
 				for key in self.vReservoirs:
@@ -175,6 +173,8 @@ class Training:
 				shortenedVReservoirs = self.vReservoirs
 			self.nnets.initialiseVIterator(shortenedVReservoirs)
 			#print(self.vN)
+		else:
+			input("Unknown iterator: name ="+name)
 
 	def playGames(self): 
 		

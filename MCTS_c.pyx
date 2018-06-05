@@ -5,7 +5,7 @@ import math
 import numpy as np
 cimport numpy as np
 from leduc_c cimport LeducGame
-from holdEm_c cimport HoldEmGame
+#from game_c cimport Game
 import copy
 import time
 EPS = 1e-8
@@ -19,10 +19,11 @@ cdef class MCTS():
 	cdef int numMCTSSims,cpuct
 	cdef double temp,floor,tempDecayRate
 	cdef dict Qsa,Nsa,Ns,Ps,
-	cdef Game game, gameCopy
+	cdef LeducGame game, gameCopy
 	cdef object nnets 
+	cdef int holdEm
 
-	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double floor = 0.05, double tempDecayRate = 1.0005,bool holdEm = False):
+	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double floor = 0.05, double tempDecayRate = 1.0005,int holdEm = False):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -77,7 +78,7 @@ cdef class MCTS():
 		proportional to Nsa[(s,a)]**(1./temp)
 		"""
 		self.game=game
-		cdef np.ndarray estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
+		cdef np.ndarray estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard(), self.game.getPlayerCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= self.game.copy()			 #Make another instance of the game for each search
