@@ -66,7 +66,7 @@ class MCTS():
 		"""
 		print(self.temp)
 		self.game=game
-		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPublicHistory(), self.game.getPublicCard(), self.game.getPlayerCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
+		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCard(), self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
@@ -118,10 +118,10 @@ class MCTS():
 			
 		# pick the action with the highest upper confidence bound
 
-		#if not root:
-		u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s])/(1+self.Nsa[s])
-		#else:
-			#u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(1/3)/(1+self.Nsa[s])
+		if not root:
+			u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s])/(1+self.Nsa[s])
+		else:
+			u = self.Qsa[s] + math.sqrt(self.Ns[s]+EPS)*self.cpuct*(self.Ps[s]**self.temp)/(1+self.Nsa[s])
 		#print(u)
 		a=np.argmax(u)
 		#print("probs =" +str(self.Ps[s])+", playerMove = "+str(playerMove)+ ", action ="+str(a))

@@ -203,21 +203,21 @@ class nnets:
 	def policyValue(self,playerCard, publicHistory, publicCard):
 		#print(publicCard)
 		#print(" " + str(publicHistory.shape)+" " + str(playerCard.shape)+" "+str(publicCard.shape))
-		playerInfo=self.preprocessInput(publicHistory, publicCard, playerCard)
+		playerInfo=self.preprocessInput(playerCard, publicHistory, publicCard)
 		#print(playerInfo.shape)
 		p, v = self.sess.run(self.getPolicyValue, feed_dict = {self.predictionInput : [playerInfo] })
 		p=np.reshape(p,(self.gameParams["actionSize"]))
 		v=np.reshape(v,(self.gameParams["valueSize"]))
 		return p,v
 
-	def estimateOpponent(self, publicHistory, publicCard, playerCard):
-		playerInfo=self.preprocessInput(publicHistory, publicCard, playerCard)
+	def estimateOpponent(self, playerCard, publicHistory, publicCard):
+		playerInfo=self.preprocessInput( playerCard, publicHistory, publicCard)
 		#print(playerInfo.shape)
 		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionInput: [playerInfo]})
 
 		return np.reshape(estimate,(self.gameParams["handSize"]))
 
-	def preprocessInput(self, publicHistory, publicCard, playerCard): #Method that is here only because of the input specifics
+	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
 		playerCard=np.reshape(playerCard,-1)
 		publicHistory=np.reshape(publicHistory,-1)
 		publicCard=np.reshape(publicCard,-1)
