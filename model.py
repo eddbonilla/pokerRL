@@ -23,8 +23,8 @@ def define_scope(function):
 class nnets:
 
 	"""docstring for nnet"""
-	def __init__(self,session, gameParams, lmbda=0.002,alpha =10.,feedGIntoF = False, batchSize = 128):
 
+	def __init__(self,session, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128,hyp=None):
 		self.sess=session
 		self.gameParams=gameParams
 		self.feedGIntoF = feedGIntoF
@@ -54,8 +54,17 @@ class nnets:
 		self.vnNetsData =self.vIterator.get_next(name = "vIterator")
 
 		#Properties that we are setting to be constants
-		self.alpha=tf.constant(alpha)		
-		self.lmbda = tf.constant(lmbda)
+		if hyp != None:
+			self.alpha=tf.constant(hyp["alpha"],dtype=tf.float32)		
+			self.lmbda = tf.constant(hyp["lmbda"],dtype=tf.float32)
+			self.gLearningRate=hyp["gLearn"]
+			self.fLearningRate=hyp["fLearn"]
+		else:
+			self.alpha=tf.constant(alpha,dtype=tf.float32)		
+			self.lmbda = tf.constant(0.001,dtype=tf.float32)
+			self.gLearningRate=0.0005
+			self.fLearningRate=0.0005
+
 
 		#Properties that are actually graph nodes
 		self.gModel
@@ -76,10 +85,10 @@ class nnets:
 		input_size = int(self.gameParams["inputSize"])
 		target_size= int(self.gameParams["handSize"])
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=128, activation='relu')(model)
-		cards = Dense(output_dim=target_size, activation='linear')(model)
-		gModel = Model(input=inputs, output=cards)
+		model = Dense(units=256, activation='relu')(inputs)
+		model = Dense(units=128, activation='relu')(model)
+		cards = Dense(units=target_size, activation='linear')(model)
+		gModel = Model(inputs=inputs, outputs=cards)
 
 		return gModel
 
@@ -91,22 +100,22 @@ class nnets:
 			input_size = int(self.gameParams["inputSize"]+self.gameParams["handSize"])    # Use if feeding gModel into fModel
 
 		inputs = Input(shape=(input_size,))
-		model = Dense(output_dim=256, activation='relu')(inputs)
-		model = Dense(output_dim=128, activation='relu')(model)
+		model = Dense(units=256, activation='relu')(inputs)
+		model = Dense(units=128, activation='relu')(model)
 
-		fModel = Model(input=inputs, output=model)
+		fModel = Model(inputs=inputs, outputs=model)
 
 		return fModel
 
 	@define_scope
 	def valueLayer(self):
 		value_size= int(self.gameParams["valueSize"])
-		return Dense(output_dim = value_size, input_shape = self.fModel.output_shape, activation='linear')
+		return Dense(units = value_size, input_shape = self.fModel.output_shape, activation='linear')
 
 	@define_scope
 	def policyLayer(self):
 		policy_size= int(self.gameParams["actionSize"])
-		return Dense(output_dim = policy_size, input_shape = self.fModel.output_shape, activation = 'linear')
+		return Dense(units = policy_size, input_shape = self.fModel.output_shape, activation = 'linear')
 
 	@define_scope
 	def vInputData(self):
@@ -141,7 +150,7 @@ class nnets:
 
 	@define_scope
 	def trainPolicyValue(self):
-		optimizer=tf.train.AdamOptimizer(0.00005)
+		optimizer=tf.train.AdamOptimizer(self.fLearningRate)
 		variables = self.fModel.trainable_weights
 		variables.append(self.valueLayer.trainable_weights)
 		variables.append(self.policyLayer.trainable_weights)
@@ -158,7 +167,7 @@ class nnets:
 
 	@define_scope
 	def trainEstimate(self):
-		optimizer=tf.train.AdamOptimizer(0.00005)
+		optimizer=tf.train.AdamOptimizer(self.gLearningRate)
 		variables = self.gModel.trainable_weights 
 		return optimizer.minimize(self.costEstimate,var_list = variables)
 
