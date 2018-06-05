@@ -69,7 +69,7 @@ class Training:
 					tree.increaseNumSimulations()
 			if i%10==0:
 				history = np.zeros((2,2,3,2))
-				currentExploitability=self.selfPlay.trees[0].findAnalyticalExploitability()
+				currentExploitability,_=self.selfPlay.trees[0].findAnalyticalExploitability()
 				print("Exploitability =" + str(currentExploitability))
 				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
 				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
@@ -89,8 +89,9 @@ class Training:
 			end = time.time()
 			if i%10==0:
 				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
-				
-		return self.selfPlay.trees[0].findAnalyticalExploitability(), minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D
+
+		currentExploitability=self.selfPlay.trees[0].findAnalyticalExploitability()
+		return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D
 				#print("cost = " + str(self.nnets.compute_cost_alpha()))
 		#self.sess.close()
 

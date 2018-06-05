@@ -28,6 +28,7 @@ class MCTS():
 
 
 		self.Es = {}		# stores game.getGameEnded ended for board s
+		self.Bs = {} 		# stores best response to avg strategies for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 		#Harcoded Parameters. To be deprecated soon
@@ -202,11 +203,11 @@ class MCTS():
 				for oppCard in range(3): #explicit reference to number of cards in leduc
 					localGame.setPlayerCard(oppCard)
 	
-					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
+					#Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
 					#s = localGame.playerInfoStringRepresentation() #We cannot use the information because it has been raised to the Temp
 					#if s not in self.Ps: #
 					#Ps[oppCard]=self.Ps[s]
-					#Ps[oppCard,:]=[0.,1.,0.]
+					Ps[oppCard,:]=[0.,1.,0.]
 				Pa=np.dot(np.sum(belief,axis=1),Ps) #marginalize over public cards, axis 1. Probability of taking an action a 
 				for a in range(numActions): #Make copies of the game with each action
 					if Pa[:,a].any() !=0: #if the action has any probability of happening
@@ -228,8 +229,8 @@ class MCTS():
 					nextGame=copy.deepcopy(localGame)
 					bets[:,a]=nextGame.action(action=a)
 					Qsa[:,a]=np.reshape(self.exploitabilitySearch(nextGame,belief,prevGame=localGame,prevAction=a),3)
-				
 				Vs=Qsa-bets
+				self.Bs[localGame.publicInfoStringRepresentation()]=np.argmax(Vs,axis=1) #store the optimal action in the dict, index is the player card
 				return  np.max(Vs,axis=1)#take the max over actions of Vs
 
 	def findAnalyticalExploitability(self):
@@ -265,5 +266,5 @@ class MCTS():
 
 		end = time.time()
 		print("Exploitability calculation time: "+str(end - start))
-		return exploitability
+		return exploitability, self.Bs
 
