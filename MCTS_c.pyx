@@ -130,7 +130,7 @@ cdef class MCTS():
 
 			#self.Vs[s] = valids
 			
-			self.Ps[s] = self.Ps[s]
+			#self.Ps[s] = self.Ps[s]
 			self.Qsa[s] = value * np.ones(3)
 			self.Ns[s] = 0
 			self.Nsa[s] = np.zeros(3)
@@ -239,14 +239,13 @@ cdef class MCTS():
 				#print("exploiting")
 				#print(localGame.getPublicHistory())
 				bets=np.zeros((1,numActions))
-				cardV=np.zeros(3)
 				for a in range(numActions):
 					nextGame=localGame.copy()
 					bets[:,a]=nextGame.action(action=a)
 					Qsa[:,a]=np.reshape(self.exploitabilitySearch(nextGame,belief,prevGame=localGame,prevAction=a),3)
 				
 				Vs=Qsa-bets
-				return  np.maximum(np.maximum(Vs[:,0],Vs[:,1]),Vs[:,2])#take the max over actions of Vs
+				return  np.max(Vs,axis=1)#take the max over actions of Vs
 
 
 	def findAnalyticalExploitability(self):

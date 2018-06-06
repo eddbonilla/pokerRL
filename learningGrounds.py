@@ -58,6 +58,13 @@ class Training:
 			self.nnets=nnets(self.sess,gameParams=self.gameParams)
 		
 		self.saver = tf.train.Saver() #This is probably good practice
+		
+		#setup the summary operations
+		self.currentExploitability=tf.placeholder(tf.float32)
+		exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
+		self.mergedSummary=tf.summary.merge_all()
+		self.writer=tf.summary.FileWriter('./logs',self.sess.graph)
+
 		self.sess.run(tf.global_variables_initializer())
 		if self.poker=="leduc":
 			game = LeducGame()
@@ -89,6 +96,8 @@ class Training:
 					history[1,0,0,0] = 1
 					print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
 					print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
+					summary= self.sess.run(self.mergedSummary,feed_dict={self.currentExploitability:currentExploitability})
+					self.writer.add_summary(summary,i)
 
 					if currentExploitability<minExpoitability: 
 						minExpoitability=currentExploitability
@@ -104,9 +113,9 @@ class Training:
 					print("2,7 p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
 					if i%50 == 0:
 						self.selfPlay.testGame(10)
+			
 
-
-				
+			preclean=time.time()
 			self.selfPlay.tree.cleanTree()
 
 			prenets = time.time()
@@ -117,7 +126,7 @@ class Training:
 
 			end = time.time()
 			if i%10==0:
-				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
+				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets)+" tree cleaning time = "+str(prenets-preclean)+" total time = "+str(end-start))
 		if self.poker == "leduc":
 			currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
 			return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
