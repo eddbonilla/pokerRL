@@ -59,9 +59,9 @@ class Card ():
         http://www.suffecool.net/poker/evaluator.html
         """
 
-        rank_number = number % 4
-        suit_number = number // 4
-        rank_int = 2**rank_number
+        suit_number = number % 4
+        rank_int = number // 4
+        suit_int = 2**suit_number
         rank_prime = Card.PRIMES[rank_int]
 
         bitrank = 1 << rank_int << 16
@@ -190,24 +190,3 @@ class Card ():
 
         return " [ " +r+ " " +s+ " ] "
 
-    @staticmethod
-    def print_pretty_card(card_int):
-        """
-        Expects a single integer as input
-        """
-        print Card.int_to_pretty_str(card_int)
-
-    @staticmethod
-    def print_pretty_cards(card_ints):
-        """
-        Expects a list of cards in integer form.
-        """
-        output = " "
-        for i in range(len(card_ints)):
-            c = card_ints[i]
-            if i != len(card_ints) - 1:
-                output += Card.int_to_pretty_str(c) + ","
-            else:
-                output += Card.int_to_pretty_str(c) + " "
-    
-        print output

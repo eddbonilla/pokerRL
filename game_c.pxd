@@ -3,8 +3,9 @@ cimport numpy as np
 
 cdef class Game:
 	cdef int pot,player,round,bet,raisesInRound,finished
-	cdef np.ndarray cards, winnings, playersCardsArray, publicCardArray, history
-	cdef int[:] cards_view, winnings_view, publicCardArray_view
+	cdef np.ndarray winnings, playersCardsArray, publicCardsArray, history
+	cdef int[:] winnings_view,  publicCardsArray_view
+	cdef int[:,:] playerCardsArray_view
 	cdef int[:,:,:,:] history_view
 
 	cpdef void resetGame(self)
