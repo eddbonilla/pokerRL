@@ -24,18 +24,20 @@ class nnets:
 
 	"""docstring for nnet"""
 
-	def __init__(self,session, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128,hyp=None):
+	def __init__(self,session, gameParams,alpha =10.,feedGIntoF = False, batchSize = 128,hyp=None, poker = "leduc"):
 		self.sess=session
 		self.gameParams=gameParams
+		self.poker = poker
 		self.feedGIntoF = feedGIntoF
 		self.predictionInput = tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"]))
+		self.firstCard = tf.placeholder(dtype=tf.float32,shape=(None,gameParams["deckSize"]))
 
 		#Create placeholders
 		self.rawPData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
 						"policyTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["actionSize"])) }
 		
 		self.rawVData={ "input" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["inputSize"])),
-						"estimTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["handSize"])),
+						"estimTarget" : tf.placeholder(dtype=tf.int32,shape=(None,gameParams["handSize"])),
 						"valuesTarget" : tf.placeholder(dtype=tf.float32,shape=(None,gameParams["valueSize"])) }
 		
 		self.pDataset = tf.data.Dataset.from_tensor_slices(self.rawPData)
@@ -61,7 +63,7 @@ class nnets:
 			self.fLearningRate=hyp["fLearn"]
 		else:
 			self.alpha=tf.constant(alpha,dtype=tf.float32)		
-			self.lmbda = tf.constant(0.001,dtype=tf.float32)
+			self.lmbda = tf.constant(0.01,dtype=tf.float32)
 			self.gLearningRate=0.0005
 			self.fLearningRate=0.0005
 
@@ -82,10 +84,16 @@ class nnets:
 	@define_scope
 	def gModel(self):
 		#Takes an input and returns logits for opponent card
-		input_size = int(self.gameParams["inputSize"])
-		target_size= int(self.gameParams["handSize"])
+		if self.poker == "holdem":
+			input_size = int(self.gameParams["inputSize"]+self.gameParams["deckSize"])
+		else:
+			input_size = int(self.gameParams["inputSize"])
+		target_size= int(self.gameParams["deckSize"])
 		inputs = Input(shape=(input_size,))
 		model = Dense(units=256, activation='relu')(inputs)
+		if self.poker == "holdem":
+			model = Dense(units=256, activation='relu')(model)
+			model = Dense(units=256, activation='relu')(model)
 		model = Dense(units=128, activation='relu')(model)
 		cards = Dense(units=target_size, activation='linear')(model)
 		gModel = Model(inputs=inputs, outputs=cards)
@@ -97,10 +105,13 @@ class nnets:
 		if not self.feedGIntoF:
 			input_size = int(self.gameParams["inputSize"])    #Use if not feeding gModel into fModel
 		else:
-			input_size = int(self.gameParams["inputSize"]+self.gameParams["handSize"])    # Use if feeding gModel into fModel
+			input_size = int(self.gameParams["inputSize"]+self.gameParams["deckSize"])    # Use if feeding gModel into fModel
 
 		inputs = Input(shape=(input_size,))
 		model = Dense(units=256, activation='relu')(inputs)
+		if self.poker == "holdem":
+			model = Dense(units=256, activation='relu')(model)
+			model = Dense(units=256, activation='relu')(model)
 		model = Dense(units=128, activation='relu')(model)
 
 		fModel = Model(inputs=inputs, outputs=model)
@@ -158,8 +169,24 @@ class nnets:
 
 	@define_scope
 	def costEstimate(self):
-		cardLogits=self.gModel(self.vnNetsData["input"])
-		cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.vnNetsData["estimTarget"],logits=cardLogits))
+		inputs = self.vnNetsData["input"]
+
+		if self.poker == "holdem":
+			inputs = tf.pad(inputs,tf.constant([[0,0],[0,self.Params["deckSize"]]]))
+
+		cardLogits=self.gModel(inputs)
+		oneHot = tf.one_hot(self.vnNetsData["estimTarget"],self.gameParams["deckSize"])
+		tf.Assert(tf.equal(tf.rank(oneHot), tf.constant(3)),[oneHot])
+		labels = tf.reduce_mean(oneHot , axis = 1)
+		cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=labels,logits=cardLogits))
+
+		if self.poker == "holdem":
+			reshapedVnnetsData = tf.expand_dims(self.vnNetsData["input"],1)+tf.zeros((self.vnNetsData["input"].shape[0],2,self.vnNetsData["input"].shape[1]))
+			inputs = tf.reshape(tf.concat(values =[reshapedVnnetsData,oneHot],axis = 2),shape = [-1,self.gameParams["inputSize"]+self.gameParams["deckSize"]])
+			cardLogits=self.gModel(inputs)
+			labels = tf.reshape(tf.reverse(oneHot, axis = 1), shape = [-1,oneHot.shape[2]])
+			cost = tf.add(cost,tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=labels,logits=cardLogits)))
+
 		for layer in self.gModel.layers:
 			if len(layer.get_weights()) > 0:
 				cost = tf.add(cost,tf.multiply(self.lmbda,tf.nn.l2_loss(layer.get_weights()[0])))
@@ -186,8 +213,10 @@ class nnets:
 	@define_scope
 	def getEstimateOpponent(self):
 		#Used for predictions only
-		return tf.nn.softmax(self.gModel(self.predictionInput))
-
+		if self.poker == "holdem":
+			return tf.nn.softmax(self.gModel(tf.concat([self.predictionInput,self.firstCard],axis = 1)))
+		else:
+			return tf.nn.softmax(self.gModel(self.predictionInput))
 
 #Auxiliary functions
 
@@ -210,12 +239,17 @@ class nnets:
 		v=np.reshape(v,(self.gameParams["valueSize"]))
 		return p,v
 
-	def estimateOpponent(self, playerCard, publicHistory, publicCard):
+	def estimateOpponent(self, playerCard, publicHistory, publicCard, firstCard = None):
 		playerInfo=self.preprocessInput( playerCard, publicHistory, publicCard)
 		#print(playerInfo.shape)
-		estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionInput: [playerInfo]})
+		if self.poker == "holdem":
+			if firstCard is None:
+				firstCard = np.zeros(self.gameParams["deckSize"])
+			estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionInput: [playerInfo], self.firstCard : [firstCard]})
+		else:
+			estimate=self.getEstimateOpponent.eval(session = self.sess, feed_dict = {self.predictionInput: [playerInfo]})
 
-		return np.reshape(estimate,(self.gameParams["handSize"]))
+		return np.reshape(estimate,(self.gameParams["deckSize"]))
 
 	def preprocessInput(self, playerCard, publicHistory, publicCard): #Method that is here only because of the input specifics
 		playerCard=np.reshape(playerCard,-1)

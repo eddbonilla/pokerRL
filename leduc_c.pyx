@@ -1,32 +1,32 @@
 cimport cython
 import numpy as np
 cimport numpy as np
-#from game_c cimport Game
+from game_c cimport Game
 import array
 import random
 
-cdef class LeducGame():
+cdef class LeducGame(Game):
 
 	#2 = K, 1 = Q, 0 = J
-	def getAnte(self):
-		return 1
+	def getBlinds(self):
+		return np.array([1,1])
 
 
-	def __init__(self, int override = False, int player = 0, int pot = 0, int round = 0, int bet = 0, int raisesInRound = 0, int finished = 0, np.ndarray cards = None, np.ndarray winnings = None, np.ndarray playersCardsArray = None, np.ndarray publicCardArray=None, np.ndarray history = None):
-		if override:
-			self.player = player
+	def __init__(self, int copy = False, LeducGame game = None):
+		if copy:
+			self.player = game.player
 
-			self.pot = pot
-			self.round = round
-			self.bet = bet
-			self.raisesInRound = raisesInRound
-			self.finished= finished
-			self.cards = cards
-			self.winnings= winnings
-			self.playersCardsArray = playersCardsArray
-			self.publicCardArray = publicCardArray
-			self.publicCardArray_view = self.publicCardArray
-			self.history = history
+			self.pot = game.pot
+			self.round = game.round
+			self.bet = game.bet
+			self.raisesInRound = game.raisesInRound
+			self.finished= game.finished
+			self.cards = np.copy(game.cards)
+			self.winnings= np.copy(game.winnings)
+			self.playersCardsArray = np.copy(game.playersCardsArray)
+			self.publicCardsArray = np.copy(game.publicCardsArray)
+			self.publicCardsArray_view = self.publicCardsArray
+			self.history = np.copy(game.history)
 
 			self.cards_view = self.cards
 			self.winnings_view = self.winnings
@@ -45,8 +45,8 @@ cdef class LeducGame():
 		self.cards_view[1] = (self.cards[0] + (random.randint(0,4)%3) + 1)%3
 		self.cards_view[2] = -1
 		self.playersCardsArray = np.eye(3, dtype = np.int32)[self.cards_view[0:2]]
-		self.publicCardArray = np.zeros(3, dtype =np.int32)
-		self.publicCardArray_view = self.publicCardArray
+		self.publicCardsArray = np.zeros(3, dtype =np.int32)
+		self.publicCardsArray_view = self.publicCardsArray
 		self.round = 0   #0 for 1st round, 1 for 2nd round
 		self.bet = 2
 		self.finished = False
@@ -57,17 +57,17 @@ cdef class LeducGame():
 		self.winnings_view = self.winnings
 
 	cpdef object copy(self):
-		cdef object newGame = LeducGame(override=True,player = self.player, pot = self.pot, round = self.round, bet = self.bet, raisesInRound = self.raisesInRound, finished = self.finished, cards = np.copy(self.cards), winnings = np.copy(self.winnings), playersCardsArray = np.copy(self.playersCardsArray), publicCardArray=np.copy(self.publicCardArray), history = np.copy(self.history))
+		cdef object newGame = LeducGame(copy=True,game = self)
 
 		return newGame
 
 
 	cdef str playerInfoStringRepresentation(self):
-		cdef str string =  str(self.player)+str(self.cards[self.player])+str(self.history)+str(self.getPublicCard())
+		cdef str string =  str(self.player)+str(self.cards[self.player])+str(self.history)+str(self.getPublicCards())
 		return string
 
 	cdef str publicInfoStringRepresentation(self):
-		cdef str string = str(self.player)+str(self.history)+str(self.getPublicCard())
+		cdef str string = str(self.player)+str(self.history)+str(self.getPublicCards())
 		return string
 
 	@cython.boundscheck(False)
@@ -100,7 +100,7 @@ cdef class LeducGame():
 				self.cards_view[2] = (self.cards_view[0] + 1 + random.randint(0,1))%3
 			else:
 				self.cards_view[2] = (random.randint(0,3) - self.cards_view[0] - self.cards_view[1]) % 3
-			self.publicCardArray_view[self.cards_view[2]] = 1
+			self.publicCardsArray_view[self.cards_view[2]] = 1
 		else:
 			self.finishGame()
 
@@ -109,19 +109,20 @@ cdef class LeducGame():
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
-	cpdef np.ndarray getPlayerCard(self):
+	cpdef np.ndarray getPlayerCards(self):
 		return self.playersCardsArray[self.player]
 
 	@cython.boundscheck(False)
 	@cython.wraparound(False)
-	cpdef np.ndarray getOpponentCard(self):
-		return self.playersCardsArray[(self.player + 1) % 2]
+	cpdef np.ndarray getOpponentCards(self):
+		cdef int op = (self.player + 1) % 2
+		return self.cards[op:(op+1)]
 
 	cpdef np.ndarray getPlayerStates(self):
 		return self.playersCardsArray
 
-	cpdef np.ndarray getPublicCard(self):
-		return self.publicCardArray
+	cpdef np.ndarray getPublicCards(self):
+		return self.publicCardsArray
 		
 	cpdef int getPot(self):
 		return self.pot
@@ -145,8 +146,8 @@ cdef class LeducGame():
 	cpdef void setPublicCard(self,int card):
 		#input: card as scalar number e.g. 2=K,1=Q,0=J
 		self.cards_view[2] = card 
-		self.publicCardArray = np.eye(3, dtype = "int32")[card]
-		self.publicCardArray_view = self.publicCardArray
+		self.publicCardsArray = np.eye(3, dtype = "int32")[card]
+		self.publicCardsArray_view = self.publicCardsArray
 
 	cpdef int getRound(self):
 		return self.round
@@ -173,6 +174,7 @@ cdef class LeducGame():
 	cpdef np.ndarray regulariseOpponentEstimate(self,np.ndarray estimate):
 		if self.cards[self.player] == self.cards[2]:
 			estimate= (1 - self.playersCardsArray[self.player])*estimate
+			assert(np.sum(estimate)>0)
 			estimate /= np.sum(estimate)
 		return estimate
 
@@ -228,5 +230,9 @@ cdef class LeducGame():
 			self.endRound()
 		return betAmount
 
+	cpdef int sampleOpponent(self,object nnets):
+		cdef np.ndarray probs = self.regulariseOpponentEstimate(nnets.estimateOpponent(self.getPlayerCards(), self.getPublicHistory(), self.getPublicCards()))
+		newCard = np.random.choice(3,p=probs)
+		self.setOpponentCard(newCard)
 
 

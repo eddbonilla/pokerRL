@@ -5,7 +5,7 @@ import math
 import numpy as np
 cimport numpy as np
 from leduc_c cimport LeducGame
-#from game_c cimport Game
+from game_c cimport Game
 import copy
 import time
 EPS = 1e-8
@@ -17,13 +17,13 @@ cdef class MCTS():
 	"""
 
 	cdef int numMCTSSims,cpuct
-	cdef double temp,floor,tempDecayRate
+	cdef double temp,tempDecayRate
 	cdef dict Qsa,Nsa,Ns,Ps,
-	cdef LeducGame game, gameCopy
+	cdef Game game, gameCopy
 	cdef object nnets 
 	cdef int holdEm
 
-	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double floor = 0.05, double tempDecayRate = 1.0005,int holdEm = False):
+	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double tempDecayRate = 1.0005,int holdEm = False):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -31,7 +31,6 @@ cdef class MCTS():
 		self.cpuct=cpuct
 		self.temp = temp
 		self.tempDecayRate =tempDecayRate
-		self.floor = floor
 		self.holdEm = holdEm
 		self.Qsa = {}	   # stores Q values for s,a (as defined in the paper)
 		self.Nsa = {}	   # stores #times edge s,a was visited
@@ -78,18 +77,20 @@ cdef class MCTS():
 		proportional to Nsa[(s,a)]**(1./temp)
 		"""
 		self.game=game
-		cdef np.ndarray estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCard(), self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
+		start = time.time()
+  # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= self.game.copy()			 #Make another instance of the game for each search
-			self.gameCopy.setOpponentCard(np.random.choice(3,p=estimOpponentCards)) #choose the opponent cards with a guess
+			self.gameCopy.sampleOpponent(self.nnets) #choose the opponent cards with a guess
 			#if i%100 == 0: print(i)
 			self.search(root = True)
 			#if i>2: print("N="+str(self.Nsa[(self.game.playerInfoStringRepresentation(),0)]))
 
 		cdef str s = self.game.playerInfoStringRepresentation() #This is to get a representation of the initial state of the game
 		cdef np.ndarray counts = self.Nsa[s] #Here you count the number of times that action a was taken in state s
-
+		#if time.time() - start > 1:
+			#print(s +", "+ str(counts))
 		counts = counts**(1./self.temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
 		cdef np.ndarray treeStrategy = counts /float(np.sum(counts)) #normalize
 		#averageStrategy = self.Ps[s]
@@ -113,7 +114,7 @@ cdef class MCTS():
 		cdef np.ndarray strategy
 		cdef double value
 		if not playerMove:
-			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())
+			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCards(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCards())
 			pFold = strategy[2]
 			strategy[2] = 0
 			pot = self.gameCopy.getPot()
@@ -125,7 +126,7 @@ cdef class MCTS():
 			# leaf node
 			
 			#fnet and gnet integrate into one function 
-			self.Ps[s], value = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())   #Opponent Strategy.
+			self.Ps[s], value = self.nnets.policyValue(self.gameCopy.getPlayerCards(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCards())   #Opponent Strategy.
 
 			#self.Vs[s] = valids
 			
@@ -171,7 +172,7 @@ cdef class MCTS():
 				#print("public")
 				nextGame=localGame.copy() #copy the current game
 				nextGame.setPublicCard(pubCard)
-				updatedBelief=np.transpose(np.multiply(np.transpose(belief,axes=[0,2,1]),nextGame.getPublicCard()),axes=[0,2,1])
+				updatedBelief=np.transpose(np.multiply(np.transpose(belief,axes=[0,2,1]),nextGame.getPublicCards()),axes=[0,2,1])
 				##updatedBelief=np.multiply(belief.T,nextGame.publicCardArray).T ##
 				summ=np.sum(updatedBelief,axis=(1,2))
 				for pCard in range(3):
@@ -213,7 +214,7 @@ cdef class MCTS():
 				for oppCard in range(3): #explicit reference to number of cards in leduc
 					localGame.setPlayerCard(oppCard)
 	
-					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
+					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCards(), localGame.getPublicHistory(), localGame.getPublicCards()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
 					#s = localGame.playerInfoStringRepresentation() #We cannot use the information because it has been raised to the Temp
 					#if s not in self.Ps: #
 					#Ps[oppCard]=self.Ps[s]
