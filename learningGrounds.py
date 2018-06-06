@@ -132,7 +132,7 @@ class Training:
 					self.pReservoirs[key][self.pN:self.maxPolicyMemory, :] = pData[key][0:numLeft]
 
 				numReplace = pk - numLeft
-				keep_prob =  np.divide(float(self.maxPolicyMemory),(self.pN+np.arange(numReplace)+1))
+				keep_prob =  np.divide(float(self.maxPolicyMemory),(self.pN+np.arange(pk)+1))
 				keep_masks = np.random.rand((pk)) < keep_prob
 				keep_masks[0:numLeft] = 0
 				replacements = np.random.randint(0,self.maxPolicyMemory, size = (np.sum(keep_masks)))
