@@ -6,9 +6,9 @@ from MCTS_c import MCTS
 
 class selfPlay:
 
-	def __init__(self,game, eta, nnets,numMCTSSims=200,cpuct =1,simParams=None):
+	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =1,simParams=None):
 		self.game=game
-		self.tree = MCTS(nnets, numMCTSSims, cpuct,floor=0.08,tempDecayRate = 1.0005)             #Index labels player
+		self.tree = MCTS(nnets, numMCTSSims, cpuct, tempDecayRate = 1.0005)             #Index labels player
            #Index labels player
 		if simParams!= None: 
 			tree.setTreeSearchParams(simParams["treeSearchParams"])
@@ -20,6 +20,7 @@ class selfPlay:
 
 	def runGame(self):
 		self.game.resetGame()
+		#print(self.game.getOpponentCards())
 		pCache = { "input" : [],
 					"policyTarget": []
 				 }
@@ -29,10 +30,10 @@ class selfPlay:
 					"player" : [],
 					"pot" : []
 					}
-		ante = self.game.getAnte()
-		value = np.zeros(2) #harcoded 2 players -E
-		value-=ante
+		value = -self.game.getBlinds()
 		moveCount = 0
+		treestrat = np.zeros(2,dtype = bool)
+		treestrat[random.randint(0,1)] = random.random() < self.eta
 		#self.cleanTrees()             clean trees each game if we want
 		while not self.game.isFinished():
 			if moveCount > 25: #Harcoded max number of moves -E
@@ -43,17 +44,17 @@ class selfPlay:
 
 			player = self.game.getPlayer()
 			#print(player)
-			if random.random() < self.eta[player]:
+			if treestrat[player]:
 				strategy = self.tree.strategy(self.game)
-				pCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), self.game.getPlayerCard()))
+				pCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards()))
 				#print(strategy)
 				pCache["policyTarget"].append(strategy)
 			#print("avStrat =" + str(averageStrategy) + "\n treeStrat =" + str(treeStrategy))
 			else:
-				strategy,_ = self.nnets.policyValue(self.game.getPlayerCard(),self.game.getPublicHistory(),self.game.getPublicCard())
+				strategy,_ = self.nnets.policyValue(self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards())
 			
-			vCache["input"].append(self.nnets.preprocessInput(self.game.getPublicHistory(),self.game.getPublicCard(), self.game.getPlayerCard()))
-			vCache["estimTarget"].append(self.game.getOpponentCard())
+			vCache["input"].append(self.nnets.preprocessInput( self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards()))
+			vCache["estimTarget"].append(self.game.getOpponentCards())
 			vCache["valuesTarget"].append(value[player])
 			vCache["player"].append(player)
 			vCache["pot"].append(self.game.getPot())
@@ -72,7 +73,7 @@ class selfPlay:
 			vCache["valuesTarget"][i] = (value[vCache["player"][i]] - vCache["valuesTarget"][i])/vCache["pot"][i]
 
 		#print("input: " + str(len(pCache["input"])) + ", target: " + str(len(pCache["policyTarget"])))
-
+		#print(vCache["estimTarget"])
 		return pCache, vCache
 
 	#def cleanTrees(self):
@@ -95,26 +96,24 @@ class selfPlay:
 		for j in range(3):
 			for i in range(numTests):
 				self.game.resetGame()
-				ante = self.game.getAnte()
-				v = np.array([-ante,-ante],dtype = float)
+				v = -self.game.getBlinds()
 				while not self.game.isFinished():
 
 					player = self.game.getPlayer()
-					averageStrategy, treeStrategy = self.trees[player].strategy(self.game)
 					if player == testPlayer:
 						if j == 2:
-							strategy =averageStrategy
+							strategy,_ = self.nnets.policyValue(self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards())
 						else:
-							strategy = treeStrategy
+							strategy = self.tree.strategy(self.game)
 					else:
 						if j == 1:
-							strategy= averageStrategy
+							strategy,_= self.nnets.policyValue(self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards())
 						else:
 
 							strategy=checkStrategy
 
 					#print(str(player)+" j= "+str(j)+" "+str(strategy))
-					action,bet = self.game.action(strategy =strategy)
+					bet = self.game.action(strategy =strategy)
 					v[player]-= bet
 				v += self.game.getOutcome()
 				if j == 0: v_TC+=v[testPlayer]/numTests

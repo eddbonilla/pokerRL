@@ -7,6 +7,7 @@ import time
 import threading
 from keras import backend as K
 from model import nnets
+from holdem_c import HoldEmGame
 from leduc_c import LeducGame
 #from leduc import LeducGame
 from selfPlay import selfPlay
@@ -15,15 +16,19 @@ import time
 class Training:
 
 
-	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp =None):
+	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp =None, poker = 'leduc'):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
 		self.unShuffledFraction = 0.005 #Maximum fraction of unshuffled data llowed to be in the reservoir
 		self.maxPolicyMemory = maxPolicyMemory
 		self.maxValueMemory = maxValueMemory
+		self.poker = poker
 
-		self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
+		if poker == "leduc":
+			self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 1, "deckSize" : 3, "actionSize" : 3, "valueSize": 1}
+		else:
+			self.gameParams = {"inputSize" : 184, "historySize" : 80, "handSize" : 2, "deckSize" : 52, "actionSize" : 3, "valueSize": 1}
 
 		self.pReservoirs = {"input" : np.zeros((maxPolicyMemory, self.gameParams["inputSize"])),
 							"policyTarget" : np.zeros((maxPolicyMemory,self.gameParams["actionSize"]))
@@ -31,7 +36,7 @@ class Training:
 
 		self.vReservoirs = { "input" : np.zeros((maxValueMemory, self.gameParams["inputSize"])),
 							 "valuesTarget" : np.zeros((maxValueMemory,self.gameParams["valueSize"])),
-							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]))}
+							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]), dtype = np.int32)}
 
 		self.randState = np.random.RandomState()
 		compGraph = tf.Graph()
@@ -44,17 +49,30 @@ class Training:
 			self.batchSize = hyp["batchSize"]
 			self.batchesPerTrain = hyp["batchesPerTrain"]
 			self.stepsToIncreaseNumSimulations=hyp["stepsToIncreaseNumSimulations"]
-			self.nnets=nnets(self.sess,gameParams=self.gameParams,hyp=hyp)
+			self.nnets=nnets(self.sess,gameParams=self.gameParams,hyp=hyp, poker = self.poker)
 		else:
 			self.gamesPerUpdateNets = 128 
 			self.batchSize = 128
-			self.batchesPerTrain = 1024
+			self.batchesPerTrain = 128
 			self.stepsToIncreaseNumSimulations=20
 			self.nnets=nnets(self.sess,gameParams=self.gameParams)
 		
 		self.saver = tf.train.Saver() #This is probably good practice
+		
+		#setup the summary operations
+		self.currentExploitability=tf.placeholder(tf.float32)
+		exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
+		self.mergedSummary=tf.summary.merge_all()
+		self.writer=tf.summary.FileWriter('./logs',self.sess.graph)
+
 		self.sess.run(tf.global_variables_initializer())
-		self.selfPlay = selfPlay(eta=[0.1,0.1],game=LeducGame(), nnets = self.nnets)
+		if self.poker=="leduc":
+			game = LeducGame()
+			print("Playing Leduc")
+		else:
+			game = HoldEmGame()
+			print("Playing HoldEm")
+		self.selfPlay = selfPlay(eta=0.1,game=game, nnets = self.nnets)
 		
 
 	def doTraining(self,steps):
@@ -68,18 +86,36 @@ class Training:
 			if i%self.stepsToIncreaseNumSimulations==0:
 				self.selfPlay.tree.increaseNumSimulations()
 			if i%10==0:
-				history = np.zeros((2,2,3,2))
-				currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
-				print("Exploitability =" + str(currentExploitability))
-				print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
-				print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
-				print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
-				history[1,0,0,0] = 1
-				print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
-				print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
+				if self.poker == "leduc":
+					history = np.zeros((2,2,3,2))
+					currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
+					print("Exploitability =" + str(currentExploitability))
+					print("Jack p,v: "+ str(self.nnets.policyValue([1,0,0], history, np.zeros(3))))
+					print("Queen p,v: "+ str(self.nnets.policyValue([0,1,0], history, np.zeros(3))))
+					print("King p,v: "+ str(self.nnets.policyValue([0,0,1], history, np.zeros(3))))
+					history[1,0,0,0] = 1
+					print("If op raised + Q, op cards:" + str(self.nnets.estimateOpponent([0,1,0],history,np.zeros(3))))
+					print("vN = "+str(self.vN) + ", pN = " +str(self.pN))
+					summary= self.sess.run(self.mergedSummary,feed_dict={self.currentExploitability:currentExploitability})
+					self.writer.add_summary(summary,i)
 
-				if currentExploitability<minExpoitability: 
-					minExpoitability=currentExploitability
+					if currentExploitability<minExpoitability: 
+						minExpoitability=currentExploitability
+				else:
+					cards = np.zeros(52)
+					cards[50] = 1
+					cards[49] = 1
+					print("Pair As p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
+					cards[50] = 0
+					cards[49] = 0
+					cards[22] = 1
+					cards[3] = 1
+					print("2,7 p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
+					if i%50 == 0:
+						self.selfPlay.testGame(10)
+			
+
+			preclean=time.time()
 			self.selfPlay.tree.cleanTree()
 
 			prenets = time.time()
@@ -90,10 +126,10 @@ class Training:
 
 			end = time.time()
 			if i%10==0:
-				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
-
-		currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
-		return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
+				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets)+" tree cleaning time = "+str(prenets-preclean)+" total time = "+str(end-start))
+		if self.poker == "leduc":
+			currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
+			return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
@@ -131,6 +167,7 @@ class Training:
 			self.pN += pk
 
 		vk = len(vData["valuesTarget"])
+		#print(vData["estimTarget"])
 		#Overwritten data input so that we can feed only recent data to nnets without having to copy arrays
 		if self.vN + vk < 1.5*self.maxValueMemory and self.vN >= self.maxValueMemory:
 			vN = int(1.5*self.maxValueMemory) - self.vN - vk
@@ -142,6 +179,8 @@ class Training:
 			vData[key] = np.array(vData[key])
 			assert vk == vData[key].shape[0]
 		vData["valuesTarget"] = np.reshape(vData["valuesTarget"],(vk,1))
+		if self.poker == "leduc":
+			vData["estimTarget"] = np.reshape(vData["estimTarget"],(vk,1))
 		if vN + vk <= self.maxValueMemory:
 			for key in self.vReservoirs:
 				self.vReservoirs[key][vN:vN+vk, :] = vData[key]
