@@ -1,6 +1,7 @@
 import math
 import numpy as np
-from learningGrounds_copy import Training
+import tensorflow as tf
+from learningGrounds import Training
 import time
 import collections
 
@@ -32,12 +33,12 @@ def log_uniform_sample_plus(interval,plus):
 
 #file = open("./hyperparameter_check/test4.txt", "a")
 
-hyperparams = collections.OrderedDict([("alpha", (0.001,10)), ("lmbda", (0.001,1)), ("tempDecayRate", (0.001,0.01)), ("gLearn", (0.0001,1)), ("fLearn", (0.0001,1))])
+hyperparams = collections.OrderedDict([("alpha", (0.001,10)), ("lmbda", (0.001,1)), ("tempDecayRate", (0.001,0.01)), ("gLearn", (0.0001,1)), ("fLearn", (0.0001,1))]) #ordered dictionary
 
-hyperparams2 = collections.OrderedDict([("numMCTSsims", 200), ("batchSize", 128), ("batchesPerTrain", 1024), ("gamesPerUpdateNets", 128), ("stepsToIncreaseNumSimulations", 20)])
+hyperparams2 = collections.OrderedDict([("numMCTSsims", 200), ("batchSize", 128), ("batchesPerTrain", 1024), ("gamesPerUpdateNets", 128), ("stepsToIncreaseNumSimulations", 20)]) #ordered dictionary
 
-hyperparams3 = {"alpha": (0.001,10), "lmbda": (0.001,1),"tempDecayRate": (0.0001,0.01),"gLearn": (0.0001,1), "fLearn": (0.0001,1)}
-hyperparams4 = {"numMCTSsims": 200, "batchSize": 128, "batchesPerTrain": 1024, "gamesPerUpdateNets": 128, "stepsToIncreaseNumSimulations": 20}
+hyperparams3 = {"alpha": (0.001,10), "lmbda": (0.001,1),"tempDecayRate": (0.0001,0.01),"gLearn": (0.0001,1), "fLearn": (0.0001,1)} #unordered dictionary
+hyperparams4 = {"numMCTSsims": 200, "batchSize": 128, "batchesPerTrain": 1024, "gamesPerUpdateNets": 128, "stepsToIncreaseNumSimulations": 20} #unordered dictionary
 
 
 hypList = []
@@ -64,13 +65,12 @@ def hyperparameterSearch(numIterations,numTrainSteps):
 
 	hypList = generateDictionaryList(numIterations)
 
-	A = [None for i in range(numIterations)]
 
 	for i in range(numIterations):
 		print(hypList[i])
-		A[i] = Training(hyp=hypList[i])
-		finalExploitability,minExploitability= A[i].doTraining(numTrainSteps)
-		A[i].closeSession()
+		A = Training(directory='logs'+str(i),hyp=hypList[i])
+		finalExploitability,minExploitability= A.doTraining(numTrainSteps)
+		A.closeSession()
 		print(i)
 		#file.write(str(finalExploitability)+" "+str(minExploitability)+" "+str(numTrainSteps)+ " "+str(hyp_1)+"\n")
 		
@@ -80,24 +80,9 @@ def hyperparameterSearch(numIterations,numTrainSteps):
 #B.doTraining(3)
 
 
-#hyperparameterSearch(2,3)
+hyperparameterSearch(2,10)
 
 
-A = Training(hyp = generateDictionaryList(2)[0])
-B = Training(hyp = generateDictionaryList(2)[1])
-
-print(A.nnets.trainOnMinibatch())
-print(B.nnets.trainOnMinibatch())
-
-"""
-print(generateDictionaryList(2)[1])
-B.doTraining(3)
-B.closeSession()
-
-print(generateDictionaryList(2)[0])
-A.doTraining(3)
-A.closeSession()
-"""
 
 
 
