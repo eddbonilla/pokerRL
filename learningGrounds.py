@@ -64,9 +64,20 @@ class Training:
 		self.saver = tf.train.Saver() #This is probably good practice
 		
 		#setup the summary operations
-		self.currentExploitability=tf.placeholder(tf.float32)
-		exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
-		self.mergedSummary=tf.summary.merge_all()
+		if poker == "leduc":
+			self.currentExploitability=tf.placeholder(tf.float32)
+			exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
+			self.mergedSummary=tf.summary.merge_all()
+
+		else:
+			self.v_TC = tf.placeholder(tf.float32)
+			self.v_TA = tf.placeholder(tf.float32)
+			self.v_AC = tf.placeholder(tf.float32)
+			v_TCSummary=tf.summary.scalar('v_TC',self.v_TC)
+			v_TASummary=tf.summary.scalar('v_TA',self.v_TA)
+			v_ACSummary=tf.summary.scalar('v_AC',self.v_TC)
+			self.mergedSummary=tf.summary.merge_all()
+
 
 		if directory != None:
 			self.writer=tf.summary.FileWriter('./'+directory,self.sess.graph) #specify the directory -D
@@ -90,6 +101,9 @@ class Training:
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
+			v_TCs = []
+			v_TAs = []
+			v_ACs = []
 
 			if i%self.stepsToIncreaseNumSimulations==0:
 				self.selfPlay.tree.increaseNumSimulations()
@@ -121,6 +135,12 @@ class Training:
 					print("2,7 p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
 					if i%100 == 0:
 						v_TC, v_TA, v_AC = self.selfPlay.testGame(500)
+						summary= self.sess.run(self.mergedSummary,feed_dict={self.v_TC:v_TC,self.v_TA:v_TA,self.v_AC:v_AC})
+						self.writer.add_summary(summary,i)
+						v_TCs.append(v_TC)
+						v_TAs.append(v_TA)
+						v_ACs.append(v_AC)
+
 			
 
 			preclean=time.time()
@@ -138,6 +158,8 @@ class Training:
 		if self.poker == "leduc":
 			currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
 			return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
+		else:
+			return v_TCs,v_TAs,v_ACs
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
