@@ -16,7 +16,7 @@ import time
 class Training:
 
 
-	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp =None, poker = 'leduc'):
+	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,directory = None,hyp =None, poker = 'leduc'):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
@@ -24,6 +24,11 @@ class Training:
 		self.maxPolicyMemory = maxPolicyMemory
 		self.maxValueMemory = maxValueMemory
 		self.poker = poker
+
+		if directory != None:
+			self.directory = directory
+
+
 
 		if poker == "leduc":
 			self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 1, "deckSize" : 3, "actionSize" : 3, "valueSize": 1}
@@ -39,8 +44,7 @@ class Training:
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]), dtype = np.int32)}
 
 		self.randState = np.random.RandomState()
-		compGraph = tf.Graph()
-		compGraph.as_default()
+		tf.reset_default_graph()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
 		
@@ -63,7 +67,11 @@ class Training:
 		self.currentExploitability=tf.placeholder(tf.float32)
 		exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
 		self.mergedSummary=tf.summary.merge_all()
-		self.writer=tf.summary.FileWriter('./logs',self.sess.graph)
+
+		if directory != None:
+			self.writer=tf.summary.FileWriter('./'+directory,self.sess.graph) #specify the directory -D
+		else:
+			self.writer=tf.summary.FileWriter('./logs',self.sess.graph)
 
 		self.sess.run(tf.global_variables_initializer())
 		if self.poker=="leduc":
