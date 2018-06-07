@@ -11,7 +11,7 @@ import time
 EPS = 1e-8
 
 
-cdef class MCTS():
+cdef class MCTS:
 	"""
 	This class handles the MCTS tree.
 	"""

@@ -111,8 +111,8 @@ class Training:
 					cards[22] = 1
 					cards[3] = 1
 					print("2,7 p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
-					if i%50 == 0:
-						self.selfPlay.testGame(10)
+					if i%100 == 0:
+						v_TC, v_TA, v_AC = self.selfPlay.testGame(500)
 			
 
 			preclean=time.time()
