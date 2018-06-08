@@ -16,7 +16,7 @@ import time
 class Training:
 
 
-	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,hyp =None, poker = 'leduc'):
+	def __init__(self,maxPolicyMemory = 1000000, maxValueMemory = 100000,directory = None,hyp =None, poker = 'leduc'):
 		self.pN = 0
 		self.vN = 0
 		self.numShuffled = 0
@@ -24,6 +24,11 @@ class Training:
 		self.maxPolicyMemory = maxPolicyMemory
 		self.maxValueMemory = maxValueMemory
 		self.poker = poker
+
+		if directory != None:
+			self.directory = directory
+
+
 
 		if poker == "leduc":
 			self.gameParams = {"inputSize" : 30, "historySize" : 24, "handSize" : 1, "deckSize" : 3, "actionSize" : 3, "valueSize": 1}
@@ -39,8 +44,7 @@ class Training:
 							 "estimTarget" : np.zeros((maxValueMemory, self.gameParams["handSize"]), dtype = np.int32)}
 
 		self.randState = np.random.RandomState()
-		compGraph = tf.Graph()
-		compGraph.as_default()
+		tf.reset_default_graph()
 		self.sess= tf.Session()
 		K.set_session(self.sess)
 		
@@ -60,10 +64,26 @@ class Training:
 		self.saver = tf.train.Saver() #This is probably good practice
 		
 		#setup the summary operations
-		self.currentExploitability=tf.placeholder(tf.float32)
-		exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
-		self.mergedSummary=tf.summary.merge_all()
-		self.writer=tf.summary.FileWriter('./logs/2',self.sess.graph)
+
+		if poker == "leduc":
+			self.currentExploitability=tf.placeholder(tf.float32)
+			exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
+			self.mergedSummary=tf.summary.merge_all()
+
+		else:
+			self.v_TC = tf.placeholder(tf.float32)
+			self.v_TA = tf.placeholder(tf.float32)
+			self.v_AC = tf.placeholder(tf.float32)
+			v_TCSummary=tf.summary.scalar('v_TC',self.v_TC)
+			v_TASummary=tf.summary.scalar('v_TA',self.v_TA)
+			v_ACSummary=tf.summary.scalar('v_AC',self.v_TC)
+			self.mergedSummary=tf.summary.merge_all()
+
+
+		if directory != None:
+			self.writer=tf.summary.FileWriter('./'+directory,self.sess.graph) #specify the directory -D
+		else:
+			self.writer=tf.summary.FileWriter('./logs',self.sess.graph)
 
 		self.sess.run(tf.global_variables_initializer())
 		if self.poker=="leduc":
@@ -82,6 +102,9 @@ class Training:
 			start = time.time()
 			self.playGames()
 			postGames = time.time()
+			v_TCs = []
+			v_TAs = []
+			v_ACs = []
 
 			if i%self.stepsToIncreaseNumSimulations==0:
 				self.selfPlay.tree.increaseNumSimulations()
@@ -111,8 +134,14 @@ class Training:
 					cards[22] = 1
 					cards[3] = 1
 					print("2,7 p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
-					if i%50 == 0:
-						self.selfPlay.testGame(10)
+					if i%100 == 0:
+						v_TC, v_TA, v_AC = self.selfPlay.testGame(500)
+						summary= self.sess.run(self.mergedSummary,feed_dict={self.v_TC:v_TC,self.v_TA:v_TA,self.v_AC:v_AC})
+						self.writer.add_summary(summary,i)
+						v_TCs.append(v_TC)
+						v_TAs.append(v_TA)
+						v_ACs.append(v_AC)
+
 			
 
 			self.selfPlay.tree.cleanTree()
@@ -129,6 +158,8 @@ class Training:
 		if self.poker == "leduc":
 			currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
 			return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
+		else:
+			return v_TCs,v_TAs,v_ACs
 		#self.sess.close()
 
 	def addToReservoirs(self,newData):
