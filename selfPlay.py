@@ -6,7 +6,7 @@ from MCTS_c import MCTS
 
 class selfPlay:
 
-	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =1,simParams=None):
+	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =1,simParams=None,deterministicTree=False):
 		self.game=game
 		self.tree = MCTS(nnets, numMCTSSims, cpuct, tempDecayRate = 1.0005)             #Index labels player
            #Index labels player
@@ -17,6 +17,9 @@ class selfPlay:
 		self.numMCTSSims=numMCTSSims
 		self.cpuct=cpuct
 		self.nnets=nnets
+		self.deterministicTree=deterministicTree
+		if deterministicTree:
+			print("Using deterministic Tree Search")
 
 	def runGame(self):
 		self.game.resetGame()
@@ -33,7 +36,8 @@ class selfPlay:
 		value = -self.game.getBlinds()
 		moveCount = 0
 		treestrat = np.zeros(2,dtype = bool)
-		treestrat[random.randint(0,1)] = random.random() < self.eta
+		treestrat[0] = random.random() < self.eta
+		treestrat[1] = random.random() < self.eta
 		#self.cleanTrees()             clean trees each game if we want
 		while not self.game.isFinished():
 			if moveCount > 25: #Harcoded max number of moves -E
@@ -45,7 +49,12 @@ class selfPlay:
 			player = self.game.getPlayer()
 			#print(player)
 			if treestrat[player]:
-				strategy = self.tree.strategy(self.game)
+
+				if self.deterministicTree:#use Bayes' rule + extensive search +nnet prior
+					strategy = self.tree.deterministicStrategy(self.game) 
+				else: 
+					strategy = self.tree.strategy(self.game)
+
 				pCache["input"].append(self.nnets.preprocessInput(self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards()))
 				#print(strategy)
 				pCache["policyTarget"].append(strategy)
@@ -53,6 +62,7 @@ class selfPlay:
 			else:
 				strategy,_ = self.nnets.policyValue(self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards())
 			
+			#if not treestrat[(player+1)%2]:#append info if the other player is playing avg strategy
 			vCache["input"].append(self.nnets.preprocessInput( self.game.getPlayerCards(),self.game.getPublicHistory(),self.game.getPublicCards()))
 			vCache["estimTarget"].append(self.game.getOpponentCards())
 			vCache["valuesTarget"].append(value[player])

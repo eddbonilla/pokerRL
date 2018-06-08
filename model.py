@@ -64,7 +64,7 @@ class nnets:
 		else:
 			self.alpha=tf.constant(alpha,dtype=tf.float32)		
 			self.lmbda = tf.constant(0.01,dtype=tf.float32)
-			self.gLearningRate=0.0005
+			self.gLearningRate=0.005
 			self.fLearningRate=0.0005
 
 

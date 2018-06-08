@@ -63,7 +63,7 @@ class Training:
 		self.currentExploitability=tf.placeholder(tf.float32)
 		exploitabilitySummary=tf.summary.scalar('expoitability',self.currentExploitability)
 		self.mergedSummary=tf.summary.merge_all()
-		self.writer=tf.summary.FileWriter('./logs',self.sess.graph)
+		self.writer=tf.summary.FileWriter('./logs/2',self.sess.graph)
 
 		self.sess.run(tf.global_variables_initializer())
 		if self.poker=="leduc":
@@ -115,7 +115,6 @@ class Training:
 						self.selfPlay.testGame(10)
 			
 
-			preclean=time.time()
 			self.selfPlay.tree.cleanTree()
 
 			prenets = time.time()
@@ -126,7 +125,7 @@ class Training:
 
 			end = time.time()
 			if i%10==0:
-				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets)+" tree cleaning time = "+str(prenets-preclean)+" total time = "+str(end-start))
+				print(str(i) + ", selfPlay time = "+str(postGames - start) + ", nnet training time = "+str(end - prenets))
 		if self.poker == "leduc":
 			currentExploitability=self.selfPlay.tree.findAnalyticalExploitability()
 			return currentExploitability, minExpoitability #Want to minimize final exploitability after training when sampling over hyperparameters -D			#print("cost = " + str(self.nnets.compute_cost_alpha()))
@@ -144,7 +143,7 @@ class Training:
 				for key in self.pReservoirs:
 					self.pReservoirs[key][self.pN:self.pN+pk, :] = pData[key]
 			elif self.pN >= self.maxPolicyMemory:
-				#Reservoir samping, probabilities decrease per new element
+				#Reservoir samping, probabilities decrease per new element added
 				keep_prob =  np.divide(float(self.maxPolicyMemory),(self.pN+np.arange(pk)+1))
 				keep_masks = np.random.rand((pk)) < keep_prob
 				replacements = np.random.randint(0,self.maxPolicyMemory, size = (np.sum(keep_masks)))
@@ -168,32 +167,33 @@ class Training:
 			self.pN += pk
 
 		vk = len(vData["valuesTarget"])
-		#print(vData["estimTarget"])
-		#Overwritten data input so that we can feed only recent data to nnets without having to copy arrays
-		if self.vN + vk < 1.5*self.maxValueMemory and self.vN >= self.maxValueMemory:
-			vN = int(1.5*self.maxValueMemory) - self.vN - vk
-		#Normal data input
-		else:
-			vN = self.vN % self.maxValueMemory
-
-		for key in self.vReservoirs:
-			vData[key] = np.array(vData[key])
-			assert vk == vData[key].shape[0]
-		vData["valuesTarget"] = np.reshape(vData["valuesTarget"],(vk,1))
-		if self.poker == "leduc":
-			vData["estimTarget"] = np.reshape(vData["estimTarget"],(vk,1))
-		if vN + vk <= self.maxValueMemory:
-			for key in self.vReservoirs:
-				self.vReservoirs[key][vN:vN+vk, :] = vData[key]
-		else:
-			numLeft = self.maxValueMemory - vN 
+		if vk>0:
+			#print(vData["estimTarget"])
+			#Overwritten data input so that we can feed only recent data to nnets without having to copy arrays
+			if self.vN + vk < 1.5*self.maxValueMemory and self.vN >= self.maxValueMemory:
+				vN = int(1.5*self.maxValueMemory) - self.vN - vk
+			#Normal data input
+			else:
+				vN = self.vN % self.maxValueMemory
 
 			for key in self.vReservoirs:
-				self.vReservoirs[key][vN:self.maxValueMemory, :] = vData[key][0:numLeft]
-				self.vReservoirs[key][0:(vk - numLeft), :] = vData[key][numLeft:vk]
+				vData[key] = np.array(vData[key])
+				assert vk == vData[key].shape[0]
+			vData["valuesTarget"] = np.reshape(vData["valuesTarget"],(vk,1))
+			if self.poker == "leduc":
+				vData["estimTarget"] = np.reshape(vData["estimTarget"],(vk,1))
+			if vN + vk <= self.maxValueMemory:
+				for key in self.vReservoirs:
+					self.vReservoirs[key][vN:vN+vk, :] = vData[key]
+			else:
+				numLeft = self.maxValueMemory - vN 
+
+				for key in self.vReservoirs:
+					self.vReservoirs[key][vN:self.maxValueMemory, :] = vData[key][0:numLeft]
+					self.vReservoirs[key][0:(vk - numLeft), :] = vData[key][numLeft:vk]
 
 
-		self.vN += vk
+			self.vN += vk
 		
 
 	def shufflePReservoirs(self):
@@ -242,7 +242,6 @@ class Training:
 		
 		for i in range(self.gamesPerUpdateNets):
 			self.addToReservoirs(self.selfPlay.runGame())
-		
 		if (self.pN - self.numShuffled)/self.pN > self.unShuffledFraction:
 			self.shufflePReservoirs()
 
