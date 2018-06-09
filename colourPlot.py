@@ -22,7 +22,7 @@ def colourPlot(nnets):
 						cards[4*j+l] = 1
 						colour,_ = nnets.policyValue(cards,np.zeros((2,4,5,2)),np.zeros(52))
 						avColour += colour/12
-			avColour = avColour/average
+			avColour = avColour/(average+np.array([1/10,1/10,1/10]))
 			avColour = avColour**2
 			colours[12- i,12 - j,:] = avColour/np.sum(avColour)
 
@@ -35,7 +35,7 @@ def colourPlot(nnets):
 				cards[4*j+k] = 1
 				colour,_= nnets.policyValue(cards,np.zeros((2,4,5,2)),np.zeros(52))
 				avColour += colour/4
-			avColour = avColour/average
+			avColour = avColour/(average+np.array([1/10,1/10,1/10]))
 			avColour = avColour**2
 			colours[12- i,12 - j,:] = avColour/np.sum(avColour)
 
