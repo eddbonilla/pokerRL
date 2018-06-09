@@ -23,7 +23,7 @@ cdef class MCTS:
 	cdef object nnets 
 	cdef int holdEm
 
-	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double tempDecayRate = 1.0005,int holdEm = False):
+	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double tempDecayRate = 1.01,int holdEm = False):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -43,7 +43,7 @@ cdef class MCTS:
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 	cpdef void reduceTemp(self):
-		if self.temp > 0.1:
+		if self.temp > 0.05:
 			self.temp = self.temp/self.tempDecayRate
 
 	def increaseNumSimulations(self):

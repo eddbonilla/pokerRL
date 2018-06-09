@@ -134,13 +134,13 @@ class Training:
 					cards[22] = 1
 					cards[3] = 1
 					print("2,7 p,v: "+ str(self.nnets.policyValue(cards, np.zeros((2,4,5,2)), np.zeros(52))))
-					if i%100 == 0:
-						v_TC, v_TA, v_AC = self.selfPlay.testGame(500)
-						summary= self.sess.run(self.mergedSummary,feed_dict={self.v_TC:v_TC,self.v_TA:v_TA,self.v_AC:v_AC})
-						self.writer.add_summary(summary,i)
-						v_TCs.append(v_TC)
-						v_TAs.append(v_TA)
-						v_ACs.append(v_AC)
+					#if i%100 == 0:
+						#v_TC, v_TA, v_AC = self.selfPlay.testGame(500)
+						#summary= self.sess.run(self.mergedSummary,feed_dict={self.v_TC:v_TC,self.v_TA:v_TA,self.v_AC:v_AC})
+						#self.writer.add_summary(summary,i)
+						#v_TCs.append(v_TC)
+						#v_TAs.append(v_TA)
+						#v_ACs.append(v_AC)
 
 			
 
