@@ -27,7 +27,7 @@ class MCTS():
 		self.Ps = {}		# stores initial policy (returned by neural net)
 
 
-		self.Es = {}		# stores game.getGameEnded ended for board s
+		self.Es = {}		# stores estimate opponent ended for board s
 		self.Bs = {} 		# stores best response to avg strategies for board s
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
@@ -66,7 +66,7 @@ class MCTS():
 		"""
 		print(self.temp)
 		self.game=game
-		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCard(), self.game.getPublicHistory(), self.game.getPublicCard())) # gives a guess of the opponent cards, we can change this to be the actual cards
+		estimOpponentCards= self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCards(), self.game.getPublicHistory(), self.game.getPublicCards())) # gives a guess of the opponent cards, we can change this to be the actual cards
 		for i in range(self.numMCTSSims): 
 		
 			self.gameCopy= copy.deepcopy(self.game)			 #Make another instance of the game for each search
@@ -97,7 +97,7 @@ class MCTS():
 			return self.gameCopy.getOutcome()[self.game.getPlayer()] #Always get outcome for original player
 
 		if not playerMove:
-			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())
+			strategy,value = self.nnets.policyValue(self.gameCopy.getPlayerCards(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCards())
 			self.gameCopy.action(action = -1, strategy = strategy)
 			return self.search()
 
@@ -105,7 +105,7 @@ class MCTS():
 			# leaf node
 			
 			#fnet and gnet integrate into one function 
-			self.Ps[s], v = self.nnets.policyValue(self.gameCopy.getPlayerCard(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCard())   #Opponent Strategy.
+			self.Ps[s], v = self.nnets.policyValue(self.gameCopy.getPlayerCards(), self.gameCopy.getPublicHistory(), self.gameCopy.getPublicCards())   #Opponent Strategy.
 
 			#self.Vs[s] = valids
 
@@ -150,7 +150,7 @@ class MCTS():
 
 	def exploitabilitySearch(self,localGame,belief,prevGame,prevAction): #it returns net winnings for exploiting strategy by doing an exhaustive search
 		
-		if not (prevGame.cards[2]== localGame.cards[2]): #time to set the public card (or something)
+		if not (prevGame.getRound()== localGame.getRound()): #time to set the public card (or something)
 			Ppub=np.sum(belief,axis=2) ##for pcard inside the mix
 			Qsc=np.zeros((3,3)) #numcards,1
 			for pubCard in range(3):
@@ -198,11 +198,11 @@ class MCTS():
 				for oppCard in range(3): #explicit reference to number of cards in leduc
 					localGame.setPlayerCard(oppCard)
 	
-					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCard(), localGame.getPublicHistory(), localGame.getPublicCard()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
+					Ps[oppCard,:],_ = self.nnets.policyValue(localGame.getPlayerCards(), localGame.getPublicHistory(), localGame.getPublicCards()) #get probabilities for each card, do not browse the dict, it is slower for some reason -E
 					#s = localGame.playerInfoStringRepresentation() #We cannot use the information because it has been raised to the Temp
 					#if s not in self.Ps: #
 					#Ps[oppCard]=self.Ps[s]
-					#Ps[oppCard,:]=[0.,1.,0.]
+					#Ps[oppCard,:]=[0.5,0.3,0.2]
 				Pa=np.dot(np.sum(belief,axis=1),Ps) #marginalize over public cards, axis 1. Probability of taking an action a 
 				for a in range(numActions): #Make copies of the game with each action
 					if Pa[:,a].any() !=0: #if the action has any probability of happening
@@ -243,8 +243,6 @@ class MCTS():
 		#create an array with the conditional probabilities of being in a state
 		belief=np.zeros((numCards,numCards,numCards),dtype=float) #exploiting player card, public card,exploited player card
 		for pCard in range(numCards): #take a card
-			Qsa=np.zeros((numActions,1),dtype=float)
-			self.gameCopy.setPlayerCard(pCard) #set the card specified by for loop
 			for oppCard in range(numCards):
 				for pubCard in range(numCards):
 					belief[pCard,pubCard,oppCard]=1.*(2-(oppCard==pCard))*(2-(pubCard==oppCard)-(pubCard==pCard))/20.
@@ -261,4 +259,34 @@ class MCTS():
 		end = time.time()
 		print("Exploitability calculation time: "+str(end - start))
 		return exploitability, self.Bs
+
+	def deterministicStrategy(self,game): #uses the exploitability search and a belief to compute an optimal strategy:
+		self.game=game #copy the game,it also sets who is exploiting
+		numCards=3
+
+		#create a belief based on the info available at the moment:
+		pCard = np.argmax(game.getPlayerCards()) # the only belief that matters is the one corresponding to the current card
+		#prior=(2*np.ones(numCards)-(np.arange(numCards)==pCard))/5. #good prior for the beggining of the game - use for testing, E
+		prior=self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCards(), self.game.getPublicHistory(), self.game.getPublicCards()))
+		
+		belief=np.zeros((numCards,numCards,numCards),dtype=float) #exploiting player card, public card,exploited player card
+		
+		for oppCard in range(numCards):
+			for pubCard in range(numCards):
+				belief[pCard,pubCard,oppCard]=(2-(pubCard==oppCard)-(pubCard==pCard))*prior[oppCard]/4.
+
+		#update the belief if it contains info about the public card
+		if not (self.game.publicCardArray==0).all():
+			belief=np.transpose(np.multiply(np.transpose(belief,axes=[0,2,1]),self.game.publicCardArray),axes=[0,2,1])
+			summ=np.sum(belief,axis=(1,2))
+			if summ[pCard]!=0:
+				belief[pCard,:,:]=belief[pCard,:,:]/summ[pCard]
+
+		#copy the game to carry the search
+		nextGame=copy.deepcopy(self.game)
+		_=self.exploitabilitySearch(nextGame,belief=belief,prevGame=self.game,prevAction=-1)
+
+		s0=self.game.publicInfoStringRepresentation()
+		#print(str(np.eye(3)[self.Bs[s0][pCard]])+" "+str(pCard))
+		return np.eye(3)[self.Bs[s0][pCard]] #return best response action
 

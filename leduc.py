@@ -6,8 +6,8 @@ class Game:
 
 class LeducGame(Game):
 	#2 = K, 1 = Q, 0 = J
-	def getAnte(self):
-		return 1
+	def getBlinds(self):
+		return np.array([1.,1.])
 
 	params = {"inputSize" : 30, "historySize" : 24, "handSize" : 3, "actionSize" : 3, "valueSize": 1}
 
@@ -35,10 +35,10 @@ class LeducGame(Game):
 		self.manualPublicCard = None 	#Need to set this consistently to test my code -E
 
 	def playerInfoStringRepresentation(self):
-		return (str(self.player)+str(self.cards[self.player])+str(self.history)+str(self.getPublicCard()))
+		return (str(self.player)+str(self.cards[self.player])+str(self.history)+str(self.getPublicCards()))
 
 	def publicInfoStringRepresentation(self):
-		return (str(self.player)+str(self.history)+str(self.getPublicCard()))
+		return (str(self.player)+str(self.history)+str(self.getPublicCards()))
 
 	def finishGame(self,playerfolded):
 		self.finished = True
@@ -58,7 +58,8 @@ class LeducGame(Game):
 			self.winnings += self.pot/2
 		#print(self.winnings)
 
-
+	def getRound(self):
+		return self.round
 	def endRound(self):
 		if self.round==0:
 			self.round = 1
@@ -80,17 +81,18 @@ class LeducGame(Game):
 	def getPlayer(self):
 		return self.player
 
-	def getPlayerCard(self):
+	def getPlayerCards(self):
 		return self.playersCardsArray[self.player]
 
-	def getOpponentCard(self):
-		return self.playersCardsArray[(self.player + 1) % 2]
+	def getOpponentCards(self):
+		op = (self.player + 1) % 2
+		return self.cards[op:(op+1)]
 
 	def getPlayerStates(self):
 		#return tf.one_hot(self.cards["player1"],3),tf.one_hot(self.cards["player2"],3)
 		return self.playersCardsArray
 
-	def getPublicCard(self):
+	def getPublicCards(self):
 		return self.publicCardArray
 
 	def getPot(self):

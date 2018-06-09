@@ -18,7 +18,7 @@ cdef class MCTS:
 
 	cdef int numMCTSSims,cpuct
 	cdef double temp,tempDecayRate
-	cdef dict Qsa,Nsa,Ns,Ps,
+	cdef dict Qsa,Nsa,Ns,Ps,Es,Bs
 	cdef Game game, gameCopy
 	cdef object nnets 
 	cdef int holdEm
@@ -38,7 +38,8 @@ cdef class MCTS:
 		self.Ps = {}		# stores initial policy (returned by neural net)
 
 
-		#self.Es = {}		# stores game.getGameEnded ended for board s
+		self.Es = {}		# stores estimate opponent cards for board s
+		self.Bs = {}		# stores Best response given an estimate opponent
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 	cpdef void reduceTemp(self):
@@ -62,7 +63,7 @@ cdef class MCTS:
 		self.Nsa = {}	  
 		self.Ns = {}		
 		self.Ps = {}		
-		#self.Es = {}
+		self.Es = {}
 
 
 	@cython.boundscheck(False)
@@ -163,7 +164,7 @@ cdef class MCTS:
 
 		return net_winnings
 
-	def exploitabilitySearch(self,localGame,belief,prevGame,prevAction): #it returns net winnings for exploiting strategy by doing an exhaustive search
+	def exploitabilitySearch(self,localGame,belief,prevGame,prevAction,returnStrat=False): #it returns net winnings for exploiting strategy by doing an exhaustive search
 		if prevGame.getRound() is not localGame.getRound(): #time to set the public card (or something)
 			#Ppub=np.sum(belief,axis=1) #marginalize over the opponent card ##
 			Ppub=np.sum(belief,axis=2) ##for pcard inside the mix
@@ -218,7 +219,7 @@ cdef class MCTS:
 					#s = localGame.playerInfoStringRepresentation() #We cannot use the information because it has been raised to the Temp
 					#if s not in self.Ps: #
 					#Ps[oppCard]=self.Ps[s]
-					#Ps[oppCard,:]=[0.5,0.5,0.]
+					#Ps[oppCard,:]=[0.5,0.3,0.2]
 				#print("belief = "+str(belief))
 				Pa=np.dot(np.sum(belief,axis=1),Ps) #marginalize over public cards, axis 1. Probability of taking an action a 
 				#print(Pa)
@@ -245,6 +246,10 @@ cdef class MCTS:
 					Qsa[:,a]=np.reshape(self.exploitabilitySearch(nextGame,belief,prevGame=localGame,prevAction=a),3)
 				
 				Vs=Qsa-bets
+				#returns the strategy for the exploiting player if requested
+				if returnStrat:
+					return np.argmax(Vs,axis=1)
+
 				return  np.max(Vs,axis=1)#take the max over actions of Vs
 
 
@@ -265,7 +270,6 @@ cdef class MCTS:
 		#create an array with the conditional probabilities of being in a state
 		belief=np.zeros((numCards,numCards,numCards),dtype=float)
 		for pCard in range(numCards): #take a card
-			Qsa=np.zeros((numActions,1),dtype=float)
 			for oppCard in range(numCards):
 				for pubCard in range(numCards):
 					belief[pCard,pubCard,oppCard]=1.*(2-(oppCard==pCard))*(2-(pubCard==oppCard)-(pubCard==pCard))/20.
@@ -279,6 +283,39 @@ cdef class MCTS:
 		end = time.time()
 		print("Exploitability calculation time: "+str(end - start))
 		return exploitability
+
+	def deterministicStrategy(self,game): #uses the exploitability search and a belief to compute an optimal strategy:
+		
+		#copy the game,it also sets who is exploiting
+		self.game=game 
+		numCards=3
+
+		#create a belief based on the info available at the moment:
+		pCard = np.argmax(game.getPlayerCards()) 
+		#prior=(2*np.ones(numCards)-(np.arange(numCards)==pCard*np.ones(numCards)))/5. #good prior for the beggining of the game - use for testing, E
+		prior=self.game.regulariseOpponentEstimate(self.nnets.estimateOpponent(self.game.getPlayerCards(), self.game.getPublicHistory(), self.game.getPublicCards()))
+		s0=self.game.publicInfoStringRepresentation()
+
+		#If this has already been requested
+		if s0 not in self.Es:
+			self.Es[s0]=np.zeros((numCards,3)) #estimates for the opponent cards given the player card and the history
+			self.Bs[s0]=np.zeros(3,dtype=np.int32)
+
+		if (self.Es[s0][pCard]!=prior).any(): #if the prior was changed, carry the calculation
+			self.Es[s0][pCard]=prior
+			belief=np.zeros((numCards,numCards,numCards),dtype=float) #exploiting player card, public card,exploited player card
+			if not (self.game.getPublicCards()==0).all():#the public card was set.
+				belief[pCard,np.argmax(self.game.getPublicCards()),:]=prior 
+			else:
+				for oppCard in range(numCards): #we make a joint distribution by using the knowledge from the game
+					for pubCard in range(numCards):
+						belief[pCard,pubCard,oppCard]=(2-(pubCard==oppCard)-(pubCard==pCard))*prior[oppCard]/4.
+			#copy the game to carry the search
+			nextGame=self.game.copy()
+			strat=self.exploitabilitySearch(nextGame,belief=belief,prevGame=self.game,prevAction=-1,returnStrat=True)
+			#print(self.Bs[s0])
+			self.Bs[s0][pCard]=strat[pCard]
+		return np.eye(3)[self.Bs[s0][pCard]] #return best response action
 
 
 
