@@ -19,3 +19,6 @@ To run the code:
 
   agentInstance.doTraining(numEpisodes)
   
+
+
+- We adapted card.py, lookup.py and evaluator.py from github.com/worldveil/deuces
