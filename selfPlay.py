@@ -8,7 +8,7 @@ class selfPlay:
 
 	def __init__(self,game, eta, nnets,numMCTSSims=50,cpuct =1,simParams=None,deterministicTree=False):
 		self.game=game
-		self.tree = MCTS(nnets, numMCTSSims, cpuct, tempDecayRate = 1.0005)             #Index labels player
+		self.tree = MCTS(nnets, numMCTSSims, cpuct, tempDecayRate = 1.005,temp=0.01)             #Index labels player
            #Index labels player
 		if simParams!= None: 
 			tree.setTreeSearchParams(simParams["treeSearchParams"])

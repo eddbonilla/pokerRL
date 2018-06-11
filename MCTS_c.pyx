@@ -23,7 +23,7 @@ cdef class MCTS:
 	cdef object nnets 
 	cdef int holdEm
 
-	def __init__(self, nnets, int numMCTSSims, int cpuct, int temp = 1, double tempDecayRate = 1.0005,int holdEm = False):
+	def __init__(self, nnets, int numMCTSSims, int cpuct, double temp = 1, double tempDecayRate = 1.0005,int holdEm = False):
 		self.game = None
 		self.gameCopy= None;
 		self.nnets = nnets #neural networks used to predict the cards and/or action probabilities
@@ -43,7 +43,7 @@ cdef class MCTS:
 		#self.Vs = {}		# stores game.getValidMoves for board s
 
 	cpdef void reduceTemp(self):
-		if self.temp > 0.1:
+		if self.temp > 0.03:
 			self.temp = self.temp/self.tempDecayRate
 
 	def increaseNumSimulations(self):
@@ -92,7 +92,14 @@ cdef class MCTS:
 		cdef np.ndarray counts = self.Nsa[s] #Here you count the number of times that action a was taken in state s
 		#if time.time() - start > 1:
 			#print(s +", "+ str(counts))
-		counts = counts**(1./self.temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
+
+		counts = (counts/np.sum(counts))**(1./self.temp) #Add a temperature factor to emphasize max_a(Nsa) or to sample uniform
+
+		if np.isnan(counts).any():
+			#counts=np.isnan(counts)/float(np.sum(np.isnan(counts)))
+			counts=np.eye(3)[np.argmax(self.Nsa[s])]
+			print("Got you back bud: strategy= "+str(counts))
+
 		cdef np.ndarray treeStrategy = counts /float(np.sum(counts)) #normalize
 		#averageStrategy = self.Ps[s]
 		return treeStrategy 		#return pi,tree strategy
